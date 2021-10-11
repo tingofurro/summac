@@ -1,0 +1,2020 @@
+Traceback (most recent call last):
+  File "run_baseline.py", line 47, in <module>
+    {"name": "pt_any", "dataset": load_polytope(which_label="overall", cut=cut)},
+  File "/home/phillab/summac/utils_summac_benchmark.py", line 49, in load_polytope
+    all_segments = pd.read_excel(fn, sheet_name="Scores per segment")
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/pandas/util/_decorators.py", line 311, in wrapper
+    return func(*args, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/pandas/io/excel/_base.py", line 364, in read_excel
+    io = ExcelFile(io, storage_options=storage_options, engine=engine)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/pandas/io/excel/_base.py", line 1233, in __init__
+    self._reader = self._engines[engine](self._io, storage_options=storage_options)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/pandas/io/excel/_openpyxl.py", line 521, in __init__
+    import_optional_dependency("openpyxl")
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/pandas/compat/_optional.py", line 118, in import_optional_dependency
+    raise ImportError(msg) from None
+ImportError: Missing optional dependency 'openpyxl'.  Use pip or conda to install openpyxl.
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Downloading:   0%|          | 0.00/3.51k [00:00<?, ?B/s]Downloading: 9.35kB [00:00, 3.52MB/s]                   
+Downloading:   0%|          | 0.00/1.61k [00:00<?, ?B/s]Downloading: 9.50kB [00:00, 4.83MB/s]                   
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Downloading:   0%|          | 0.00/1.93k [00:00<?, ?B/s]Downloading: 5.16kB [00:00, 2.90MB/s]                   
+Downloading:   0%|          | 0.00/954 [00:00<?, ?B/s]Downloading: 1.91kB [00:00, 859kB/s]                  
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+>>
+Token indices sequence length is longer than the specified maximum sequence length for this model (704 > 512). Running this sequence through the model will result in indexing errors
+  0%|          | 0/503 [00:05<?, ?it/s]
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 103, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 80, in score_dae
+    score = score_example_single_context(generated, document, self.dae_model, self.tokenizer, self.args)
+  File "/home/phillab/dae-factuality/evaluate_factuality.py", line 72, in score_example_single_context
+    outputs = model(**inputs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/dae-factuality/utils.py", line 141, in forward
+    transformer_outputs = self.electra(input_ids, attention_mask=attention, token_type_ids=token_ids)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_electra.py", line 329, in forward
+    hidden_states = self.encoder(hidden_states, attention_mask=extended_attention_mask, head_mask=head_mask)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_bert.py", line 408, in forward
+    hidden_states, attention_mask, head_mask[i], encoder_hidden_states, encoder_attention_mask
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_bert.py", line 369, in forward
+    self_attention_outputs = self.attention(hidden_states, attention_mask, head_mask)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_bert.py", line 315, in forward
+    hidden_states, attention_mask, head_mask, encoder_hidden_states, encoder_attention_mask
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_bert.py", line 217, in forward
+    mixed_query_layer = self.query(hidden_states)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/linear.py", line 93, in forward
+    return F.linear(input, self.weight, self.bias)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/functional.py", line 1692, in linear
+    output = input.matmul(weight.t())
+RuntimeError: CUDA error: CUBLAS_STATUS_ALLOC_FAILED when calling `cublasCreate(handle)`
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+>>
+Token indices sequence length is longer than the specified maximum sequence length for this model (704 > 512). Running this sequence through the model will result in indexing errors
+  0%|          | 0/503 [00:04<?, ?it/s]
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 103, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 80, in score_dae
+    score = score_example_single_context(generated, document, self.dae_model, self.tokenizer, self.args)
+  File "/home/phillab/dae-factuality/evaluate_factuality.py", line 63, in score_example_single_context
+    num_dependencies = torch.tensor([f.num_dependencies for f in features], dtype=torch.long).to(args.device)[:, :512]
+IndexError: too many indices for tensor of dimension 1
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+>>
+Token indices sequence length is longer than the specified maximum sequence length for this model (704 > 512). Running this sequence through the model will result in indexing errors
+torch.Size([1, 719]) torch.Size([1, 719]) torch.Size([1, 719]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+  0%|          | 0/503 [00:05<?, ?it/s]
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 103, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 80, in score_dae
+    score = score_example_single_context(generated, document, self.dae_model, self.tokenizer, self.args)
+  File "/home/phillab/dae-factuality/evaluate_factuality.py", line 74, in score_example_single_context
+    outputs = model(**inputs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/dae-factuality/utils.py", line 141, in forward
+    transformer_outputs = self.electra(input_ids, attention_mask=attention, token_type_ids=token_ids)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_electra.py", line 329, in forward
+    hidden_states = self.encoder(hidden_states, attention_mask=extended_attention_mask, head_mask=head_mask)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_bert.py", line 408, in forward
+    hidden_states, attention_mask, head_mask[i], encoder_hidden_states, encoder_attention_mask
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_bert.py", line 369, in forward
+    self_attention_outputs = self.attention(hidden_states, attention_mask, head_mask)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_bert.py", line 315, in forward
+    hidden_states, attention_mask, head_mask, encoder_hidden_states, encoder_attention_mask
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_bert.py", line 217, in forward
+    mixed_query_layer = self.query(hidden_states)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/linear.py", line 93, in forward
+    return F.linear(input, self.weight, self.bias)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/functional.py", line 1692, in linear
+    output = input.matmul(weight.t())
+RuntimeError: CUDA error: CUBLAS_STATUS_ALLOC_FAILED when calling `cublasCreate(handle)`
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]  0%|          | 0/503 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 96, in score
+    self.load_model()
+  File "/home/phillab/summac/model_baseline.py", line 27, in load_model
+    from evaluate_factuality import MODEL_CLASSES, score_example_single_context
+  File "/home/phillab/dae-factuality/evaluate_factuality.py", line 70
+    inputs = {'input_ids': input_ids, 'attention': attention, 'token_ids': token_ids, 'child': child, 'head': head,
+         ^
+SyntaxError: invalid syntax
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+>>
+Token indices sequence length is longer than the specified maximum sequence length for this model (704 > 512). Running this sequence through the model will result in indexing errors
+torch.Size([1, 512]) torch.Size([1, 512]) torch.Size([1, 512]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+  0%|          | 0/503 [00:06<?, ?it/s]
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 103, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 80, in score_dae
+    score = score_example_single_context(generated, document, self.dae_model, self.tokenizer, self.args)
+  File "/home/phillab/dae-factuality/evaluate_factuality.py", line 74, in score_example_single_context
+    outputs = model(**inputs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/dae-factuality/utils.py", line 159, in forward
+    arc_attention = torch.arange(arcs.size(1)).to(device)[None, :] <= arc_label_lengths[:, None]
+RuntimeError: CUDA error: device-side assert triggered
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+>>>>>>>>>> 3168
+>>
+Token indices sequence length is longer than the specified maximum sequence length for this model (704 > 512). Running this sequence through the model will result in indexing errors
+torch.Size([1, 512]) torch.Size([1, 512]) torch.Size([1, 512]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+  0%|          | 0/503 [00:07<?, ?it/s]
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 103, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 80, in score_dae
+    score = score_example_single_context(generated, document, self.dae_model, self.tokenizer, self.args)
+  File "/home/phillab/dae-factuality/evaluate_factuality.py", line 75, in score_example_single_context
+    outputs = model(**inputs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/dae-factuality/utils.py", line 159, in forward
+    arc_attention = torch.arange(arcs.size(1)).to(device)[None, :] <= arc_label_lengths[:, None]
+RuntimeError: CUDA error: device-side assert triggered
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+>>>>>>>>>> 163
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 245
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 150
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 83
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 150
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 93
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 66
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 163
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 83
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 18
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 98
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 81
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 133
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 64
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 113
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 42
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 60
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 54
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 25
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 58
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 82
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 116
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 26
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 83
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 52
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 82
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 44
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 94
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 99
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 214
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 85
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 166
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 51
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 163
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 187
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 76
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 136
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 125
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 217
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 374
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 380
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 96
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 137
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 82
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 150
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 230
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 162
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 169
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 185
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 282
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 234
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 106
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 166
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 334
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 96
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 179
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 254
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 133
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 124
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 226
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 103
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 155
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 221
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 192
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 153
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 187
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 104
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 183
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 115
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 157
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 116
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 148
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 161
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 205
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 315
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 45
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 181
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 170
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 128
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 196
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 76
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 266
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 75
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 154
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 158
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 168
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 71
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 143
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 189
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 70
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 141
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 118
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 57
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 48
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 69
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 43
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 113
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 123
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 123
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 38
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 17
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 24
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 40
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 151
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 187
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 217
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 37
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 66
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 24
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 181
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 85
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 135
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 136
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 181
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 238
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 111
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 133
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 193
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 230
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 98
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 32
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 44
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 36
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 24
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 198
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 40
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 39
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 156
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 300
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 71
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 172
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 85
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 90
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 148
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 29
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 118
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 98
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 272
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 162
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 124
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 67
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 96
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 212
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 78
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 116
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 121
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 44
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 37
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 108
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 98
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 59
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 130
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 77
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 46
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 147
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 137
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 131
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 56
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 62
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 173
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 87
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 115
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 128
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 45
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 114
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 148
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 93
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 91
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 208
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 178
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 159
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 89
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 17
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 28
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 98
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 140
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 273
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 96
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 100
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 115
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 59
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 83
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 103
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 237
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 65
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 135
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 142
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 54
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 146
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 103
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 42
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 108
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 107
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 95
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 96
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 152
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 85
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 138
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 117
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 157
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 140
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 171
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 126
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 81
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 7
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 12
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 55
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 27
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 167
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 112
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 119
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 90
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 194
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 70
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 49
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 95
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 116
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 165
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 102
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 82
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 69
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 145
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 62
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 102
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 105
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 54
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 52
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 193
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 99
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 124
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 141
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 47
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 90
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 74
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 4
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 203
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 99
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 80
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 63
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 3
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 160
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 82
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 99
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 148
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 25
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 90
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 129
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 39
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 74
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 121
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 150
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 122
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 64
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 7
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 10
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 30
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 160
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 149
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 69
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 212
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 110
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 188
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 107
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 171
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 135
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 98
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 129
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 146
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 129
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 136
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 99
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 83
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 74
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 145
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 51
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 279
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 81
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 266
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 75
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 166
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 59
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 208
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 47
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 95
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 103
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 125
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 73
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 75
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 234
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 231
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 232
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 85
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 175
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 181
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 104
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 98
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 70
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 195
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 110
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 185
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 85
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 139
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 115
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 128
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 141
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>>>>>>>>> 128
+>>
+torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 128]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 103, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 80, in score_dae
+    score = score_example_single_context(generated, doc_sent, self.dae_model, self.tokenizer, self.args)
+  File "/home/phillab/dae-factuality/evaluate_factuality.py", line 75, in score_example_single_context
+    tmp_eval_loss, logits = outputs[:2]
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/dae-factuality/utils.py", line 161, in forward
+    transformer_arc_outputs = self.electra(arcs, attention_mask=arc_attention)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_electra.py", line 329, in forward
+    hidden_states = self.encoder(hidden_states, attention_mask=extended_attention_mask, head_mask=head_mask)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_bert.py", line 408, in forward
+    hidden_states, attention_mask, head_mask[i], encoder_hidden_states, encoder_attention_mask
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_bert.py", line 380, in forward
+    intermediate_output = self.intermediate(attention_output)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/modeling_bert.py", line 332, in forward
+    hidden_states = self.dense(hidden_states)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/linear.py", line 93, in forward
+    return F.linear(input, self.weight, self.bias)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/functional.py", line 1694, in linear
+    output += bias
+KeyboardInterrupt
+  0%|          | 0/503 [00:27<?, ?it/s]
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+>>
+torch.Size([1, 442]) torch.Size([1, 442]) torch.Size([1, 442]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 453]) torch.Size([1, 453]) torch.Size([1, 453]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 214]) torch.Size([1, 214]) torch.Size([1, 214]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 446]) torch.Size([1, 446]) torch.Size([1, 446]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 403]) torch.Size([1, 403]) torch.Size([1, 403]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 471]) torch.Size([1, 471]) torch.Size([1, 471]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 472]) torch.Size([1, 472]) torch.Size([1, 472]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 367]) torch.Size([1, 367]) torch.Size([1, 367]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 262]) torch.Size([1, 262]) torch.Size([1, 262]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 184]) torch.Size([1, 184]) torch.Size([1, 184]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 409]) torch.Size([1, 409]) torch.Size([1, 409]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 399]) torch.Size([1, 399]) torch.Size([1, 399]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 438]) torch.Size([1, 438]) torch.Size([1, 438]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 437]) torch.Size([1, 437]) torch.Size([1, 437]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 224]) torch.Size([1, 224]) torch.Size([1, 224]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 410]) torch.Size([1, 410]) torch.Size([1, 410]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 411]) torch.Size([1, 411]) torch.Size([1, 411]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 426]) torch.Size([1, 426]) torch.Size([1, 426]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 424]) torch.Size([1, 424]) torch.Size([1, 424]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 440]) torch.Size([1, 440]) torch.Size([1, 440]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 436]) torch.Size([1, 436]) torch.Size([1, 436]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 260]) torch.Size([1, 260]) torch.Size([1, 260]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+torch.Size([1, 448]) torch.Size([1, 448]) torch.Size([1, 448]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+>>
+Token indices sequence length is longer than the specified maximum sequence length for this model (506 > 512). Running this sequence through the model will result in indexing errors
+torch.Size([1, 512]) torch.Size([1, 512]) torch.Size([1, 512]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1, 20]) torch.Size([1]) torch.Size([1, 20, 20]) torch.Size([1, 20, 10]) torch.Size([1, 20])
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 104, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 81, in score_dae
+    score = score_example_single_context(generated, document, self.dae_model, self.tokenizer, self.args)
+  File "/home/phillab/dae-factuality/evaluate_factuality.py", line 74, in score_example_single_context
+    outputs = model(**inputs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/dae-factuality/utils.py", line 159, in forward
+    arc_attention = torch.arange(arcs.size(1)).to(device)[None, :] <= arc_label_lengths[:, None]
+RuntimeError: CUDA error: device-side assert triggered
+  0%|          | 0/503 [00:09<?, ?it/s]
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+ 20%|#9        | 100/503 [00:13<00:54,  7.45it/s] 40%|###9      | 200/503 [00:22<00:36,  8.34it/s] 60%|#####9    | 300/503 [00:30<00:22,  9.10it/s] 80%|#######9  | 400/503 [00:39<00:10,  9.81it/s] 99%|#########9| 500/503 [00:47<00:00, 10.39it/s]100%|##########| 503/503 [00:47<00:00, 10.62it/s]
+Traceback (most recent call last):
+  File "run_baseline.py", line 94, in <module>
+    scorer["model"].save_cache()
+  File "/home/phillab/summac/model_baseline.py", line 54, in save_cache
+    json.dump(self.cache, f)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/__init__.py", line 179, in dump
+    for chunk in iterable:
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 431, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 438, in _iterencode
+    o = _default(o)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type float32 is not JSON serializable
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+Traceback (most recent call last):
+  File "run_baseline.py", line 66, in <module>
+    scorers.append({"name": "DAE", "model": BaselineScorer(model="dae"), "sign": 1})
+  File "/home/phillab/summac/model_baseline.py", line 13, in __init__
+    self.load_cache()
+  File "/home/phillab/summac/model_baseline.py", line 50, in load_cache
+    self.cache = json.load(f)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/__init__.py", line 296, in load
+    parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/__init__.py", line 348, in loads
+    return _default_decoder.decode(s)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 3203 (char 3202)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+<class 'float'>
+ 20%|#9        | 100/503 [00:13<00:53,  7.58it/s]Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 100, in score
+    
+  File "/home/phillab/summac/model_baseline.py", line 77, in score_dae
+    score = score_example_single_context(generated, document, self.dae_model, self.tokenizer, self.args)
+  File "/home/phillab/dae-factuality/evaluate_factuality.py", line 25, in score_example_single_context
+    tokenized_text = get_tokens(input_text)
+  File "/home/phillab/dae-factuality/preprocessing_utils.py", line 29, in get_tokens
+    'ssplit.isOneSentence': True})
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/pycorenlp/corenlp.py", line 29, in annotate
+    }, data=data, headers={'Connection': 'close'})
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/requests/api.py", line 117, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/requests/api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/requests/sessions.py", line 528, in request
+    prep = self.prepare_request(req)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/requests/sessions.py", line 466, in prepare_request
+    hooks=merge_hooks(request.hooks, self.hooks),
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/requests/models.py", line 320, in prepare
+    self.prepare_auth(auth, url)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/requests/models.py", line 547, in prepare_auth
+    url_auth = get_auth_from_url(self.url)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/requests/utils.py", line 951, in get_auth_from_url
+    auth = (unquote(parsed.username), unquote(parsed.password))
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/urllib/parse.py", line 149, in username
+    @property
+KeyboardInterrupt
+ 20%|#9        | 100/503 [00:13<00:53,  7.55it/s]
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+ 20%|#9        | 100/503 [00:13<00:52,  7.68it/s] 40%|###9      | 200/503 [00:21<00:34,  8.68it/s] 60%|#####9    | 300/503 [00:29<00:21,  9.39it/s] 80%|#######9  | 400/503 [00:38<00:10, 10.02it/s] 99%|#########9| 500/503 [00:46<00:00, 10.42it/s]100%|##########| 503/503 [00:46<00:00, 10.76it/s]
+Traceback (most recent call last):
+  File "run_baseline.py", line 94, in <module>
+    scorer["model"].save_cache()
+  File "/home/phillab/summac/model_baseline.py", line 54, in save_cache
+    json.dump(self.cache, f)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/__init__.py", line 179, in dump
+    for chunk in iterable:
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 431, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 438, in _iterencode
+    o = _default(o)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type float32 is not JSON serializable
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+Traceback (most recent call last):
+  File "run_baseline.py", line 66, in <module>
+    scorers.append({"name": "DAE", "model": BaselineScorer(model="dae"), "sign": 1})
+  File "/home/phillab/summac/model_baseline.py", line 13, in __init__
+    self.load_cache()
+  File "/home/phillab/summac/model_baseline.py", line 50, in load_cache
+    self.cache = json.load(f)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/__init__.py", line 296, in load
+    parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/__init__.py", line 348, in loads
+    return _default_decoder.decode(s)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 3203 (char 3202)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+Traceback (most recent call last):
+  File "run_baseline.py", line 66, in <module>
+    scorers.append({"name": "DAE", "model": BaselineScorer(model="dae"), "sign": 1})
+  File "/home/phillab/summac/model_baseline.py", line 13, in __init__
+    self.load_cache()
+  File "/home/phillab/summac/model_baseline.py", line 50, in load_cache
+    self.cache = json.load(f)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/__init__.py", line 296, in load
+    parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/__init__.py", line 348, in loads
+    return _default_decoder.decode(s)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 3203 (char 3202)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+  0%|          | 0/503 [00:06<?, ?it/s]
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 102, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 83, in score_dae
+    self.save_cache()
+  File "/home/phillab/summac/model_baseline.py", line 54, in save_cache
+    print(">>>>>>>>>>>.", self.cache.valueS())
+AttributeError: 'dict' object has no attribute 'valueS'
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+>>>>>>>>>>>. dict_values([])
+  4%|3         | 20/503 [00:06<02:34,  3.13it/s]>>>>>>>>>>>. dict_values([0.9801728, 0.99835056, 0.99910027, 0.9914193, 0.9975606, 0.9985482, 0.9976398, 0.9555503, 0.9957905, 0.99850005, 0.98210365, 0.99619263, 0.99614197, 0.85708094, 0.88863546, 0.99802154, 0.99427474, 0.9939576, 0.95770556, 0.9967071])
+  4%|3         | 20/503 [00:07<03:11,  2.53it/s]
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 102, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 83, in score_dae
+    self.save_cache()
+  File "/home/phillab/summac/model_baseline.py", line 57, in save_cache
+    json.dump(self.cache, f)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/__init__.py", line 179, in dump
+    for chunk in iterable:
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 431, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 438, in _iterencode
+    o = _default(o)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type float32 is not JSON serializable
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+>>>>>>>>>>>. dict_values([])
+  4%|3         | 20/503 [00:06<02:32,  3.18it/s]>>>>>>>>>>>. dict_values([0.9801728129386902, 0.9983505606651306, 0.9991002678871155, 0.9914193153381348, 0.9975606203079224, 0.9985482096672058, 0.9976397752761841, 0.9555503129959106, 0.9957904815673828, 0.9985000491142273, 0.9821036458015442, 0.9961926341056824, 0.9961419701576233, 0.8570809364318848, 0.8886354565620422, 0.9980215430259705, 0.9942747354507446, 0.9939575791358948, 0.957705557346344, 0.9967070817947388])
+  8%|7         | 40/503 [00:07<01:53,  4.08it/s]>>>>>>>>>>>. dict_values([0.9801728129386902, 0.9983505606651306, 0.9991002678871155, 0.9914193153381348, 0.9975606203079224, 0.9985482096672058, 0.9976397752761841, 0.9555503129959106, 0.9957904815673828, 0.9985000491142273, 0.9821036458015442, 0.9961926341056824, 0.9961419701576233, 0.8570809364318848, 0.8886354565620422, 0.9980215430259705, 0.9942747354507446, 0.9939575791358948, 0.957705557346344, 0.9967070817947388, 0.8550094962120056, 0.9966999292373657, 0.9784914255142212, 0.8748288154602051, 0.9883211255073547, 0.660932183265686, 0.9727143049240112, 0.9950315356254578, 0.9789379835128784, 0.9958369135856628, 0.997087836265564, 0.9686704874038696, 0.9355071187019348, 0.9814079403877258, 0.9985255002975464, 0.932957649230957, 0.9982118606567383, 0.9661603569984436, 0.9970555305480957, 0.7698602676391602])
+ 12%|#1        | 60/503 [00:09<01:26,  5.10it/s]>>>>>>>>>>>. dict_values([0.9801728129386902, 0.9983505606651306, 0.9991002678871155, 0.9914193153381348, 0.9975606203079224, 0.9985482096672058, 0.9976397752761841, 0.9555503129959106, 0.9957904815673828, 0.9985000491142273, 0.9821036458015442, 0.9961926341056824, 0.9961419701576233, 0.8570809364318848, 0.8886354565620422, 0.9980215430259705, 0.9942747354507446, 0.9939575791358948, 0.957705557346344, 0.9967070817947388, 0.8550094962120056, 0.9966999292373657, 0.9784914255142212, 0.8748288154602051, 0.9883211255073547, 0.660932183265686, 0.9727143049240112, 0.9950315356254578, 0.9789379835128784, 0.9958369135856628, 0.997087836265564, 0.9686704874038696, 0.9355071187019348, 0.9814079403877258, 0.9985255002975464, 0.932957649230957, 0.9982118606567383, 0.9661603569984436, 0.9970555305480957, 0.7698602676391602, 0.9634815454483032, 0.9957228302955627, 0.9943874478340149, 0.9992222785949707, 0.9925339221954346, 0.9912487864494324, 0.9990999698638916, 0.9906513690948486, 0.9777343273162842, 0.993603527545929, 0.9853720664978027, 0.9730551838874817, 0.9756051898002625, 0.952213704586029, 0.9334238767623901, 0.975080668926239, 0.9614831805229187, 0.9958502054214478, 0.9843425750732422, 0.9966875910758972])
+ 16%|#5        | 80/503 [00:11<01:09,  6.12it/s]Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 102, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 80, in score_dae
+    score = score_example_single_context(generated, document, self.dae_model, self.tokenizer, self.args).item()
+  File "/home/phillab/dae-factuality/evaluate_factuality.py", line 51, in score_example_single_context
+    pad_token_segment_id=0,
+  File "/home/phillab/dae-factuality/utils.py", line 298, in convert_examples_to_features_bert
+    inputs = tokenizer.encode_plus(example['input'], example['context'], add_special_tokens=True)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py", line 1576, in encode_plus
+    first_ids = get_input_ids(text)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py", line 1548, in get_input_ids
+    tokens = self.tokenize(text, add_special_tokens=add_special_tokens, **kwargs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py", line 1329, in tokenize
+    tokenized_text = split_on_tokens(added_tokens, text)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py", line 1323, in split_on_tokens
+    for token in tokenized_text
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py", line 1323, in <genexpr>
+    for token in tokenized_text
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_bert.py", line 211, in _tokenize
+    for sub_token in self.wordpiece_tokenizer.tokenize(token):
+KeyboardInterrupt
+ 16%|#5        | 80/503 [00:11<01:01,  6.87it/s]
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+ 20%|#9        | 100/503 [00:08<00:32, 12.41it/s] 40%|###9      | 200/503 [00:16<00:24, 12.46it/s] 60%|#####9    | 300/503 [00:23<00:16, 12.53it/s] 80%|#######9  | 400/503 [00:32<00:08, 12.38it/s] 99%|#########9| 500/503 [00:40<00:00, 12.38it/s]100%|##########| 503/503 [00:40<00:00, 12.49it/s]
+======= frank ========
+  0%|          | 0/1575 [00:00<?, ?it/s]  6%|6         | 100/1575 [00:08<02:05, 11.72it/s] 13%|#2        | 200/1575 [00:17<01:57, 11.67it/s] 19%|#9        | 300/1575 [00:25<01:49, 11.63it/s] 25%|##5       | 400/1575 [00:34<01:42, 11.51it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (575 > 512). Running this sequence through the model will result in indexing errors
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 99, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 77, in score_dae
+    score = score_example_single_context(generated, document, self.dae_model, self.tokenizer, self.args).item()
+  File "/home/phillab/dae-factuality/evaluate_factuality.py", line 72, in score_example_single_context
+    outputs = model(**inputs)
+  File "/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/phillab/dae-factuality/utils.py", line 147, in forward
+    add = add.unsqueeze(1).to(device)
+RuntimeError: CUDA error: device-side assert triggered
+ 25%|##5       | 400/1575 [00:39<01:56, 10.10it/s]
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]100%|##########| 503/503 [00:00<00:00, 135152.78it/s]
+======= frank ========
+  0%|          | 0/1575 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+ 25%|##5       | 400/1575 [00:13<00:38, 30.16it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (575 > 512). Running this sequence through the model will result in indexing errors
+THIS HAPPENED
+Traceback (most recent call last):
+  File "run_baseline.py", line 92, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 78, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 99, in score
+    new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+  File "/home/phillab/summac/model_baseline.py", line 77, in score_dae
+    score = score_example_single_context(generated, document, self.dae_model, self.tokenizer, self.args).item()
+AttributeError: 'float' object has no attribute 'item'
+ 25%|##5       | 400/1575 [00:17<00:52, 22.31it/s]
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]100%|##########| 503/503 [00:00<00:00, 132031.72it/s]
+======= frank ========
+  0%|          | 0/1575 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
+  category=FutureWarning,
+ 25%|##5       | 400/1575 [00:13<00:39, 29.85it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (575 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (575 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (575 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (575 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 32%|###1      | 500/1575 [00:21<00:52, 20.32it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (644 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (644 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (644 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (644 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 38%|###8      | 600/1575 [00:30<00:58, 16.66it/s] 44%|####4     | 700/1575 [00:38<00:58, 14.98it/s] 44%|####4     | 700/1575 [00:50<00:58, 14.98it/s] 51%|#####     | 800/1575 [00:50<01:04, 12.05it/s] 57%|#####7    | 900/1575 [01:02<01:03, 10.61it/s] 63%|######3   | 1000/1575 [01:15<00:59,  9.65it/s] 70%|######9   | 1100/1575 [01:27<00:51,  9.31it/s] 76%|#######6  | 1200/1575 [01:39<00:41,  8.99it/s] 83%|########2 | 1300/1575 [01:51<00:31,  8.67it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (373 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (338 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 89%|########8 | 1400/1575 [02:03<00:20,  8.66it/s] 95%|#########5| 1500/1575 [02:15<00:08,  8.56it/s]100%|##########| 1575/1575 [02:15<00:00, 11.65it/s]
+======= pt_any ========
+  0%|          | 0/634 [00:00<?, ?it/s] 16%|#5        | 100/634 [00:11<01:00,  8.90it/s] 32%|###1      | 200/634 [00:23<00:49,  8.74it/s] 47%|####7     | 300/634 [00:34<00:38,  8.66it/s] 63%|######3   | 400/634 [00:47<00:27,  8.52it/s] 79%|#######8  | 500/634 [01:00<00:16,  8.26it/s] 95%|#########4| 600/634 [01:12<00:04,  8.23it/s]100%|##########| 634/634 [01:12<00:00,  8.76it/s]
+======= summ_corr ========
+  0%|          | 0/400 [00:00<?, ?it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (523 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 25%|##5       | 100/400 [00:11<00:35,  8.50it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (523 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (451 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 50%|#####     | 200/400 [00:24<00:24,  8.20it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (523 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (451 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 75%|#######5  | 300/400 [00:38<00:12,  7.93it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (523 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (451 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+100%|##########| 400/400 [00:51<00:00,  7.92it/s]100%|##########| 400/400 [00:51<00:00,  7.81it/s]
+======= summeval ========
+  0%|          | 0/850 [00:00<?, ?it/s] 12%|#1        | 100/850 [00:12<01:33,  8.03it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (361 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 24%|##3       | 200/850 [00:24<01:21,  8.02it/s] 35%|###5      | 300/850 [00:36<01:07,  8.11it/s] 47%|####7     | 400/850 [00:48<00:55,  8.18it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (479 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (479 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (479 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (479 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (479 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (479 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (479 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (479 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 59%|#####8    | 500/850 [01:00<00:42,  8.27it/s] 71%|#######   | 600/850 [01:13<00:30,  8.13it/s] 82%|########2 | 700/850 [01:26<00:18,  8.08it/s] 94%|#########4| 800/850 [01:38<00:06,  8.12it/s]100%|##########| 850/850 [01:38<00:00,  8.65it/s]
+======= xsumfaith ========
+  0%|          | 0/1250 [00:00<?, ?it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (539 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (641 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+  8%|8         | 100/1250 [00:08<01:35, 12.04it/s] 16%|#6        | 200/1250 [00:16<01:25, 12.21it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (644 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 24%|##4       | 300/1250 [00:24<01:19, 12.02it/s] 32%|###2      | 400/1250 [00:33<01:10, 12.06it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (641 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 40%|####      | 500/1250 [00:41<01:01, 12.21it/s] 48%|####8     | 600/1250 [00:49<00:53, 12.06it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (644 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+Token indices sequence length is longer than the specified maximum sequence length for this model (539 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 56%|#####6    | 700/1250 [00:58<00:47, 11.63it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (644 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 64%|######4   | 800/1250 [01:07<00:38, 11.59it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (539 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 72%|#######2  | 900/1250 [01:15<00:29, 11.75it/s] 80%|########  | 1000/1250 [01:24<00:21, 11.70it/s] 88%|########8 | 1100/1250 [01:32<00:12, 11.74it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (644 > 512). Running this sequence through the model will result in indexing errors
+Error, document too long
+ 96%|#########6| 1200/1250 [01:41<00:04, 11.88it/s]100%|##########| 1250/1250 [01:41<00:00, 12.37it/s]
+                    factcc     frank    pt_any  summ_corr  summeval  xsumfaith
+model_name input                                                              
+DAE        doc    0.758339  0.615318  0.626702   0.630828  0.701461   0.506868

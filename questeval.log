@@ -1,0 +1,280 @@
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0  xsumfaith  1250    127   1123    0.1016
+Traceback (most recent call last):
+  File "run_baseline.py", line 58, in <module>
+    scorers.append({"name": "QuestEval", "model": QuestEvalScorer(do_weighter=questeval_weighter), "sign": 1})
+  File "/home/phillab/summac/model_baseline.py", line 3, in __init__
+    from questeval.questeval_metric import QuestEval
+ModuleNotFoundError: No module named 'questeval'
+Downloading:   0%|          | 0.00/1.97k [00:00<?, ?B/s]Downloading: 5.22kB [00:00, 3.18MB/s]                   
+Downloading:   0%|          | 0.00/954 [00:00<?, ?B/s]Downloading: 1.91kB [00:00, 1.36MB/s]                 
+Using custom data configuration default
+Downloading and preparing dataset xsum/default (download: 245.38 MiB, generated: 507.60 MiB, post-processed: Unknown size, total: 752.98 MiB) to /home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/f9abaabb5e2b2a1e765c25417264722d31877b34ec34b437c53242f6e5c30d6d...
+0 examples [00:00, ? examples/s]2044 examples [00:00, 20435.05 examples/s]4539 examples [00:00, 21606.84 examples/s]7086 examples [00:00, 22635.18 examples/s]9538 examples [00:00, 23167.19 examples/s]11386 examples [00:00, 19328.92 examples/s]14004 examples [00:00, 20975.24 examples/s]15988 examples [00:00, 20568.02 examples/s]18438 examples [00:00, 21607.02 examples/s]20558 examples [00:00, 20686.50 examples/s]23152 examples [00:01, 22023.17 examples/s]25714 examples [00:01, 22988.16 examples/s]28291 examples [00:01, 23757.43 examples/s]30686 examples [00:01, 21809.64 examples/s]33274 examples [00:01, 22889.64 examples/s]35873 examples [00:01, 23738.59 examples/s]38418 examples [00:01, 24225.95 examples/s]40871 examples [00:01, 22589.37 examples/s]43455 examples [00:01, 23473.29 examples/s]46006 examples [00:02, 24049.15 examples/s]48558 examples [00:02, 24470.78 examples/s]51029 examples [00:02, 22250.01 examples/s]53625 examples [00:02, 23246.60 examples/s]56287 examples [00:02, 24164.36 examples/s]58844 examples [00:02, 24567.87 examples/s]61334 examples [00:02, 21959.45 examples/s]63953 examples [00:02, 23076.74 examples/s]66541 examples [00:02, 23850.85 examples/s]69041 examples [00:02, 24182.19 examples/s]71498 examples [00:03, 22825.70 examples/s]74055 examples [00:03, 23583.86 examples/s]76586 examples [00:03, 24075.81 examples/s]79122 examples [00:03, 24446.30 examples/s]81588 examples [00:03, 22509.30 examples/s]84185 examples [00:03, 23445.91 examples/s]86763 examples [00:03, 24099.17 examples/s]89293 examples [00:03, 24444.41 examples/s]91763 examples [00:03, 22382.06 examples/s]94375 examples [00:04, 23384.81 examples/s]96966 examples [00:04, 24088.62 examples/s]99418 examples [00:04, 24212.09 examples/s]101867 examples [00:04, 21841.36 examples/s]104444 examples [00:04, 22888.01 examples/s]106997 examples [00:04, 23620.94 examples/s]109546 examples [00:04, 24151.63 examples/s]111997 examples [00:04, 22741.19 examples/s]114575 examples [00:04, 23574.18 examples/s]117144 examples [00:05, 24168.50 examples/s]119737 examples [00:05, 24669.34 examples/s]122228 examples [00:05, 23039.95 examples/s]124570 examples [00:05, 21240.88 examples/s]127153 examples [00:05, 22435.84 examples/s]129677 examples [00:05, 23208.36 examples/s]132044 examples [00:05, 21223.35 examples/s]134620 examples [00:05, 22407.14 examples/s]137176 examples [00:05, 23267.14 examples/s]139714 examples [00:06, 23862.48 examples/s]142142 examples [00:06, 22527.29 examples/s]144760 examples [00:06, 23509.24 examples/s]147369 examples [00:06, 24226.12 examples/s]149960 examples [00:06, 24707.63 examples/s]152458 examples [00:06, 23172.77 examples/s]155056 examples [00:06, 23946.51 examples/s]157677 examples [00:06, 24581.06 examples/s]160163 examples [00:06, 22592.23 examples/s]162751 examples [00:06, 23487.33 examples/s]165368 examples [00:07, 24231.37 examples/s]167939 examples [00:07, 24656.37 examples/s]170433 examples [00:07, 22674.98 examples/s]173059 examples [00:07, 23641.98 examples/s]175630 examples [00:07, 24225.80 examples/s]178205 examples [00:07, 24663.44 examples/s]180699 examples [00:07, 22674.43 examples/s]183308 examples [00:07, 23598.54 examples/s]185906 examples [00:07, 24264.16 examples/s]188511 examples [00:08, 24771.68 examples/s]191017 examples [00:08, 22817.04 examples/s]193606 examples [00:08, 23657.65 examples/s]196166 examples [00:08, 24208.40 examples/s]198728 examples [00:08, 24614.30 examples/s]201215 examples [00:08, 23093.22 examples/s]203786 examples [00:08, 23820.45 examples/s]                                            0 examples [00:00, ? examples/s]2060 examples [00:00, 20594.32 examples/s]4638 examples [00:00, 21914.77 examples/s]7203 examples [00:00, 22914.52 examples/s]9700 examples [00:00, 23494.72 examples/s]                                          0 examples [00:00, ? examples/s]2095 examples [00:00, 20941.43 examples/s]4654 examples [00:00, 22146.85 examples/s]7134 examples [00:00, 22879.89 examples/s]9696 examples [00:00, 23638.08 examples/s]                                          Dataset xsum downloaded and prepared to /home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/f9abaabb5e2b2a1e765c25417264722d31877b34ec34b437c53242f6e5c30d6d. Subsequent calls will reuse this data.
+        name     N  N_pos  N_neg  frac_pos
+0  xsumfaith  1250    127   1123    0.1016
+Better speed can be achieved with apex installed from https://www.github.com/nvidia/apex.
+======= xsumfaith ========
+  0%|          | 0/1250 [00:00<?, ?it/s]  8%|8         | 100/1250 [07:27<1:25:40,  4.47s/it] 16%|#6        | 200/1250 [14:30<1:16:59,  4.40s/it] 24%|##4       | 300/1250 [21:15<1:07:59,  4.29s/it] 32%|###2      | 400/1250 [29:18<1:03:07,  4.46s/it] 40%|####      | 500/1250 [38:17<59:12,  4.74s/it]   48%|####8     | 600/1250 [46:45<52:25,  4.84s/it] 56%|#####6    | 700/1250 [55:18<45:09,  4.93s/it] 64%|######4   | 800/1250 [1:03:29<36:54,  4.92s/it] 72%|#######2  | 900/1250 [1:11:51<28:52,  4.95s/it] 80%|########  | 1000/1250 [1:20:07<20:38,  4.95s/it] 88%|########8 | 1100/1250 [1:28:28<12:25,  4.97s/it] 96%|#########6| 1200/1250 [1:37:12<04:12,  5.05s/it]100%|##########| 1250/1250 [1:37:12<00:00,  4.67s/it]
+                  xsumfaith
+model_name input           
+QuestEval  doc     0.654606
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   931    799    132  0.858217
+1      frank   671    223    448  0.332340
+2     pt_any   634     42    592  0.066246
+3  summ_corr  1281    637    644  0.497268
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    127   1123  0.101600
+======= factcc ========
+  0%|          | 0/931 [00:00<?, ?it/s] 11%|#         | 99/931 [00:00<00:00, 98560.67it/s]
+Traceback (most recent call last):
+  File "run_baseline.py", line 83, in <module>
+    compute_doc_level(datas)
+  File "run_baseline.py", line 69, in compute_doc_level
+    doc_scores = scorer_doc(documents, summaries, progress=True)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 75, in __call__
+    return self.score(inputs, generateds, **kwargs)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 54, in score
+    batch_scores, timings_out = self.score_func(self.scorers, batch_inputs, batch_gens, partial=partial, printing=printing, extras=extras)
+  File "/home/phillab/neural_textgen/utils_scoring.py", line 83, in sum_score
+    scores = scorer['model'].score(paragraphs, generateds, partial=partial, printing=printing, **extras)
+  File "/home/phillab/summac/model_baseline.py", line 56, in score
+    self.load_model()
+  File "/home/phillab/summac/model_baseline.py", line 14, in load_model
+    from questeval.questeval_metric import QuestEval
+ModuleNotFoundError: No module named 'questeval'
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/0a01b1abede4f646130574f203de57a293ded8a7a11e3406a539453afdfeb2c0)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/f9abaabb5e2b2a1e765c25417264722d31877b34ec34b437c53242f6e5c30d6d)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   931    799    132  0.858217
+1      frank   671    223    448  0.332340
+2     pt_any   634     42    592  0.066246
+3  summ_corr  1281    637    644  0.497268
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    127   1123  0.101600
+======= factcc ========
+  0%|          | 0/931 [00:00<?, ?it/s]Better speed can be achieved with apex installed from https://www.github.com/nvidia/apex.
+ 11%|#         | 100/931 [04:47<39:49,  2.88s/it] 21%|##1       | 200/931 [09:13<34:15,  2.81s/it] 32%|###2      | 300/931 [13:34<28:54,  2.75s/it] 43%|####2     | 400/931 [17:56<23:59,  2.71s/it] 54%|#####3    | 500/931 [22:17<19:15,  2.68s/it] 64%|######4   | 600/931 [26:37<14:39,  2.66s/it] 75%|#######5  | 700/931 [31:00<10:11,  2.65s/it] 86%|########5 | 800/931 [35:25<05:47,  2.65s/it] 97%|#########6| 900/931 [40:05<01:23,  2.69s/it]100%|##########| 931/931 [40:05<00:00,  2.58s/it]
+======= frank ========
+  0%|          | 0/671 [00:00<?, ?it/s] 15%|#4        | 100/671 [04:00<22:55,  2.41s/it] 30%|##9       | 200/671 [08:38<19:45,  2.52s/it] 45%|####4     | 300/671 [13:04<15:49,  2.56s/it] 60%|#####9    | 400/671 [20:46<14:21,  3.18s/it] 75%|#######4  | 500/671 [27:56<10:01,  3.52s/it] 89%|########9 | 600/671 [34:55<04:24,  3.72s/it]100%|##########| 671/671 [34:55<00:00,  3.12s/it]
+======= pt_any ========
+  0%|          | 0/634 [00:00<?, ?it/s] 16%|#5        | 100/634 [05:52<31:21,  3.52s/it] 32%|###1      | 200/634 [12:06<25:57,  3.59s/it] 47%|####7     | 300/634 [18:08<20:01,  3.60s/it] 63%|######3   | 400/634 [24:05<14:00,  3.59s/it] 79%|#######8  | 500/634 [30:07<08:02,  3.60s/it]Warning: Empty candidate sentence detected; setting precision to be 0.
+ 95%|#########4| 600/634 [36:17<02:03,  3.63s/it]100%|##########| 634/634 [36:17<00:00,  3.43s/it]
+======= summ_corr ========
+  0%|          | 0/1281 [00:00<?, ?it/s]  8%|7         | 100/1281 [06:53<1:21:27,  4.14s/it] 16%|#5        | 200/1281 [13:46<1:14:30,  4.14s/it] 23%|##3       | 300/1281 [20:55<1:08:22,  4.18s/it] 31%|###1      | 400/1281 [27:44<1:01:00,  4.15s/it] 39%|###9      | 500/1281 [34:32<53:47,  4.13s/it]   47%|####6     | 600/1281 [40:35<45:09,  3.98s/it] 55%|#####4    | 700/1281 [45:54<36:14,  3.74s/it] 62%|######2   | 800/1281 [51:05<28:29,  3.55s/it] 70%|#######   | 900/1281 [55:41<21:03,  3.32s/it] 78%|#######8  | 1000/1281 [59:47<14:19,  3.06s/it] 86%|########5 | 1100/1281 [1:03:38<08:33,  2.84s/it] 94%|#########3| 1200/1281 [1:07:01<03:30,  2.59s/it]100%|##########| 1281/1281 [1:07:01<00:00,  3.14s/it]
+======= summeval ========
+  0%|          | 0/850 [00:00<?, ?it/s] 12%|#1        | 100/850 [06:18<47:21,  3.79s/it] 24%|##3       | 200/850 [12:36<41:01,  3.79s/it] 35%|###5      | 300/850 [18:45<34:25,  3.76s/it] 47%|####7     | 400/850 [24:40<27:43,  3.70s/it] 59%|#####8    | 500/850 [30:52<21:35,  3.70s/it] 71%|#######   | 600/850 [36:39<15:08,  3.63s/it] 82%|########2 | 700/850 [42:51<09:08,  3.66s/it] 94%|#########4| 800/850 [48:39<03:00,  3.60s/it]100%|##########| 850/850 [48:39<00:00,  3.43s/it]
+======= xsumfaith ========
+  0%|          | 0/1250 [00:00<?, ?it/s]  8%|8         | 100/1250 [04:09<47:51,  2.50s/it] 16%|#6        | 200/1250 [08:07<43:03,  2.46s/it] 24%|##4       | 300/1250 [12:12<38:55,  2.46s/it] 32%|###2      | 400/1250 [16:07<34:20,  2.42s/it] 40%|####      | 500/1250 [20:26<30:57,  2.48s/it] 48%|####8     | 600/1250 [24:29<26:39,  2.46s/it] 56%|#####6    | 700/1250 [28:39<22:39,  2.47s/it] 64%|######4   | 800/1250 [32:38<18:21,  2.45s/it] 72%|#######2  | 900/1250 [36:43<14:16,  2.45s/it] 80%|########  | 1000/1250 [40:44<10:09,  2.44s/it] 88%|########8 | 1100/1250 [44:47<06:05,  2.44s/it] 96%|#########6| 1200/1250 [48:59<02:03,  2.46s/it]100%|##########| 1250/1250 [48:59<00:00,  2.35s/it]
+                    factcc     frank   pt_any  summ_corr  summeval  xsumfaith
+model_name input                                                             
+QuestEval  doc    0.688678  0.782136  0.65255   0.549792  0.723539   0.654606
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   931    799    132  0.858217
+1      frank   671    223    448  0.332340
+2     pt_any   634     42    592  0.066246
+3  summ_corr  1281    637    644  0.497268
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    127   1123  0.101600
+======= factcc ========
+  0%|          | 0/931 [00:00<?, ?it/s]100%|##########| 931/931 [00:00<00:00, 167261.93it/s]
+======= frank ========
+  0%|          | 0/671 [00:00<?, ?it/s]100%|##########| 671/671 [00:00<00:00, 132910.41it/s]
+======= pt_any ========
+  0%|          | 0/634 [00:00<?, ?it/s]100%|##########| 634/634 [00:00<00:00, 89889.08it/s]
+======= summ_corr ========
+  0%|          | 0/1281 [00:00<?, ?it/s]100%|##########| 1281/1281 [00:00<00:00, 93516.61it/s]
+======= summeval ========
+  0%|          | 0/850 [00:00<?, ?it/s]100%|##########| 850/850 [00:00<00:00, 190854.30it/s]
+======= xsumfaith ========
+  0%|          | 0/1250 [00:00<?, ?it/s]100%|##########| 1250/1250 [00:00<00:00, 134899.78it/s]
+                    factcc     frank   pt_any  summ_corr  summeval  xsumfaith
+model_name input                                                             
+QuestEval  doc    0.688678  0.782136  0.65255   0.549792  0.723539   0.654606
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   931    799    132  0.858217
+1      frank   671    223    448  0.332340
+2     pt_any   634     42    592  0.066246
+3  summ_corr  1281    637    644  0.497268
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    127   1123  0.101600
+======= factcc ========
+  0%|          | 0/931 [00:00<?, ?it/s]100%|##########| 931/931 [00:00<00:00, 176062.81it/s]
+======= frank ========
+  0%|          | 0/671 [00:00<?, ?it/s]100%|##########| 671/671 [00:00<00:00, 99960.15it/s]
+======= pt_any ========
+  0%|          | 0/634 [00:00<?, ?it/s]100%|##########| 634/634 [00:00<00:00, 95403.75it/s]
+======= summ_corr ========
+  0%|          | 0/1281 [00:00<?, ?it/s]100%|##########| 1281/1281 [00:00<00:00, 87758.12it/s]
+======= summeval ========
+  0%|          | 0/850 [00:00<?, ?it/s]100%|##########| 850/850 [00:00<00:00, 143652.12it/s]
+======= xsumfaith ========
+  0%|          | 0/1250 [00:00<?, ?it/s]100%|##########| 1250/1250 [00:00<00:00, 168918.10it/s]
+                    factcc     frank   pt_any  summ_corr  summeval  xsumfaith
+model_name input                                                             
+QuestEval  doc    0.688678  0.782136  0.65255   0.549792  0.723539   0.654606
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/0a01b1abede4f646130574f203de57a293ded8a7a11e3406a539453afdfeb2c0)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/f9abaabb5e2b2a1e765c25417264722d31877b34ec34b437c53242f6e5c30d6d)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   931    799    132  0.858217
+1      frank   671    223    448  0.332340
+2     pt_any   634     42    592  0.066246
+3  summ_corr  1281    637    644  0.497268
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    127   1123  0.101600
+======= factcc ========
+  0%|          | 0/931 [00:00<?, ?it/s]100%|##########| 931/931 [00:00<00:00, 71231.25it/s]
+======= frank ========
+  0%|          | 0/671 [00:00<?, ?it/s]100%|##########| 671/671 [00:00<00:00, 148570.87it/s]
+======= pt_any ========
+  0%|          | 0/634 [00:00<?, ?it/s]100%|##########| 634/634 [00:00<00:00, 97556.27it/s]
+======= summ_corr ========
+  0%|          | 0/1281 [00:00<?, ?it/s]100%|##########| 1281/1281 [00:00<00:00, 122517.98it/s]
+======= summeval ========
+  0%|          | 0/850 [00:00<?, ?it/s]100%|##########| 850/850 [00:00<00:00, 193495.71it/s]
+======= xsumfaith ========
+  0%|          | 0/1250 [00:00<?, ?it/s]100%|##########| 1250/1250 [00:00<00:00, 141756.93it/s]
+                    factcc     frank   pt_any  summ_corr  summeval  xsumfaith
+model_name input                                                             
+QuestEval  doc    0.688678  0.782136  0.65255   0.549792  0.723539   0.654606
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/0a01b1abede4f646130574f203de57a293ded8a7a11e3406a539453afdfeb2c0)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/f9abaabb5e2b2a1e765c25417264722d31877b34ec34b437c53242f6e5c30d6d)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   931    799    132  0.858217
+1      frank   671    223    448  0.332340
+2     pt_any   634     42    592  0.066246
+3  summ_corr  1281    637    644  0.497268
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    127   1123  0.101600
+======= factcc ========
+  0%|          | 0/931 [00:00<?, ?it/s]100%|##########| 931/931 [00:00<00:00, 152130.94it/s]
+======= frank ========
+  0%|          | 0/671 [00:00<?, ?it/s]100%|##########| 671/671 [00:00<00:00, 104849.79it/s]
+======= pt_any ========
+  0%|          | 0/634 [00:00<?, ?it/s]100%|##########| 634/634 [00:00<00:00, 101978.40it/s]
+======= summ_corr ========
+  0%|          | 0/1281 [00:00<?, ?it/s]100%|##########| 1281/1281 [00:00<00:00, 89552.87it/s]
+======= summeval ========
+  0%|          | 0/850 [00:00<?, ?it/s]100%|##########| 850/850 [00:00<00:00, 155826.67it/s]
+======= xsumfaith ========
+  0%|          | 0/1250 [00:00<?, ?it/s]100%|##########| 1250/1250 [00:00<00:00, 130520.55it/s]
+                    factcc     frank   pt_any  summ_corr  summeval  xsumfaith
+model_name input                                                             
+QuestEval  doc    0.688678  0.782136  0.65255   0.549792  0.723539   0.654606
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/0a01b1abede4f646130574f203de57a293ded8a7a11e3406a539453afdfeb2c0)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/f9abaabb5e2b2a1e765c25417264722d31877b34ec34b437c53242f6e5c30d6d)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]Better speed can be achieved with apex installed from https://www.github.com/nvidia/apex.
+ 20%|#9        | 100/503 [04:38<18:42,  2.78s/it] 40%|###9      | 200/503 [08:54<13:42,  2.72s/it] 60%|#####9    | 300/503 [13:12<09:03,  2.68s/it] 80%|#######9  | 400/503 [17:42<04:36,  2.68s/it] 99%|#########9| 500/503 [22:12<00:08,  2.69s/it]100%|##########| 503/503 [22:12<00:00,  2.65s/it]
+======= frank ========
+  0%|          | 0/1575 [00:00<?, ?it/s]  6%|6         | 100/1575 [04:20<1:04:06,  2.61s/it] 13%|#2        | 200/1575 [09:16<1:02:11,  2.71s/it] 19%|#9        | 300/1575 [13:46<57:32,  2.71s/it]   25%|##5       | 400/1575 [17:51<51:33,  2.63s/it] 32%|###1      | 500/1575 [23:03<49:46,  2.78s/it] 38%|###8      | 600/1575 [27:29<44:33,  2.74s/it] 44%|####4     | 700/1575 [31:43<39:07,  2.68s/it] 51%|#####     | 800/1575 [38:08<39:08,  3.03s/it] 57%|#####7    | 900/1575 [44:45<37:16,  3.31s/it] 63%|######3   | 1000/1575 [51:21<33:36,  3.51s/it] 70%|######9   | 1100/1575 [58:31<29:39,  3.75s/it] 76%|#######6  | 1200/1575 [1:05:08<23:49,  3.81s/it] 83%|########2 | 1300/1575 [1:12:28<18:16,  3.99s/it] 89%|########8 | 1400/1575 [1:19:34<11:52,  4.07s/it] 95%|#########5| 1500/1575 [1:26:38<05:09,  4.12s/it]100%|##########| 1575/1575 [1:26:38<00:00,  3.30s/it]
+======= pt_any ========
+  0%|          | 0/634 [00:00<?, ?it/s] 16%|#5        | 100/634 [05:42<30:26,  3.42s/it] 32%|###1      | 200/634 [11:36<25:00,  3.46s/it]Warning: Empty candidate sentence detected; setting precision to be 0.
+ 47%|####7     | 300/634 [17:29<19:22,  3.48s/it] 63%|######3   | 400/634 [23:22<13:37,  3.49s/it]Warning: Empty candidate sentence detected; setting precision to be 0.
+ 79%|#######8  | 500/634 [29:26<07:54,  3.54s/it] 95%|#########4| 600/634 [35:21<02:00,  3.54s/it]100%|##########| 634/634 [35:21<00:00,  3.35s/it]
+======= summ_corr ========
+  0%|          | 0/400 [00:00<?, ?it/s] 25%|##5       | 100/400 [06:46<20:20,  4.07s/it] 50%|#####     | 200/400 [13:54<13:46,  4.13s/it] 75%|#######5  | 300/400 [20:55<06:55,  4.16s/it]100%|##########| 400/400 [27:49<00:00,  4.15s/it]100%|##########| 400/400 [27:49<00:00,  4.17s/it]
+======= summeval ========
+  0%|          | 0/850 [00:00<?, ?it/s]100%|##########| 850/850 [00:00<00:00, 104534.77it/s]
+======= xsumfaith ========
+  0%|          | 0/1250 [00:00<?, ?it/s]  8%|8         | 100/1250 [04:11<48:16,  2.52s/it] 16%|#6        | 200/1250 [08:01<42:55,  2.45s/it] 24%|##4       | 300/1250 [12:06<38:49,  2.45s/it] 32%|###2      | 400/1250 [15:59<34:11,  2.41s/it] 40%|####      | 500/1250 [19:53<29:53,  2.39s/it] 48%|####8     | 600/1250 [23:55<26:01,  2.40s/it] 56%|#####6    | 700/1250 [28:23<22:46,  2.48s/it] 64%|######4   | 800/1250 [32:25<18:28,  2.46s/it] 72%|#######2  | 900/1250 [36:37<14:28,  2.48s/it] 80%|########  | 1000/1250 [40:50<10:24,  2.50s/it] 88%|########8 | 1100/1250 [44:43<06:07,  2.45s/it] 96%|#########6| 1200/1250 [48:37<02:00,  2.41s/it]100%|##########| 1250/1250 [48:37<00:00,  2.33s/it]
+                    factcc     frank    pt_any  summ_corr  summeval  xsumfaith
+model_name input                                                              
+QuestEval  doc    0.662863  0.819669  0.702094   0.626166  0.723539   0.618475
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/0a01b1abede4f646130574f203de57a293ded8a7a11e3406a539453afdfeb2c0)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/f9abaabb5e2b2a1e765c25417264722d31877b34ec34b437c53242f6e5c30d6d)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]100%|##########| 503/503 [00:00<00:00, 123694.59it/s]
+======= frank ========
+  0%|          | 0/1575 [00:00<?, ?it/s]100%|##########| 1575/1575 [00:00<00:00, 131662.39it/s]
+======= pt_any ========
+  0%|          | 0/634 [00:00<?, ?it/s]100%|##########| 634/634 [00:00<00:00, 108304.03it/s]
+======= summ_corr ========
+  0%|          | 0/400 [00:00<?, ?it/s]100%|##########| 400/400 [00:00<00:00, 57904.38it/s]
+======= summeval ========
+  0%|          | 0/850 [00:00<?, ?it/s]100%|##########| 850/850 [00:00<00:00, 113750.19it/s]
+======= xsumfaith ========
+  0%|          | 0/1250 [00:00<?, ?it/s]100%|##########| 1250/1250 [00:00<00:00, 143833.64it/s]
+                    factcc     frank    pt_any  summ_corr  summeval  xsumfaith
+model_name input                                                              
+QuestEval  doc    0.662863  0.819669  0.702094   0.626166  0.723539   0.618475
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+/home/phillab/anaconda3/envs/questeval/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
+  warn(msg)
+Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/0a01b1abede4f646130574f203de57a293ded8a7a11e3406a539453afdfeb2c0)
+Using custom data configuration default
+Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/f9abaabb5e2b2a1e765c25417264722d31877b34ec34b437c53242f6e5c30d6d)
+        name     N  N_pos  N_neg  frac_pos
+0     factcc   503    441     62  0.876740
+1      frank  1575    529   1046  0.335873
+2     pt_any   634     41    593  0.064669
+3  summ_corr   400    312     88  0.780000
+4   summeval   850    770     80  0.905882
+5  xsumfaith  1250    130   1120  0.104000
+======= factcc ========
+  0%|          | 0/503 [00:00<?, ?it/s]100%|##########| 503/503 [00:00<00:00, 124482.82it/s]
+======= frank ========
+  0%|          | 0/1575 [00:00<?, ?it/s]100%|##########| 1575/1575 [00:00<00:00, 138782.12it/s]
+======= pt_any ========
+  0%|          | 0/634 [00:00<?, ?it/s]100%|##########| 634/634 [00:00<00:00, 121296.75it/s]
+======= summ_corr ========
+  0%|          | 0/400 [00:00<?, ?it/s]100%|##########| 400/400 [00:00<00:00, 60371.41it/s]
+======= summeval ========
+  0%|          | 0/850 [00:00<?, ?it/s]100%|##########| 850/850 [00:00<00:00, 109039.59it/s]
+======= xsumfaith ========
+  0%|          | 0/1250 [00:00<?, ?it/s]100%|##########| 1250/1250 [00:00<00:00, 143491.16it/s]
+                    factcc     frank    pt_any  summ_corr  summeval  xsumfaith
+model_name input                                                              
+QuestEval  doc    0.662863  0.819669  0.702094   0.626166  0.723539   0.618475
