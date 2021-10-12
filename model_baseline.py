@@ -8,7 +8,7 @@ class BaselineScorer:
         self.do_weighter = do_weighter
         self.model_loaded = False
         self.cache = {}
-        self.cache_file = "/home/phillab/data/summac_cache/cache_%s.json" % (self.model)
+        self.cache_file = "/export/share/plaban/summac_cache/cache_%s.json" % (self.model)
         if load_cache:
             self.load_cache()
 

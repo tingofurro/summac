@@ -44,7 +44,7 @@ class SummaCImager:
 
         self.granularity = granularity
         self.use_cache = use_cache
-        self.cache_folder = "/home/phillab/data/summac_cache/"
+        self.cache_folder = "/export/share/plaban/summac_cache/"
 
         self.max_doc_sents = max_doc_sents
         self.max_input_length = 500
