@@ -171,7 +171,7 @@ def load_summeval(dataset_folder="/home/phillab/data/summac_benchmark/summeval/"
     clean_dataset = []
 
     for i, d in enumerate(raw_dataset):
-        cut = "val" if i % 2 == 0 else "test"
+        c = "val" if i % 2 == 0 else "test"
         _, _, article_id = d["id"].split("-")
         document = cnndm_id2article[article_id]
         annotations = d["expert_annotations"] # + d.get("turker_annotations", [])
@@ -180,7 +180,7 @@ def load_summeval(dataset_folder="/home/phillab/data/summac_benchmark/summeval/"
         final_label = 1 if len([cons for cons in consistencies if cons==5]) > len(annotations)/2 else 0
 
         annotations = [1 if cons == 5 else 0 for cons in consistencies]
-        clean_dataset.append({"document": document, "claim": d["decoded"], "label": final_label, "model_name": d["model_id"], "cnndm_id": d["id"], "cut": cut, "annotations": annotations, "task": "summeval"})
+        clean_dataset.append({"document": document, "claim": d["decoded"], "label": final_label, "model_name": d["model_id"], "cnndm_id": d["id"], "cut": c, "annotations": annotations, "task": "summeval"})
     final_dataset = [d for d in clean_dataset if d["cut"] == cut]
     return final_dataset
 
