@@ -13,7 +13,7 @@ def load_factcc(dataset_folder="/home/phillab/data/summac_benchmark/factcc/", cu
                 if max_entries > 0 and i >= max_entries:
                     break
                 D = json.loads(line)
-                with open(os.path.join(dataset_folder, D["filepath"]), "r") as f2:
+                with open(os.path.join(dataset_folder.replace("factcc/", ""), D["filepath"]), "r") as f2:
                     full_text = f2.read()
                 full_text = full_text.split("@highlight")[0].strip()
 

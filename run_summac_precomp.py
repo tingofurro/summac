@@ -1,5 +1,9 @@
+import utils_misc
+
+utils_misc.select_freer_gpu()
+
 from model_summac import SummaCHisto, model_map
-import utils_summac_benchmark, utils_misc
+import utils_summac_benchmark
 import argparse, json, tqdm, nltk
 
 model_choices = list(model_map.keys()) + ["multi", "multi2"]
@@ -23,10 +27,10 @@ else:
 
 model = SummaCHisto(models=models, granularity=args.granularity)
 
-dataset_fn = utils_misc.unique_file("/home/phillab/data/summac/train_%s_%s.jsonl" % (args.model, args.granularity))
+dataset_fn = utils_misc.unique_file("/home/phillab/data/summac_cache/train_%s_%s.jsonl" % (args.model, args.granularity))
 print(">> Will write to file: %s" % (dataset_fn))
 
-d_train = utils_summac_benchmark.load_factcc(cut="train", max_entries=60000)
+d_train = utils_summac_benchmark.load_factcc(cut="train", max_entries=20000)
 print("Dataset loaded")
 for d in tqdm.tqdm(d_train):
     if len(sent_tok(d["document"])) == 0 or len(sent_tok(d["claim"])) == 0:

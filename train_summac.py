@@ -14,7 +14,7 @@ def train(model="mnli", granularity="sentence", nli_labels="e", pre_file="", num
         print("Experiment name: %s" % (experiment))
 
     if len(pre_file) == 0:
-        standard_pre_file = "/home/phillab/data/summac/train_%s_%s.jsonl" % (model, granularity)
+        standard_pre_file = "/home/phillab/data/summac_cache/train_%s_%s.jsonl" % (model, granularity)
         if os.path.isfile(standard_pre_file):
             pre_file = standard_pre_file
 
