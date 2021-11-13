@@ -2,7 +2,7 @@ import utils_misc
 
 utils_misc.select_freer_gpu()
 
-from model_summac import SummaCHisto, model_map
+from model_summac import SummaCConv, model_map
 import utils_summac_benchmark
 import argparse, json, tqdm, nltk
 
@@ -25,7 +25,7 @@ elif args.model == "multi2":
 else:
     models = [args.model]
 
-model = SummaCHisto(models=models, granularity=args.granularity)
+model = SummaCConv(models=models, granularity=args.granularity)
 
 dataset_fn = utils_misc.unique_file("/home/phillab/data/summac_cache/train_%s_%s.jsonl" % (args.model, args.granularity))
 print(">> Will write to file: %s" % (dataset_fn))

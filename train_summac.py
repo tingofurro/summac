@@ -5,7 +5,7 @@ import torch, tqdm, nltk, numpy as np, argparse, json
 from torch.utils.data import DataLoader, RandomSampler
 import utils_optim, os, time
 from utils_summac_benchmark import SummaCBenchmark, load_factcc
-from model_summac import SummaCHisto, model_map
+from model_summac import SummaCConv, model_map
 
 def train(model="mnli", granularity="sentence", nli_labels="e", pre_file="", num_epochs=5, optimizer="adam", train_batch_size=32, learning_rate=0.1, bins="even50", silent=False, norm_histo=False):
     experiment = "%s_%s_%s_%s" % (model, granularity, bins, nli_labels)
@@ -28,7 +28,7 @@ def train(model="mnli", granularity="sentence", nli_labels="e", pre_file="", num
     else:
         models = [model]
 
-    model = SummaCHisto(models=models, granularity=granularity, nli_labels=nli_labels, device=device, bins=bins, norm_histo=norm_histo)
+    model = SummaCConv(models=models, granularity=granularity, nli_labels=nli_labels, device=device, bins=bins, norm_histo=norm_histo)
 
     optimizer = utils_optim.build_optimizer(model, learning_rate=learning_rate, optimizer_name=optimizer)
     if not silent:

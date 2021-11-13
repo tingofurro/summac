@@ -1,11 +1,11 @@
 from model_generator import Generator
-from model_summac import SummaCHisto
+from model_summac import SummaCConv
 import nltk
 
 model = Generator(model_card="gpt2-medium", device="cuda")
 model.reload("/home/phillab/models/ACL2021/gpt2_med_keep_it_simple.bin")
 
-summac = SummaCHisto(models=["vitc"], bins="percentile", start_file="/home/phillab/models/summac/vitc_sentence_percentile_e_bacc0.746.bin")
+summac = SummaCConv(models=["vitc"], bins="percentile", start_file="/home/phillab/models/summac/vitc_sentence_percentile_e_bacc0.746.bin")
 
 document = """Jeff joined Microsoft in 1992 to lead corporate developer evangelism for Windows NT. He then served as a Group Program manager in Microsoft's Internet Business Unit.
 In 1998, he led the creation of SharePoint Portal Server, which became one of Microsoft's fastest-growing businesses, exceeding $2 billion in revenues.

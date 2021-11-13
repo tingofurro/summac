@@ -171,12 +171,12 @@ class SummaCImager:
                 cache_cp = json.load(f)
                 self.cache = {tuple(k.split("[///]")): np.array(v) for k, v in cache_cp.items()}
 
-class SummaCHisto(torch.nn.Module):
+class SummaCConv(torch.nn.Module):
     def __init__(self, models=["mnli", "anli", "vitc"], bins='even50', granularity="sentence", nli_labels="e", device="cuda", start_file=None, imager_load_cache=True, agg="mean", norm_histo=False, **kwargs):
         # `bins` should be `even%d` or `percentiles`
         assert nli_labels in ["e", "c", "n", "ec", "en", "cn", "ecn"], "Unrecognized nli_labels argument %s" % (nli_labels)
 
-        super(SummaCHisto, self).__init__()
+        super(SummaCConv, self).__init__()
         self.device = device
         self.models = models
 
