@@ -15,6 +15,31 @@ The two trained models SummaC-ZS and SummaC-Conv are implemented in `model_summa
 - *SummaC-ZS* does not require a model file (as the model is zero-shot and not trained): it can be used as seen at the bottom of the `model_summac.py`.
 - *SummaC-Conv* requires a `start_file` which contains the trained weight for the convolution layer. The default `start_file` used to compute results is available in this repository ( `summac_conv_vitc_sent_perc_e.bin` [download link](https://github.com/tingofurro/summac/raw/master/summac_conv_vitc_sent_perc_e.bin)).
 
+### Example use
+
+```
+from model_summac import SummaCZS
+
+model = SummaCZS(granularity="sentence", model_name="vitc")
+
+document = """Scientists are studying Mars to learn about the Red Planet and find landing sites for future missions.
+One possible site, known as Arcadia Planitia, is covered instrange sinuous features.
+The shapes could be signs that the area is actually made of glaciers, which are large masses of slow-moving ice.
+Arcadia Planitia is in Mars' northern lowlands."""
+
+summary1 = "There are strange shape patterns on Arcadia Planitia. The shapes could indicate the area might be made of glaciers. This makes Arcadia Planitia ideal for future missions."
+summary2 = "There are strange shape patterns on Arcadia Planitia. The shapes could indicate the area might be made of glaciers."
+
+score1 = model.score([document], [summary1])
+print("Summary Score 1 consistency: %.3f" % (score1["scores"][0])) # Prints: 0.587
+
+score2 = model.score([document], [summary2])
+print("Summary Score 2 consistency: %.3f" % (score2["scores"][0])) # Prints: 0.877
+```
+
+To load all the necessary files: (1) clone this repository, (2) add the reposity to Python path: `export PYTHONPATH="${PYTHONPATH}:/path/to/summac/"`
+
+
 ## SummaC Benchmark
 
 The SummaC Benchmark consists of 6 summary consistency datasets that have been standardized to a binary classification task. The datasets included are:
@@ -39,8 +64,7 @@ If you make use of the code, models, or algorithm, please cite our paper:
   title={SummaC: Re-Visiting NLI-based Models for Inconsistency Detection in Summarization},
   author={Philippe Laban and Tobias Schnabel and Paul N. Bennett and Marti A. Hearst},
   booktitle={Proceedings of the Transactions of the Association for Computational Linguistics},
-  volume={1},
-  year={2020}
+  year={2021}
 }
 ```
 
