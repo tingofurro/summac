@@ -58,15 +58,7 @@ Note: we have a plan to streamline the process by further improving to automatic
 
 ## Cite the work
 
-If you make use of the code, models, or algorithm, please cite our paper:
-```
-@inproceedings{laban2021summac,
-  title={SummaC: Re-Visiting NLI-based Models for Inconsistency Detection in Summarization},
-  author={Philippe Laban and Tobias Schnabel and Paul N. Bennett and Marti A. Hearst},
-  booktitle={Proceedings of the Transactions of the Association for Computational Linguistics},
-  year={2021}
-}
-```
+If you make use of the code, models, or algorithm, please cite our paper. Bibtex to come.
 
 ## Contributing
 
