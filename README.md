@@ -45,8 +45,11 @@ To load all the necessary files: (1) clone this repository, (2) add the reposity
 The SummaC Benchmark consists of 6 summary consistency datasets that have been standardized to a binary classification task. The datasets included are:
 
 <p align="center">
-  <img width="500" src="https://tingofurro.github.io/images/tacl2021_summac_benchmark.png">
+  <img width="500" src="https://tingofurro.github.io/images/tacl2021_summac_benchmark.png?1"><br />
+  <b>% Positive</b> is the percentage of positive (consistent) summaries. IAA is the inter-annotator agreement (Fleiss Kappa). <b>Source</b> is the dataset used for the source documents (CNN/DM or XSum). <b># Summarizers</b> is the number of summarizers (extractive and abstractive) included in the dataset. <b># Sublabel</b> is the number of labels in the typology used to label summary errors.
 </p>
+
+
 
 The data-loaders for the benchmark are included in `utils_summac_benchmark.py` ([link](https://github.com/tingofurro/summac/blob/master/utils_summac_benchmark.py)). Because the dataset relies on previously published work, the dataset requires the manual download of several datasets. For each of the 6 tasks, the link and instruction to download are present as a comment in the file. Once all the files have been compiled, the benchmark can be loaded and standardized by running:
 ```
