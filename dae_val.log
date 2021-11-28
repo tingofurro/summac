@@ -1,57 +1,0 @@
-/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Data Validation extension is not supported and will be removed
-  warn(msg)
-/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/openpyxl/worksheet/_reader.py:312: UserWarning: Conditional Formatting extension is not supported and will be removed
-  warn(msg)
-Reusing dataset cnn_dailymail (/home/phillab/.cache/huggingface/datasets/cnn_dailymail/3.0.0/3.0.0/3cb851bf7cf5826e45d49db2863f627cba583cbc32342df7349dfe6c38060234)
-Using custom data configuration default
-Reusing dataset xsum (/home/phillab/.cache/huggingface/datasets/xsum/default/1.2.0/4957825a982999fbf80bca0b342793b01b2611e021ef589fb7c6250b3577b499)
-        name     N  N_pos  N_neg  frac_pos
-0     factcc   931    799    132  0.858217
-1      frank   671    223    448  0.332340
-2     pt_any   634     42    592  0.066246
-3  summ_corr  1281    637    644  0.497268
-4   summeval   850    770     80  0.905882
-5  xsumfaith  1250    127   1123  0.101600
-======= factcc ========
-  0%|          | 0/931 [00:00<?, ?it/s]/home/phillab/anaconda3/envs/dae/lib/python3.7/site-packages/transformers/tokenization_utils.py:831: FutureWarning: Parameter max_len is deprecated and will be removed in a future release. Use model_max_length instead.
-  category=FutureWarning,
- 11%|#         | 100/931 [00:13<01:50,  7.53it/s] 21%|##1       | 200/931 [00:21<01:26,  8.49it/s] 32%|###2      | 300/931 [00:29<01:07,  9.35it/s] 43%|####2     | 400/931 [00:37<00:52, 10.10it/s] 54%|#####3    | 500/931 [00:46<00:40, 10.54it/s] 64%|######4   | 600/931 [00:54<00:30, 10.92it/s] 75%|#######5  | 700/931 [01:02<00:20, 11.23it/s] 86%|########5 | 800/931 [01:11<00:11, 11.36it/s] 97%|#########6| 900/931 [01:19<00:02, 11.54it/s]100%|##########| 931/931 [01:19<00:00, 11.65it/s]
-======= frank ========
-  0%|          | 0/671 [00:00<?, ?it/s] 15%|#4        | 100/671 [00:08<00:48, 11.83it/s] 30%|##9       | 200/671 [00:17<00:40, 11.65it/s] 45%|####4     | 300/671 [00:26<00:32, 11.35it/s] 60%|#####9    | 400/671 [00:38<00:26, 10.26it/s] 75%|#######4  | 500/671 [00:50<00:18,  9.50it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (423 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
-Token indices sequence length is longer than the specified maximum sequence length for this model (496 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
-Token indices sequence length is longer than the specified maximum sequence length for this model (496 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
-Token indices sequence length is longer than the specified maximum sequence length for this model (496 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
-Token indices sequence length is longer than the specified maximum sequence length for this model (496 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
-Token indices sequence length is longer than the specified maximum sequence length for this model (496 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
- 89%|########9 | 600/671 [01:02<00:07,  9.17it/s]100%|##########| 671/671 [01:02<00:00, 10.70it/s]
-======= pt_any ========
-  0%|          | 0/634 [00:00<?, ?it/s] 16%|#5        | 100/634 [00:11<01:01,  8.75it/s] 32%|###1      | 200/634 [00:24<00:51,  8.35it/s] 47%|####7     | 300/634 [00:36<00:40,  8.30it/s] 63%|######3   | 400/634 [00:48<00:27,  8.41it/s] 79%|#######8  | 500/634 [01:01<00:16,  8.22it/s] 95%|#########4| 600/634 [01:12<00:04,  8.36it/s]100%|##########| 634/634 [01:12<00:00,  8.72it/s]
-======= summ_corr ========
-  0%|          | 0/1281 [00:00<?, ?it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (437 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
-  8%|7         | 100/1281 [00:12<02:23,  8.21it/s] 16%|#5        | 200/1281 [00:25<02:13,  8.08it/s] 23%|##3       | 300/1281 [00:37<02:02,  8.02it/s] 31%|###1      | 400/1281 [00:50<01:51,  7.88it/s] 39%|###9      | 500/1281 [01:02<01:37,  8.01it/s] 47%|####6     | 600/1281 [01:12<01:19,  8.61it/s] 55%|#####4    | 700/1281 [01:20<01:00,  9.54it/s] 62%|######2   | 800/1281 [01:27<00:45, 10.52it/s] 70%|#######   | 900/1281 [01:34<00:33, 11.52it/s] 78%|#######8  | 1000/1281 [01:40<00:22, 12.68it/s] 86%|########5 | 1100/1281 [01:45<00:12, 14.02it/s] 94%|#########3| 1200/1281 [01:50<00:05, 15.37it/s]100%|##########| 1281/1281 [01:50<00:00, 11.57it/s]
-======= summeval ========
-  0%|          | 0/850 [00:00<?, ?it/s]100%|##########| 850/850 [00:00<00:00, 133187.33it/s]
-======= xsumfaith ========
-  0%|          | 0/1250 [00:00<?, ?it/s]  8%|8         | 100/1250 [00:08<01:33, 12.26it/s] 16%|#6        | 200/1250 [00:16<01:25, 12.24it/s] 24%|##4       | 300/1250 [00:24<01:18, 12.06it/s] 32%|###2      | 400/1250 [00:33<01:10, 12.02it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (539 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
-Token indices sequence length is longer than the specified maximum sequence length for this model (644 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
- 40%|####      | 500/1250 [00:41<01:02, 12.02it/s] 48%|####8     | 600/1250 [00:51<00:56, 11.56it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (641 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
- 56%|#####6    | 700/1250 [00:59<00:47, 11.66it/s] 64%|######4   | 800/1250 [01:07<00:38, 11.68it/s] 72%|#######2  | 900/1250 [01:15<00:29, 12.05it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (641 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
- 80%|########  | 1000/1250 [01:24<00:20, 11.92it/s] 88%|########8 | 1100/1250 [01:32<00:12, 11.98it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (539 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
-Token indices sequence length is longer than the specified maximum sequence length for this model (641 > 512). Running this sequence through the model will result in indexing errors
-Error, document too long
- 96%|#########6| 1200/1250 [01:40<00:04, 12.01it/s]100%|##########| 1250/1250 [01:40<00:00, 12.40it/s]
-                    factcc     frank    pt_any  summ_corr  summeval  xsumfaith
-model_name input                                                              
-DAE        doc    0.791278  0.607889  0.601995   0.651551  0.701461   0.498289
