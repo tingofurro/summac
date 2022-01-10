@@ -82,20 +82,20 @@ class SummaCBenchmark:
                     label = 0 if dataset[aid]["label"] == "Incorrect" else 1
                     sents = dataset[aid]["sents"]
                     summary = " ".join([sents[str(i)]["text"] for i in range(len(sents))])
-                    clean_dataset.append({"filename": fn, "label": label, "document": document, "claim": summary, "cnndm_id": aid, "annotations": [label], "dataset": "cogensumm"})
+                    clean_dataset.append({"filename": fn, "label": label, "document": document, "claim": summary, "cnndm_id": aid, "annotations": [label], "dataset": "cogensumm", "origin": "cnndm"})
             elif fn == "val_reranking.json":
                 for aid in dataset:
                     document = self.get_cnndm_document(aid)
                     for idx, data in dataset[aid].items():
                         label = 0 if data["label"] == "Incorrect" else 1
                         summary = " ".join([data["sents"][str(i)]["text"] for i in range(len(data["sents"]))])
-                        clean_dataset.append({"filename": fn, "label": label, "document": document, "claim": summary, "cnndm_id": aid, "annotations": [label], "dataset": "cogensumm"})
+                        clean_dataset.append({"filename": fn, "label": label, "document": document, "claim": summary, "cnndm_id": aid, "annotations": [label], "dataset": "cogensumm", "origin": "cnndm"})
             elif fn == "val_sentence_pairs.json":
                 for d in dataset:
                     aid = d["article_id"]
                     document = self.get_cnndm_document(aid)
-                    clean_dataset.append({"filename": fn, "label": 1, "document": document, "claim": d["correct_sent"], "cnndm_id": aid, "annotations": [1], "dataset": "cogensumm"})
-                    clean_dataset.append({"filename": fn, "label": 0, "document": document, "claim": d["incorrect_sent"], "cnndm_id": aid, "annotations": [0], "dataset": "cogensumm"})
+                    clean_dataset.append({"filename": fn, "label": 1, "document": document, "claim": d["correct_sent"], "cnndm_id": aid, "annotations": [1], "dataset": "cogensumm", "origin": "cnndm"})
+                    clean_dataset.append({"filename": fn, "label": 0, "document": document, "claim": d["incorrect_sent"], "cnndm_id": aid, "annotations": [0], "dataset": "cogensumm", "origin": "cnndm"})
         self.datasets.append({"name": "cogensumm", "dataset": clean_dataset})
 
     def load_xsumfaith(self):
@@ -138,7 +138,7 @@ class SummaCBenchmark:
             label = 1 if most_common_label == "NULL" else 0
             c = "val" if len(clean_dataset) % 2 == 0 else "test"
 
-            clean_dataset.append({"document": document, "claim": A["summary"], "bbcid": A["bbcid"], "model_name": A["system"], "label": label, "cut": c, "annotations": annotations, "dataset": "xsumfaith"})
+            clean_dataset.append({"document": document, "claim": A["summary"], "bbcid": A["bbcid"], "model_name": A["system"], "label": label, "cut": c, "annotations": annotations, "dataset": "xsumfaith", "origin": "xsum"})
         final_dataset = [d for d in clean_dataset if d["cut"]==self.cut]
         self.datasets.append({"name": "xsumfaith", "dataset": final_dataset})
 
@@ -185,6 +185,7 @@ class SummaCBenchmark:
                     d["label"] = d["%s_label" % (which_label)]
                 d["dataset"] = "polytope"
                 d["annotations"] = [d["label"]]
+                d["origin"] = "cnndm"
 
                 full_dataset.append(d)
         cut_dataset = [d for d in full_dataset if d["cut"]==self.cut]
@@ -221,7 +222,7 @@ class SummaCBenchmark:
                     full_text = self.get_cnndm_document(aid)
 
                     label = 1 if D["label"]=="CORRECT" else 0
-                    datum = {"document": full_text, "claim": D["claim"], "cnndm_id": D["id"], "label": label, "dataset": "factcc"}
+                    datum = {"document": full_text, "claim": D["claim"], "cnndm_id": D["id"], "label": label, "dataset": "factcc", "origin": "cnndm"}
                     dataset.append(datum)
 
         if self.cut in ["val", "test"]:
@@ -237,10 +238,12 @@ class SummaCBenchmark:
                 d["label"] = 1 if d["label"] == "CORRECT" else 0
                 d["annotations"] = [d["label"]]
                 d["dataset"] = "factcc"
+                d["origin"] = "cnndm"
 
         self.datasets.append({"name": "factcc", "dataset": dataset})
 
-    def load_summeval(self):
+    def load_summeval(self, key_focus="consistency"):
+        assert key_focus in ["consistency", "coherence", "fluency", "relevance"]
         # SummEval: Re-evaluating Summarization Evaluation [https://arxiv.org/abs/2007.12626]
         # Data files must be downloaded from the following Github repository: https://github.com/Yale-LILY/SummEval
         raw_dataset = []
@@ -266,11 +269,13 @@ class SummaCBenchmark:
             document = self.get_cnndm_document(article_id)
             annotations = d["expert_annotations"]
 
-            consistencies = [a["consistency"] for a in annotations]
+            consistencies = [a[key_focus] for a in annotations]
             final_label = 1 if len([cons for cons in consistencies if cons==5]) > len(annotations)/2 else 0
 
             annotations = [1 if cons == 5 else 0 for cons in consistencies]
-            clean_dataset.append({"document": document, "claim": d["decoded"], "label": final_label, "model_name": d["model_id"], "cnndm_id": d["id"], "cut": c, "annotations": annotations, "dataset": "summeval"})
+            error_type = "no error" if final_label == 1 else "error"
+
+            clean_dataset.append({"document": document, "claim": d["decoded"], "label": final_label, "model_name": d["model_id"], "cnndm_id": d["id"], "cut": c, "annotations": annotations, "dataset": "summeval", "origin": "cnndm", "error_type": error_type})
         final_dataset = [d for d in clean_dataset if d["cut"] == self.cut]
         self.datasets.append({"name": "summeval", "dataset": final_dataset})
 
@@ -300,6 +305,8 @@ class SummaCBenchmark:
         dataset = []
         for d in raw_dataset:
             article = d["article"]
+            origin = "cnndm" if len(d["hash"]) >= 40 else "xsum"
+
             if d["hash"] not in valid_hashes:
                 continue
 
@@ -317,8 +324,14 @@ class SummaCBenchmark:
 
             annotations = [1 if all(a=="NoE" for a in annos) else 0 for annos in annotator_labels.values()]
             label = 0 if any(sl==0 for sl in summ_labels) else 1
+
+            error_type = "NoE"
+            if label == 0:
+                errors = [anno for annos in annotator_labels.values() for anno in annos if anno != "NoE"]
+                error_type = Counter(errors).most_common(1)[0][0]
+
             summary = d["summary"]
-            dataset.append({"document": article, "claim": summary, "label": label, "cut": self.cut, "hash": d["hash"], "model_name": d["model_name"], "annotations": annotations, "dataset": "frank"})
+            dataset.append({"document": article, "claim": summary, "label": label, "cut": self.cut, "hash": d["hash"], "model_name": d["model_name"], "annotations": annotations, "dataset": "frank", "origin": origin, "error_type": error_type})
         self.datasets.append({"name": "frank", "dataset": dataset})
 
     def get_dataset(self, dataset_name):
