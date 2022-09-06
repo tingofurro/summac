@@ -1,5 +1,8 @@
-import datasets, nltk, numpy as np
-import json, os, sys, argparse
+import argparse
+import json
+import os
+import sys
+
 
 class BaselineScorer:
     def __init__(self, model="questeval", do_weighter=False, load_cache=True):
@@ -8,19 +11,23 @@ class BaselineScorer:
         self.do_weighter = do_weighter
         self.model_loaded = False
         self.cache = {}
-        self.cache_file = "/export/share/plaban/summac_cache/cache_%s.json" % (self.model)
+        self.cache_file = "/export/share/plaban/summac_cache/cache_%s.json" % (
+            self.model
+        )
         if load_cache:
             self.load_cache()
 
     def load_model(self):
         if self.model == "questeval":
             from questeval.questeval_metric import QuestEval
+
             self.questeval = QuestEval(isCuda=True, do_weighter=self.do_weighter)
         elif self.model == "feqa":
             # import benepar, nltk
             # benepar.download('benepar_en2')
             # nltk.download('stopwords')
             from feqa import FEQA
+
             self.scorer = FEQA(use_gpu=True)
         elif self.model == "dae":
             sys.path.insert(0, "/home/phillab/dae-factuality/")
@@ -31,7 +38,7 @@ class BaselineScorer:
             args.device = "cuda:0"
             args.per_gpu_eval_batch_size = 8
             args.max_seq_length = 128
-            args.dependency_type =  "enhancedDependencies"
+            args.dependency_type = "enhancedDependencies"
             self.args = args
 
             model_dir = "/home/phillab/models/dae_basic/"
@@ -74,7 +81,9 @@ class BaselineScorer:
         scores = []
         for document, generated in zip(documents, generateds):
             document = " ".join(document.split(" ")[:250])
-            score = score_example_single_context(generated, document, self.dae_model, self.tokenizer, self.args).item()
+            score = score_example_single_context(
+                generated, document, self.dae_model, self.tokenizer, self.args
+            ).item()
             scores.append(score)
 
         # self.save_cache()
@@ -92,16 +101,27 @@ class BaselineScorer:
                 self.load_model()
 
             if self.model == "questeval":
-                new_scores = self.score_questeval([d[1] for d in new_samples], [d[2] for d in new_samples])
+                new_scores = self.score_questeval(
+                    [d[1] for d in new_samples], [d[2] for d in new_samples]
+                )
             elif self.model == "feqa":
-                new_scores = self.score_feqa([d[1] for d in new_samples], [d[2] for d in new_samples])
+                new_scores = self.score_feqa(
+                    [d[1] for d in new_samples], [d[2] for d in new_samples]
+                )
             elif self.model == "dae":
-                new_scores = self.score_dae([d[1] for d in new_samples], [d[2] for d in new_samples])
+                new_scores = self.score_dae(
+                    [d[1] for d in new_samples], [d[2] for d in new_samples]
+                )
 
             for (k, d, g), score in zip(new_samples, new_scores["scores"]):
                 self.cache[k] = score
 
-        return {"scores": [self.cache[self.get_sample_key(d, g)] for d, g in zip(documents, generateds)]}
+        return {
+            "scores": [
+                self.cache[self.get_sample_key(d, g)]
+                for d, g in zip(documents, generateds)
+            ]
+        }
 
 
 if __name__ == "__main__":

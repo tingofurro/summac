@@ -1,0 +1,8 @@
+LICENSE
+README.md
+setup.py
+summac.egg-info/PKG-INFO
+summac.egg-info/SOURCES.txt
+summac.egg-info/dependency_links.txt
+summac.egg-info/requires.txt
+summac.egg-info/top_level.txt

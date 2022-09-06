@@ -1,20 +1,46 @@
-import utils_misc
+from .utils_misc import select_freer_gpu
 
-utils_misc.select_freer_gpu()
-import torch, tqdm, nltk, numpy as np, argparse, json
+select_freer_gpu()
+
+import argparse
+import json
+import nltk
+import numpy as np
+import torch
+import tqdm
 from torch.utils.data import DataLoader, RandomSampler
-import utils_optim, os, time
-from utils_summac_benchmark import SummaCBenchmark, load_factcc
-from model_summac import SummaCConv, model_map
 
-def train(model="mnli", granularity="sentence", nli_labels="e", pre_file="", num_epochs=5, optimizer="adam", train_batch_size=32, learning_rate=0.1, bins="even50", silent=False, norm_histo=False):
+import os
+import time
+
+from .utils_optim import build_optimizer
+from .model_summac import SummaCConv, model_map
+from .utils_summac_benchmark import SummaCBenchmark
+
+
+def train(
+    model="mnli",
+    granularity="sentence",
+    nli_labels="e",
+    pre_file="",
+    num_epochs=5,
+    optimizer="adam",
+    train_batch_size=32,
+    learning_rate=0.1,
+    bins="even50",
+    silent=False,
+    norm_histo=False,
+):
     experiment = "%s_%s_%s_%s" % (model, granularity, bins, nli_labels)
 
     if not silent:
         print("Experiment name: %s" % (experiment))
 
     if len(pre_file) == 0:
-        standard_pre_file = "/home/phillab/data/summac_cache/train_%s_%s.jsonl" % (model, granularity)
+        standard_pre_file = "/home/phillab/data/summac_cache/train_%s_%s.jsonl" % (
+            model,
+            granularity,
+        )
         if os.path.isfile(standard_pre_file):
             pre_file = standard_pre_file
 
@@ -28,15 +54,24 @@ def train(model="mnli", granularity="sentence", nli_labels="e", pre_file="", num
     else:
         models = [model]
 
-    model = SummaCConv(models=models, granularity=granularity, nli_labels=nli_labels, device=device, bins=bins, norm_histo=norm_histo)
+    model = SummaCConv(
+        models=models,
+        granularity=granularity,
+        nli_labels=nli_labels,
+        device=device,
+        bins=bins,
+        norm_histo=norm_histo,
+    )
 
-    optimizer = utils_optim.build_optimizer(model, learning_rate=learning_rate, optimizer_name=optimizer)
+    optimizer = build_optimizer(
+        model, learning_rate=learning_rate, optimizer_name=optimizer
+    )
     if not silent:
         print("Model Loaded")
 
     def sent_tok(text):
         sentences = nltk.tokenize.sent_tokenize(text)
-        return [sent for sent in sentences if len(sent)>10]
+        return [sent for sent in sentences if len(sent) > 10]
 
     def collate_func(inps):
         documents, claims, labels = [], [], []
@@ -61,10 +96,20 @@ def train(model="mnli", granularity="sentence", nli_labels="e", pre_file="", num
         with open(pre_file, "r") as f:
             for line in f:
                 d_train.append(json.loads(line))
-        dl_train = DataLoader(dataset=d_train, batch_size=train_batch_size, sampler=RandomSampler(d_train), collate_fn=collate_pre)
+        dl_train = DataLoader(
+            dataset=d_train,
+            batch_size=train_batch_size,
+            sampler=RandomSampler(d_train),
+            collate_fn=collate_pre,
+        )
     else:
-        d_train = load_factcc(cut="train")
-        dl_train = DataLoader(dataset=d_train, batch_size=train_batch_size, sampler=RandomSampler(d_train), collate_fn=collate_func)
+        d_train = SummaCBenchmark.load_factcc(cut="train")
+        dl_train = DataLoader(
+            dataset=d_train,
+            batch_size=train_batch_size,
+            sampler=RandomSampler(d_train),
+            collate_fn=collate_func,
+        )
 
     fcb = SummaCBenchmark(cut="val")
 
@@ -94,7 +139,7 @@ def train(model="mnli", granularity="sentence", nli_labels="e", pre_file="", num
             optimizer.zero_grad()
             # wandb.log({"loss": loss.item()})
 
-            if ib % eval_every == eval_every-1:
+            if ib % eval_every == eval_every - 1:
 
                 eval_time = time.time()
                 benchmark = fcb.evaluate(model)
@@ -109,11 +154,17 @@ def train(model="mnli", granularity="sentence", nli_labels="e", pre_file="", num
                     best_val_score = val_score
                     if len(best_file) > 0:
                         os.remove(best_file)
-                    best_file = "/home/phillab/models/summac/%s_bacc%.3f.bin" % (experiment, best_val_score)
+                    best_file = "/home/phillab/models/summac/%s_bacc%.3f.bin" % (
+                        experiment,
+                        best_val_score,
+                    )
                     torch.save(model.state_dict(), best_file)
                     if not silent:
                         for t in benchmark["benchmark"]:
-                            print("[%s] Score: %.3f (thresh: %.3f)" % (t["name"].ljust(10), t["score"], t["threshold"]))
+                            print(
+                                "[%s] Score: %.3f (thresh: %.3f)"
+                                % (t["name"].ljust(10), t["score"], t["threshold"])
+                            )
     return best_val_score
 
 
@@ -123,16 +174,49 @@ if __name__ == "__main__":
     model_choices = list(model_map.keys()) + ["multi", "multi2"]
 
     parser.add_argument("--model", type=str, choices=model_choices, default="mnli")
-    parser.add_argument("--granularity", type=str, default="sentence") # , choices=["sentence", "paragraph", "mixed", "2sents"]
-    parser.add_argument("--pre_file", type=str, default="", help="If not empty, will use the precomputed instead of computing images on the fly. (useful for hyper-param tuning)")
-    parser.add_argument("--bins", type=str, default="percentile", help="How should the bins of the histograms be decided (even%d or percentile)")
-    parser.add_argument("--nli_labels", type=str, default="e", choices=["e", "c", "n", "ec", "en", "cn", "ecn"], help="Which of the three labels should be used in the creation of the histogram")
+    parser.add_argument(
+        "--granularity", type=str, default="sentence"
+    )  # , choices=["sentence", "paragraph", "mixed", "2sents"]
+    parser.add_argument(
+        "--pre_file",
+        type=str,
+        default="",
+        help="If not empty, will use the precomputed instead of computing images on the fly. (useful for hyper-param tuning)",
+    )
+    parser.add_argument(
+        "--bins",
+        type=str,
+        default="percentile",
+        help="How should the bins of the histograms be decided (even%d or percentile)",
+    )
+    parser.add_argument(
+        "--nli_labels",
+        type=str,
+        default="e",
+        choices=["e", "c", "n", "ec", "en", "cn", "ecn"],
+        help="Which of the three labels should be used in the creation of the histogram",
+    )
 
-    parser.add_argument("--num_epochs", type=int, default=5, help="Number of passes over the data.")
-    parser.add_argument("--optimizer", type=str, choices=["adam", "sgd"], default="adam")
-    parser.add_argument("--train_batch_size", type=int, default=32, help="Training batch size.")
-    parser.add_argument("--learning_rate", type=float, default=1e-2, help="Number of passes over the data.")
-    parser.add_argument("--norm_histo", action="store_true", help="Normalize the histogram to be between 0 and 1, and include the explicit count")
+    parser.add_argument(
+        "--num_epochs", type=int, default=5, help="Number of passes over the data."
+    )
+    parser.add_argument(
+        "--optimizer", type=str, choices=["adam", "sgd"], default="adam"
+    )
+    parser.add_argument(
+        "--train_batch_size", type=int, default=32, help="Training batch size."
+    )
+    parser.add_argument(
+        "--learning_rate",
+        type=float,
+        default=1e-2,
+        help="Number of passes over the data.",
+    )
+    parser.add_argument(
+        "--norm_histo",
+        action="store_true",
+        help="Normalize the histogram to be between 0 and 1, and include the explicit count",
+    )
 
     args = parser.parse_args()
     train(**args.__dict__)

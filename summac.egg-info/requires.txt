@@ -1,6 +1,6 @@
 tqdm
 transformers>=4.1.0
-xlrd==1.2.0 # For Polytope xlsx file
+xlrd==1.2.0
 requests
 numpy
 pandas

@@ -1,5 +1,7 @@
-import utils_misc, sklearn
 import numpy as np
+
+import sklearn
+
 
 # Choosing threshold
 def choose_best_threshold(labels, scores):
@@ -16,6 +18,7 @@ def choose_best_threshold(labels, scores):
             best_thresh = thresh
     return best_thresh, best_f1
 
+
 def from_score_to_pred(dataset, score_key):
     scores = [d[score_key] for d in dataset]
     labels = [d["label"] for d in dataset]
@@ -26,8 +29,8 @@ def from_score_to_pred(dataset, score_key):
         d[pred_key] = 1 if d[score_key] > thresh else 0
 
 
-
 # Score computation utility
+
 
 def compute_doc_level(scorer_doc, dataset):
     documents = [d["document"] for d in dataset]
@@ -39,14 +42,15 @@ def compute_doc_level(scorer_doc, dataset):
         score_key = ("%s|doc" % (label_key)).replace("_scores", "")
         for d, score in zip(dataset, doc_scores[label_key]):
             d[score_key] = score
-        utils_misc.from_score_to_pred(dataset, score_key)
+        from_score_to_pred(dataset, score_key)
+
 
 def compute_paragraph_level(scorer_para, dataset):
     all_paragraphs = []
     all_summaries = []
     idx_map = []
     for i, d in enumerate(dataset):
-        separator = "\n\n" if d["document"].count("\n\n")>0 else "\n"
+        separator = "\n\n" if d["document"].count("\n\n") > 0 else "\n"
         paragraphs = d["document"].split(separator)
         paragraphs = [p.strip() for p in paragraphs if len(p.strip()) > 0]
         all_paragraphs += paragraphs
@@ -54,7 +58,7 @@ def compute_paragraph_level(scorer_para, dataset):
         idx_map += [i] * len(paragraphs)
 
     para_scores = scorer_para(all_paragraphs, all_summaries, progress=True)
-    label_keys = [sname+"_scores" for sname in scorer_para.get_score_names()]
+    label_keys = [sname + "_scores" for sname in scorer_para.get_score_names()]
     for label_key in label_keys:
         score_key = ("%s|paras" % (label_key)).replace("_scores", "")
         for d in dataset:
@@ -62,7 +66,11 @@ def compute_paragraph_level(scorer_para, dataset):
         for j, score in enumerate(para_scores[label_key]):
             dataset[idx_map[j]][score_key].append(score)
 
-        mean_k, max_k, min_k = score_key+"_mean", score_key+"_max", score_key+"_min"
+        mean_k, max_k, min_k = (
+            score_key + "_mean",
+            score_key + "_max",
+            score_key + "_min",
+        )
         for d in dataset:
             d[mean_k] = np.mean(d[score_key])
             d[max_k] = np.max(d[score_key])
