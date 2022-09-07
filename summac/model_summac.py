@@ -6,6 +6,9 @@ import numpy as np
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
+from .utils_misc import batcher
+
+
 model_map = {
     "snli-base": {
         "model_card": "boychaboy/SNLI_roberta-base",
@@ -195,7 +198,7 @@ class SummaCImager:
             for i in range(N_ori)
             for j in range(N_gen)
         ]
-        for batch in utils_misc.batcher(dataset, batch_size=20):
+        for batch in batcher(dataset, batch_size=20):
 
             if self.model_name == "decomp":
                 batch_evids, batch_conts, batch_neuts = [], [], []
