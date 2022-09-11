@@ -1,5 +1,6 @@
 tqdm>=4.27, <4.50.0
 transformers==4.8.1
+huggingface-hub==0.0.12
 xlrd==1.2.0 # For Polytope xlsx file
 requests
 numpy
