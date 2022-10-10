@@ -1,7 +1,7 @@
 import numpy as np
-import tqdm
-import os, time
 import requests
+import tqdm
+import os
 
 # GPU-related business
 
@@ -10,16 +10,6 @@ def get_freer_gpu():
     memory_available = [int(x.split()[2])+5*i for i, x in enumerate(open('tmp_smi', 'r').readlines())]
     os.remove("tmp_smi")
     return np.argmax(memory_available)
-
-def any_gpu_with_space(gb_needed):
-    os.system('nvidia-smi -q -d Memory |grep -A4 GPU|grep Free >tmp_smi')
-    memory_available = [float(x.split()[2])/1024.0 for i, x in enumerate(open('tmp_smi', 'r').readlines())]
-    os.remove("tmp_smi")
-    return any([mem >= gb_needed for mem in memory_available])
-
-def wait_free_gpu(gb_needed):
-    while not any_gpu_with_space(gb_needed):
-        time.sleep(30)
 
 def select_freer_gpu():
     freer_gpu = str(get_freer_gpu())

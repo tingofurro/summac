@@ -1,5 +1,6 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-import nltk, utils_misc, numpy as np, torch, os, json
+import nltk, numpy as np, torch, os, json
+from .utils_misc import batcher
 
 model_map = {
     "snli-base": {"model_card": "boychaboy/SNLI_roberta-base", "entailment_idx": 0, "contradiction_idx": 2},
@@ -28,7 +29,7 @@ def get_neutral_idx(ent_idx, con_idx):
     return list(set([0, 1, 2]) - set([ent_idx, con_idx]))[0]
 
 class SummaCImager:
-    def __init__(self, model_name="mnli", granularity="paragraph", use_cache=True, max_doc_sents=100, **kwargs):
+    def __init__(self, model_name="mnli", granularity="paragraph", use_cache=True, max_doc_sents=100, device="cuda", **kwargs):
 
         self.grans = granularity.split("-")
 
@@ -48,7 +49,7 @@ class SummaCImager:
 
         self.max_doc_sents = max_doc_sents
         self.max_input_length = 500
-        self.device = "cuda"
+        self.device = device
         self.cache = {}
         self.model = None # Lazy loader
 
@@ -121,7 +122,7 @@ class SummaCImager:
             self.load_nli()
 
         dataset = [{"premise": original_chunks[i], "hypothesis": generated_chunks[j], "doc_i": i, "gen_i": j} for i in range(N_ori) for j in range(N_gen)]
-        for batch in utils_misc.batcher(dataset, batch_size=20):
+        for batch in batcher(dataset, batch_size=20):
 
             if self.model_name == "decomp":
                 batch_evids, batch_conts, batch_neuts = [], [], []
@@ -172,7 +173,7 @@ class SummaCImager:
                 self.cache = {tuple(k.split("[///]")): np.array(v) for k, v in cache_cp.items()}
 
 class SummaCConv(torch.nn.Module):
-    def __init__(self, models=["mnli", "anli", "vitc"], bins='even50', granularity="sentence", nli_labels="e", device="cuda", start_file=None, imager_load_cache=True, agg="mean", norm_histo=False, **kwargs):
+    def __init__(self, models=["mnli", "anli", "vitc"], bins='even50', granularity="sentence", nli_labels="e", device="cuda", start_file=None, imager_load_cache=True, agg="mean", **kwargs):
         # `bins` should be `even%d` or `percentiles`
         assert nli_labels in ["e", "c", "n", "ec", "en", "cn", "ecn"], "Unrecognized nli_labels argument %s" % (nli_labels)
 
@@ -182,7 +183,7 @@ class SummaCConv(torch.nn.Module):
 
         self.imagers = []
         for model_name in models:
-            self.imagers.append(SummaCImager(model_name=model_name, granularity=granularity, **kwargs))
+            self.imagers.append(SummaCImager(model_name=model_name, granularity=granularity, device=self.device, **kwargs))
         if imager_load_cache:
             for imager in self.imagers:
                 imager.load_cache()
@@ -192,18 +193,14 @@ class SummaCConv(torch.nn.Module):
             n_bins = int(bins.replace("even", ""))
             self.bins = list(np.arange(0, 1, 1/n_bins)) + [1.0]
         elif bins == "percentile":
-            self.bins = [0.0, 0.01, 0.02, 0.03, 0.04, 0.07, 0.13, 0.37, 0.90, 0.91, 0.92, 0.93, 0.94, 0.95, 0.955, 0.96, 0.965, 0.97, 0.975, 0.98, 0.985, 0.99, 0.995, 1.0]
-            # self.bins = [0.0, 0.01, 0.02, 0.03, 0.04, 0.07, 0.13, 0.3, 0.4, 0.5, 0.6, 0.7] + list(np.arange(0.8, 0.9, 0.01)) + list(np.arange(0.9, 0.98, 0.003)) + list(np.arange(0.98, 1.0, 0.001)) + [1.0]
+            self.bins = [0.0, 0.01, 0.02, 0.03, 0.04, 0.07, 0.13, 0.37, 0.90, 0.91, 0.92, 0.93, 0.94, 0.95, 0.955, 0.96, 0.965, 0.97, 0.975, 0.98, 0.985, 0.99, 0.995, 1.0] # Based on the percentile of the distribution on some large number of summaries
 
         self.nli_labels = nli_labels
         self.n_bins = len(self.bins) - 1
-        self.norm_histo = norm_histo
         self.n_rows = 10
         self.n_labels = 2
         self.n_depth = len(self.imagers)*len(self.nli_labels)
         self.full_size = self.n_depth*self.n_bins
-        if self.norm_histo:
-            self.full_size += 2 # Will explicitely give the count of originals and generateds
 
         self.agg = agg
 
@@ -232,11 +229,9 @@ class SummaCConv(torch.nn.Module):
 
             for i_depth in range(N_depth):
                 if (i_depth % 3 == 0 and "e" in self.nli_labels) or (i_depth % 3 == 1 and "c" in self.nli_labels) or (i_depth % 3 == 2 and "n" in self.nli_labels):
-                    histo, X = np.histogram(image[i_depth, :, i_gen], range=(0, 1), bins=self.bins, density=self.norm_histo)
+                    histo, X = np.histogram(image[i_depth, :, i_gen], range=(0, 1), bins=self.bins, density=False)
                     histos.append(histo)
 
-            if self.norm_histo:
-                histos = [[N_ori, N_gen]] + histos
             histogram_row = np.concatenate(histos)
             full_histogram.append(histogram_row)
 
@@ -300,11 +295,11 @@ class SummaCConv(torch.nn.Module):
 
 
 class SummaCZS:
-    def __init__(self, model_name="mnli", granularity="paragraph", op1="max", op2="mean", use_ent=True, use_con=True, imager_load_cache=True, **kwargs):
+    def __init__(self, model_name="mnli", granularity="paragraph", op1="max", op2="mean", use_ent=True, use_con=True, imager_load_cache=True, device="cuda", **kwargs):
         assert op2 in ["min", "mean", "max"], "Unrecognized `op2`"
         assert op1 in ["max", "mean", "min"], "Unrecognized `op1`"
-
-        self.imager = SummaCImager(model_name=model_name, granularity=granularity, **kwargs)
+        self.device = device
+        self.imager = SummaCImager(model_name=model_name, granularity=granularity, device=self.device, **kwargs)
         if imager_load_cache:
             self.imager.load_cache()
         self.op2 = op2
@@ -352,10 +347,9 @@ class SummaCZS:
 
 
 if __name__ == "__main__":
-    model = SummaCZS(granularity="sentence", model_name="vitc", imager_load_cache=True)
+    model = SummaCZS(granularity="sentence", model_name="vitc", imager_load_cache=True, device="cpu") # Device can be `cpu` or `cuda` when GPU is available
 
-    # Example from Paul from the Keep it Simple project
-    document = """Jeff joined Microsoft in 1992 to lead corporate developer evangelism for Windows NT. He then served as a Group Program manager in Microsoft’s Internet Business Unit. In 1998, he led the creation of SharePoint Portal Server, which became one of Microsoft’s fastest-growing businesses, exceeding $2 billion in revenues. Jeff next served as Corporate Vice President for Program Management across Office 365 Services and Servers, which is the foundation of Microsoft’s enterprise cloud leadership. He then led Corporate Strategy supporting Satya Nadella and Amy Hood on Microsoft’s mobile-first/cloud-first transformation and acquisitions. Prior to joining Microsoft, Jeff was vice president for software development for an investment firm in New York. He leads Office shared experiences and core applications, as well as OneDrive and SharePoint consumer and business services in Office 365. Jeff holds a Master of Business Administration degree from Harvard Business School and a Bachelor of Science degree in information systems and finance from New York University."""
+    document = """Jeff joined Microsoft in 1992 to lead corporate developer evangelism for Windows NT. He then served as a Group Program manager in Microsoft's Internet Business Unit. In 1998, he led the creation of SharePoint Portal Server, which became one of Microsoft’s fastest-growing businesses, exceeding $2 billion in revenues. Jeff next served as Corporate Vice President for Program Management across Office 365 Services and Servers, which is the foundation of Microsoft's enterprise cloud leadership. He then led Corporate Strategy supporting Satya Nadella and Amy Hood on Microsoft's mobile-first/cloud-first transformation and acquisitions. Prior to joining Microsoft, Jeff was vice president for software development for an investment firm in New York. He leads Office shared experiences and core applications, as well as OneDrive and SharePoint consumer and business services in Office 365. Jeff holds a Master of Business Administration degree from Harvard Business School and a Bachelor of Science degree in information systems and finance from New York University."""
     summary = "Jeff joined Microsoft in 1992 to lead the company's corporate evangelism. He then served as a Group Manager in Microsoft's Internet Business Unit. In 1998, Jeff led Sharepoint Portal Server, which became the company's fastest-growing business, surpassing $3 million in revenue. Jeff next leads corporate strategy for SharePoint and Servers which is the basis of Microsoft's cloud-first strategy. He leads corporate strategy for Satya Nadella and Amy Hood on Microsoft's mobile-first."
 
     scores = model.score([document], [summary])["images"][0][0].T
