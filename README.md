@@ -19,9 +19,11 @@ The two trained models SummaC-ZS and SummaC-Conv are implemented in `model_summa
 
 ### Example use
 
-```
-from summac.model_summac import SummaCZS
-model = SummaCZS(granularity="sentence", model_name="vitc", device="cpu") # If you have a GPU: switch to: device="cuda"
+```python
+from summac.model_summac import SummaCZS, SummaCConv
+
+model_zs = SummaCZS(granularity="sentence", model_name="vitc", device="cpu") # If you have a GPU: switch to: device="cuda"
+model_conv = SummaCConv(models=["vitc"], bins='percentile', granularity="sentence", nli_labels="e", device="cpu", start_file="default", agg="mean")
 
 document = """Scientists are studying Mars to learn about the Red Planet and find landing sites for future missions.
 One possible site, known as Arcadia Planitia, is covered instrange sinuous features.
@@ -29,19 +31,19 @@ The shapes could be signs that the area is actually made of glaciers, which are 
 Arcadia Planitia is in Mars' northern lowlands."""
 
 summary1 = "There are strange shape patterns on Arcadia Planitia. The shapes could indicate the area might be made of glaciers. This makes Arcadia Planitia ideal for future missions."
+score_zs1 = model_zs.score([document], [summary1])
+score_conv1 = model_conv.score([document], [summary1])
+print("[Summary 1] SummaCZS Score: %.3f; SummacConv score: %.3f" % (score_zs1["scores"][0], score_conv1["scores"][0])) # [Summary 1] SummaCZS Score: 0.582; SummacConv score: 0.536
+
 summary2 = "There are strange shape patterns on Arcadia Planitia. The shapes could indicate the area might be made of glaciers."
-
-score1 = model.score([document], [summary1])
-print("Summary Score 1 consistency: %.3f" % (score1["scores"][0])) # Prints: 0.587
-
-score2 = model.score([document], [summary2])
-print("Summary Score 2 consistency: %.3f" % (score2["scores"][0])) # Prints: 0.877
+score_zs2 = model_zs.score([document], [summary2])
+score_conv2 = model_conv.score([document], [summary2])
+print("[Summary 2] SummaCZS Score: %.3f; SummacConv score: %.3f" % (score_zs2["scores"][0], score_conv2["scores"][0])) # [Summary 2] SummaCZS Score: 0.877; SummacConv score: 0.709
 ```
 
-To load all the necessary files: (1) clone this repository, (2) add the reposity to Python path: `export PYTHONPATH="${PYTHONPATH}:/path/to/summac/"`
+We recommend using the SummaCConv models, as experiments from the paper show it provides better predictions. Two notebooks provide experimental details: [SummaC - Main Results.ipynb](https://github.com/tingofurro/summac/blob/master/SummaC%20-%20Main%20Results.ipynb) for the main results (Table 2) and [SummaC - Additional Experiments.ipynb](https://github.com/tingofurro/summac/blob/master/SummaC%20-%20Additional%20Experiments.ipynb) for additional experiments (Tables 1, 3, 4, 5, 6) from the paper.
 
-
-## SummaC Benchmark
+### SummaC Benchmark
 
 The SummaC Benchmark consists of 6 summary consistency datasets that have been standardized to a binary classification task. The datasets included are:
 
@@ -50,15 +52,15 @@ The SummaC Benchmark consists of 6 summary consistency datasets that have been s
   <b>% Positive</b> is the percentage of positive (consistent) summaries. IAA is the inter-annotator agreement (Fleiss Kappa). <b>Source</b> is the dataset used for the source documents (CNN/DM or XSum). <b># Summarizers</b> is the number of summarizers (extractive and abstractive) included in the dataset. <b># Sublabel</b> is the number of labels in the typology used to label summary errors.
 </p>
 
-
-
-The data-loaders for the benchmark are included in `utils_summac_benchmark.py` ([link](https://github.com/tingofurro/summac/blob/master/utils_summac_benchmark.py)). Because the dataset relies on previously published work, the dataset requires the manual download of several datasets. For each of the 6 tasks, the link and instruction to download are present as a comment in the file. Once all the files have been compiled, the benchmark can be loaded and standardized by running:
+The data-loaders for the benchmark are included in `benchmark.py` ([link](https://github.com/tingofurro/summac/blob/master/summac/benchmark.py)). Each dataset in the benchmark downloads automatically on first run. To load the benchmark:
+```py
+from summac.benchmark import SummaCBenchmark
+benchmark_val = SummaCBenchmark(benchmark_folder="/path/to/summac_benchmark/", cut="val")
+frank_dataset = benchmark_val.get_dataset("frank")
+print(frank_dataset[300]) # {"document: "A Darwin woman has become a TV [...]", "claim": "natalia moon , 23 , has become a tv sensation [...]", "label": 0, "cut": "val", "model_name": "s2s", "error_type": "LinkE"}
 ```
-from utils_summac_benchmark import SummaCBenchmark
-benchmark_validation = SummaCBenchmark(benchmark_folder="/path/to/summac_benchmark/", cut="val")
-```
 
-Note: we have a plan to streamline the process by further improving to automatically download necessary files if not present, if you would like to participate please let us know. If encoutering an issue in the manual download process, please contact us.
+
 
 ## Cite the work
 
