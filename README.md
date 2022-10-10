@@ -8,19 +8,20 @@ We release: (1) the trained SummaC models, (2) the SummaC Benchmark and data loa
   <img width="400" src="https://tingofurro.github.io/images/tacl2021_summac.png">
 </p>
 
-## Trained SummaC Models
+## Installing/Using SummaC
 
-The two trained models SummaC-ZS and SummaC-Conv are implemented in `model_summac.py` ([link](https://github.com/tingofurro/summac/blob/master/model_summac.py)):
+[Update] Thanks to @Aktsvigun for the help, we now have a pip package, making it easy to install the SummaC models:
+```
+pip install summac
+```
 
-- *SummaC-ZS* does not require a model file (as the model is zero-shot and not trained): it can be used as seen at the bottom of the `model_summac.py`.
-- *SummaC-Conv* requires a `start_file` which contains the trained weight for the convolution layer. The default `start_file` used to compute results is available in this repository ( `summac_conv_vitc_sent_perc_e.bin` [download link](https://github.com/tingofurro/summac/raw/master/summac_conv_vitc_sent_perc_e.bin)).
+The two trained models SummaC-ZS and SummaC-Conv are implemented in `model_summac` ([link](https://github.com/tingofurro/summac/blob/master/model_summac.py)). Once the package is installed, the models can be used like this:
 
 ### Example use
 
 ```
-from model_summac import SummaCZS
-
-model = SummaCZS(granularity="sentence", model_name="vitc")
+from summac.model_summac import SummaCZS
+model = SummaCZS(granularity="sentence", model_name="vitc", device="cpu") # If you have a GPU: switch to: device="cuda"
 
 document = """Scientists are studying Mars to learn about the Red Planet and find landing sites for future missions.
 One possible site, known as Arcadia Planitia, is covered instrange sinuous features.
