@@ -54,15 +54,11 @@ class SummaCImager:
         self.model = None # Lazy loader
 
     def load_nli(self):
-        if self.model_name == "decomp":
-            from allennlp.predictors.predictor import Predictor
-            import allennlp_models.tagging
-            self.model = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/decomposable-attention-elmo-2020.04.09.tar.gz", cuda_device=0)
-
-        else:
-            self.tokenizer = AutoTokenizer.from_pretrained(self.model_card)
-            self.model = AutoModelForSequenceClassification.from_pretrained(self.model_card).eval()
-            self.model.to(self.device).half()
+        self.tokenizer = AutoTokenizer.from_pretrained(self.model_card)
+        self.model = AutoModelForSequenceClassification.from_pretrained(self.model_card).eval()
+        self.model.to(self.device)
+        if self.device == "cuda":
+            self.model.half()
 
     def split_sentences(self, text):
         sentences = nltk.tokenize.sent_tokenize(text)
@@ -94,13 +90,7 @@ class SummaCImager:
         elif granularity == "mixed":
             return self.split_sentences(text) + self.split_paragraphs(text)
 
-    def build_image(self, original, generated):
-        cache_key = (original, generated)
-        if self.use_cache and cache_key in self.cache:
-            cached_image = self.cache[cache_key]
-            cached_image = cached_image[:, :self.max_doc_sents, :]
-            return cached_image
-
+    def build_chunk_dataset(self, original, generated, pair_idx=None):
         if len(self.grans) == 1:
             gran_doc, gran_sum = self.grans[0], self.grans[0]
         else:
@@ -109,44 +99,38 @@ class SummaCImager:
         original_chunks = self.split_text(original, granularity=gran_doc)[:self.max_doc_sents]
         generated_chunks = self.split_text(generated, granularity=gran_sum)
 
-        N_ori = len(original_chunks)
-        N_gen = len(generated_chunks)
+        N_ori, N_gen = len(original_chunks), len(generated_chunks)
+        dataset = [{"premise": original_chunks[i], "hypothesis": generated_chunks[j], "doc_i": i, "gen_i": j, "pair_idx": pair_idx} for i in range(N_ori) for j in range(N_gen)]
+        return dataset, N_ori, N_gen
 
-        if N_ori == 0 or N_gen == 0:
+    def build_image(self, original, generated):
+        cache_key = (original, generated)
+        if self.use_cache and cache_key in self.cache:
+            cached_image = self.cache[cache_key]
+            cached_image = cached_image[:, :self.max_doc_sents, :]
+            return cached_image
+
+        dataset, N_ori, N_gen = self.build_chunk_dataset(original, generated)
+        
+        if len(dataset) == 0:
             return np.zeros((3, 1, 1))
-        # assert (N_ori > 0 and N_gen > 0), "One of the inputs has no chunks"
 
         image = np.zeros((3, N_ori, N_gen))
 
         if self.model is None:
             self.load_nli()
 
-        dataset = [{"premise": original_chunks[i], "hypothesis": generated_chunks[j], "doc_i": i, "gen_i": j} for i in range(N_ori) for j in range(N_gen)]
         for batch in batcher(dataset, batch_size=20):
+            batch_prems = [b["premise"] for b in batch]
+            batch_hypos = [b["hypothesis"] for b in batch]
+            batch_tokens = self.tokenizer.batch_encode_plus(list(zip(batch_prems, batch_hypos)), padding=True, truncation=True, max_length=self.max_input_length, return_tensors="pt", truncation_strategy="only_first")
+            with torch.no_grad():
+                model_outputs = self.model(**{k: v.to(self.device) for k, v in batch_tokens.items()})
 
-            if self.model_name == "decomp":
-                batch_evids, batch_conts, batch_neuts = [], [], []
-                batch_json = [{"premise": d["premise"], "hypothesis": d["hypothesis"]} for d in batch]
-                model_outs = self.model.predict_batch_json(batch_json)
-                for out in model_outs:
-                    probs = out["label_probs"]
-                    batch_evids.append(probs[0])
-                    batch_conts.append(probs[1])
-                    batch_neuts.append(probs[2])
-
-            else:
-                batch_prems = [b["premise"] for b in batch]
-                batch_hypos = [b["hypothesis"] for b in batch]
-                batch_tokens = self.tokenizer.batch_encode_plus(list(zip(batch_prems, batch_hypos)), padding=True, truncation=True,
-                                                                max_length=self.max_input_length, return_tensors="pt", truncation_strategy="only_first")
-                batch_tokens = {k: v.to(self.device) for k, v in batch_tokens.items()}
-                with torch.no_grad():
-                    model_outputs = self.model(**batch_tokens)
-
-                batch_probs = torch.nn.functional.softmax(model_outputs["logits"], dim=-1)
-                batch_evids = batch_probs[:, self.entailment_idx].tolist()
-                batch_conts = batch_probs[:, self.contradiction_idx].tolist()
-                batch_neuts = batch_probs[:, self.neutral_idx].tolist()
+            batch_probs = torch.nn.functional.softmax(model_outputs["logits"], dim=-1)
+            batch_evids = batch_probs[:, self.entailment_idx].tolist()
+            batch_conts = batch_probs[:, self.contradiction_idx].tolist()
+            batch_neuts = batch_probs[:, self.neutral_idx].tolist()
 
             for b, evid, cont, neut in zip(batch, batch_evids, batch_conts, batch_neuts):
                 image[0, b["doc_i"], b["gen_i"]] = evid
@@ -156,6 +140,53 @@ class SummaCImager:
         if self.use_cache:
             self.cache[cache_key] = image
         return image
+
+    def build_images(self, originals, generateds, batch_size=128):
+        todo_originals, todo_generateds = [], []
+        for ori, gen in zip(originals, generateds):
+            cache_key = (ori, gen)
+            if cache_key not in self.cache:
+                todo_originals.append(ori)
+                todo_generateds.append(gen)
+        
+        total_dataset = []
+        todo_images = []
+        for pair_idx, (ori, gen) in enumerate(zip(todo_originals, todo_generateds)):
+            dataset, N_ori, N_gen = self.build_chunk_dataset(ori, gen, pair_idx=pair_idx)
+            if len(dataset) == 0:
+                image = np.zeros((3, 1, 1))
+            else:
+                image = np.zeros((3, N_ori, N_gen))
+            todo_images.append(image)
+            total_dataset += dataset
+        if len(total_dataset) > 0 and self.model is None: # Can't just rely on the cache
+            self.load_nli()
+        
+        for batch in batcher(total_dataset, batch_size=batch_size):
+            batch_prems = [b["premise"] for b in batch]
+            batch_hypos = [b["hypothesis"] for b in batch]
+            batch_tokens = self.tokenizer.batch_encode_plus(list(zip(batch_prems, batch_hypos)), padding=True, truncation=True, max_length=self.max_input_length, return_tensors="pt", truncation_strategy="only_first")
+            with torch.no_grad():
+                model_outputs = self.model(**{k: v.to(self.device) for k, v in batch_tokens.items()})
+
+            batch_probs = torch.nn.functional.softmax(model_outputs["logits"], dim=-1)
+            batch_evids = batch_probs[:, self.entailment_idx].tolist()
+            batch_conts = batch_probs[:, self.contradiction_idx].tolist()
+            batch_neuts = batch_probs[:, self.neutral_idx].tolist()
+
+            for b, evid, cont, neut in zip(batch, batch_evids, batch_conts, batch_neuts):
+                image = todo_images[b["pair_idx"]]
+                image[0, b["doc_i"], b["gen_i"]] = evid
+                image[1, b["doc_i"], b["gen_i"]] = cont
+                image[2, b["doc_i"], b["gen_i"]] = neut
+
+        for pair_idx, (ori, gen) in enumerate(zip(todo_originals, todo_generateds)):
+            cache_key = (ori, gen)
+            self.cache[cache_key] = todo_images[pair_idx]
+        
+        images = [self.cache[(ori, gen)] for ori, gen in zip(originals, generateds)]
+        return images
+
 
     def get_cache_file(self):
         return os.path.join(self.cache_folder, "cache_%s_%s.json" % (self.model_name, self.granularity))
@@ -207,6 +238,11 @@ class SummaCConv(torch.nn.Module):
         self.mlp = torch.nn.Linear(self.full_size, 1).to(device)
         self.layer_final = torch.nn.Linear(3, self.n_labels).to(device)
 
+        if start_file == "default":
+            start_file = "summac_conv_vitc_sent_perc_e.bin"
+            if not os.path.isfile("summac_conv_vitc_sent_perc_e.bin"):
+                os.system("wget https://github.com/tingofurro/summac/raw/master/summac_conv_vitc_sent_perc_e.bin")
+                assert bins == "percentile", "bins mode should be set to percentile if using the default 1-d convolution weights."
         if start_file is not None:
             print(self.load_state_dict(torch.load(start_file)))
 
@@ -312,7 +348,10 @@ class SummaCZS:
 
     def score_one(self, original, generated):
         image = self.imager.build_image(original, generated)
+        score = self.image2score(image)
+        return {"image": image, "score": score}
 
+    def image2score(self, image):
         ent_scores = np.max(image[0], axis=0)
         co_scores = np.max(image[1], axis=0)
         if self.op1 == "mean":
@@ -334,28 +373,30 @@ class SummaCZS:
             final_score = np.min(scores)
         elif self.op2 == "max":
             final_score = np.max(scores)
+        return final_score
 
-        return {"score": final_score, "image": image}
-
-    def score(self, sources, generateds, **kwargs):
-        output = {"scores": [], "images": []}
-        for source, gen in zip(sources, generateds):
-            score = self.score_one(source, gen)
-            output["scores"].append(score["score"])
-            output["images"].append(score["image"])
-        return output
+    def score(self, sources, generateds, batch_size=128, **kwargs):
+        images = self.imager.build_images(sources, generateds, batch_size=batch_size)
+        scores = [self.image2score(image) for image in images]
+        return {"scores": scores, "images": images}
 
 
 if __name__ == "__main__":
-    model = SummaCZS(granularity="sentence", model_name="vitc", imager_load_cache=True, device="cpu") # Device can be `cpu` or `cuda` when GPU is available
+    model = SummaCZS(granularity="document", model_name="vitc", imager_load_cache=True, device="cpu") # Device can be `cpu` or `cuda` when GPU is available
 
-    document = """Jeff joined Microsoft in 1992 to lead corporate developer evangelism for Windows NT. He then served as a Group Program manager in Microsoft's Internet Business Unit. In 1998, he led the creation of SharePoint Portal Server, which became one of Microsoft’s fastest-growing businesses, exceeding $2 billion in revenues. Jeff next served as Corporate Vice President for Program Management across Office 365 Services and Servers, which is the foundation of Microsoft's enterprise cloud leadership. He then led Corporate Strategy supporting Satya Nadella and Amy Hood on Microsoft's mobile-first/cloud-first transformation and acquisitions. Prior to joining Microsoft, Jeff was vice president for software development for an investment firm in New York. He leads Office shared experiences and core applications, as well as OneDrive and SharePoint consumer and business services in Office 365. Jeff holds a Master of Business Administration degree from Harvard Business School and a Bachelor of Science degree in information systems and finance from New York University."""
-    summary = "Jeff joined Microsoft in 1992 to lead the company's corporate evangelism. He then served as a Group Manager in Microsoft's Internet Business Unit. In 1998, Jeff led Sharepoint Portal Server, which became the company's fastest-growing business, surpassing $3 million in revenue. Jeff next leads corporate strategy for SharePoint and Servers which is the basis of Microsoft's cloud-first strategy. He leads corporate strategy for Satya Nadella and Amy Hood on Microsoft's mobile-first."
+    document = "Jeff joined Microsoft in 1992 to lead corporate developer evangelism for Windows NT."
+    summary1 = "Jeff joined Microsoft in 1992."
+    summary2 = "Jeff joined Microsoft."
 
-    scores = model.score([document], [summary])["images"][0][0].T
-    summary_sentences = model.imager.split_text(summary)
+    print(model.score([document, document], [summary1, summary2])["scores"])
 
-    print(np.array2string(scores, precision=2))
-    for score_row, sentence in zip(scores, summary_sentences):
-        print("-----------")
-        print("[SummaC score: %.3f; supporting sentence: %d] %s " % (np.max(score_row), np.argmax(score_row)+1, sentence))
+    # document = """Jeff joined Microsoft in 1992 to lead corporate developer evangelism for Windows NT. He then served as a Group Program manager in Microsoft's Internet Business Unit. In 1998, he led the creation of SharePoint Portal Server, which became one of Microsoft’s fastest-growing businesses, exceeding $2 billion in revenues. Jeff next served as Corporate Vice President for Program Management across Office 365 Services and Servers, which is the foundation of Microsoft's enterprise cloud leadership. He then led Corporate Strategy supporting Satya Nadella and Amy Hood on Microsoft's mobile-first/cloud-first transformation and acquisitions. Prior to joining Microsoft, Jeff was vice president for software development for an investment firm in New York. He leads Office shared experiences and core applications, as well as OneDrive and SharePoint consumer and business services in Office 365. Jeff holds a Master of Business Administration degree from Harvard Business School and a Bachelor of Science degree in information systems and finance from New York University."""
+    # summary = "Jeff joined Microsoft in 1992 to lead the company's corporate evangelism. He then served as a Group Manager in Microsoft's Internet Business Unit. In 1998, Jeff led Sharepoint Portal Server, which became the company's fastest-growing business, surpassing $3 million in revenue. Jeff next leads corporate strategy for SharePoint and Servers which is the basis of Microsoft's cloud-first strategy. He leads corporate strategy for Satya Nadella and Amy Hood on Microsoft's mobile-first."
+
+    # scores = model.score([document], [summary])["images"][0][0].T
+    # summary_sentences = model.imager.split_text(summary)
+
+    # print(np.array2string(scores, precision=2))
+    # for score_row, sentence in zip(scores, summary_sentences):
+    #     print("-----------")
+    #     print("[SummaC score: %.3f; supporting sentence: %d] %s " % (np.max(score_row), np.argmax(score_row)+1, sentence))
