@@ -1,5 +1,4 @@
-import utils_misc, sklearn
-import numpy as np
+import sklearn, numpy as np
 
 # Choosing threshold
 def choose_best_threshold(labels, scores):
@@ -26,9 +25,7 @@ def from_score_to_pred(dataset, score_key):
         d[pred_key] = 1 if d[score_key] > thresh else 0
 
 
-
 # Score computation utility
-
 def compute_doc_level(scorer_doc, dataset):
     documents = [d["document"] for d in dataset]
     summaries = [d["claim"] for d in dataset]
@@ -39,7 +36,7 @@ def compute_doc_level(scorer_doc, dataset):
         score_key = ("%s|doc" % (label_key)).replace("_scores", "")
         for d, score in zip(dataset, doc_scores[label_key]):
             d[score_key] = score
-        utils_misc.from_score_to_pred(dataset, score_key)
+        from_score_to_pred(dataset, score_key)
 
 def compute_paragraph_level(scorer_para, dataset):
     all_paragraphs = []

@@ -3,6 +3,10 @@ from datasets import load_dataset
 from collections import Counter
 import requests, zipfile, tarfile
 import utils_scorer, utils_misc
+import datasets, logging
+
+datasets.utils.logging.set_verbosity(logging.CRITICAL)
+CNNDM = None
 
 # SummaC Benchmark
 class SummaCBenchmark:
@@ -14,6 +18,7 @@ class SummaCBenchmark:
 
         self.cut = cut
         self.benchmark_folder = benchmark_folder
+        self.cnndm_id2reference = None
         self.cnndm = None
         self.xsum = None
 
@@ -36,12 +41,27 @@ class SummaCBenchmark:
 
     # Underlying dataset loader: CNN/DM and XSum
     def get_cnndm_document(self, aid):
+        global CNNDM
         if self.cnndm is None:
-            self.cnndm = load_dataset("cnn_dailymail", "3.0.0")
+            if CNNDM is None:
+                CNNDM = load_dataset("cnn_dailymail", "3.0.0")
+            self.cnndm = CNNDM
             self.cnndm_id2article = {}
             for cut in ["test", "validation"]:
                 self.cnndm_id2article.update({d["id"]: d["article"] for d in self.cnndm[cut]})
         return self.cnndm_id2article[aid]
+
+    def get_cnndm_reference(self, aid):
+        global CNNDM
+        if CNNDM is None:
+            CNNDM = load_dataset("cnn_dailymail", "3.0.0")
+            self.cnndm = CNNDM
+        if self.cnndm_id2reference is None:
+            self.cnndm_id2reference = {}
+            for cut in ["test", "validation"]:
+                self.cnndm_id2reference.update({d["id"]: d["highlights"] for d in self.cnndm[cut]})
+        return self.cnndm_id2reference[aid]
+
 
     def get_xsum_document(self, aid):
         if self.xsum is None:
@@ -272,7 +292,8 @@ class SummaCBenchmark:
             consistencies = [a[key_focus] for a in annotations]
             final_label = 1 if len([cons for cons in consistencies if cons==5]) > len(annotations)/2 else 0
 
-            annotations = [1 if cons == 5 else 0 for cons in consistencies]
+            # annotations = [1 if cons == 5 else 0 for cons in consistencies]
+            annotations = consistencies
             error_type = "no error" if final_label == 1 else "error"
 
             clean_dataset.append({"document": document, "claim": d["decoded"], "label": final_label, "model_name": d["model_id"], "cnndm_id": d["id"], "cut": c, "annotations": annotations, "dataset": "summeval", "origin": "cnndm", "error_type": error_type})
