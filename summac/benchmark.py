@@ -2,11 +2,8 @@ import json, os, pandas as pd, numpy as np, csv
 from datasets import load_dataset
 from collections import Counter
 import requests, zipfile, tarfile
-import utils_scorer, utils_misc
-import datasets, logging
-
-datasets.utils.logging.set_verbosity(logging.CRITICAL)
-CNNDM = None
+import .utils_scorer import choose_best_threshold
+import .utils_misc import download_file_from_google_drive
 
 # SummaC Benchmark
 class SummaCBenchmark:
@@ -275,7 +272,7 @@ class SummaCBenchmark:
             os.makedirs(dataset_folder)
 
             # From the 4/19/2020 update on the README: https://github.com/Yale-LILY/SummEval
-            utils_misc.download_file_from_google_drive("1d2Iaz3jNraURP1i7CfTqPIj8REZMJ3tS", fn)
+            download_file_from_google_drive("1d2Iaz3jNraURP1i7CfTqPIj8REZMJ3tS", fn)
 
         with open(fn, "r") as f:
             for line in f:
@@ -375,7 +372,7 @@ class SummaCBenchmark:
             dataset_labels = [d["label"] for d in dataset["dataset"]]
             dataset_preds = scorer.score([d["document"] for d in dataset["dataset"]], [d["claim"] for d in dataset["dataset"]])["scores"]
 
-            dataset_thresh, dataset_f1 = utils_scorer.choose_best_threshold(dataset_labels, dataset_preds)
+            dataset_thresh, dataset_f1 = choose_best_threshold(dataset_labels, dataset_preds)
             benchmark.append({"name": dataset["name"], "score": dataset_f1, "threshold": dataset_thresh})
         return {"overall_score": np.mean([t["score"] for t in benchmark]), "benchmark": benchmark}
 

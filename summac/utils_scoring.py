@@ -1,5 +1,5 @@
 import torch, time, numpy as np
-import utils_misc
+from .utils_misc import batcher
 
 class ScorerWrapper:
     def __init__(self, scorers, scoring_method="logsum", max_batch_size=100, use_caching=False):
@@ -47,7 +47,7 @@ class ScorerWrapper:
         if len(todo) == 0:
             progress = False # Not needed, it's empty
 
-        for batch_todo in utils_misc.batcher(todo, batch_size=self.max_batch_size, progress=progress):
+        for batch_todo in batcher(todo, batch_size=self.max_batch_size, progress=progress):
             batch_inputs = [d["inp"] for d in batch_todo]
             batch_gens = [d["gen"] for d in batch_todo]
 

@@ -1,4 +1,5 @@
-import sklearn, numpy as np
+import numpy as np
+import sklearn
 
 # Choosing threshold
 def choose_best_threshold(labels, scores):
@@ -7,7 +8,6 @@ def choose_best_threshold(labels, scores):
     thresholds = [np.percentile(scores, p) for p in np.arange(0, 100, 0.2)]
     for thresh in thresholds:
         preds = [1 if score > thresh else 0 for score in scores]
-        # f1_score = sklearn.metrics.f1_score(labels, preds, average='micro')
         f1_score = sklearn.metrics.balanced_accuracy_score(labels, preds)
 
         if f1_score >= best_f1:

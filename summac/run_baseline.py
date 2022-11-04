@@ -1,3 +1,4 @@
+# This code does not work as is, but was kept for reference, if others are interested in re-running baselines.
 from utils_summac_benchmark import load_factcc, load_polytope, load_cogensumm, load_frank, load_summeval, load_xsumfaith
 import sklearn, numpy as np, os, pandas as pd, sys, argparse
 from model_baseline import BaselineScorer
