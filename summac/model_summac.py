@@ -14,19 +14,23 @@ model_map = {
     # "decomp": 0,
 }
 
+
 def card_to_name(card):
     card2name = {v["model_card"]: k for k, v in model_map.items()}
     if card in card2name:
         return card2name[card]
     return card
 
+
 def name_to_card(name):
     if name in model_map:
         return model_map[name]["model_card"]
     return name
 
+
 def get_neutral_idx(ent_idx, con_idx):
     return list(set([0, 1, 2]) - set([ent_idx, con_idx]))[0]
+
 
 class SummaCImager:
     def __init__(self, model_name="mnli", granularity="paragraph", use_cache=True, max_doc_sents=100, device="cuda", **kwargs):
@@ -111,7 +115,7 @@ class SummaCImager:
             return cached_image
 
         dataset, N_ori, N_gen = self.build_chunk_dataset(original, generated)
-        
+
         if len(dataset) == 0:
             return np.zeros((3, 1, 1))
 
@@ -183,10 +187,9 @@ class SummaCImager:
         for pair_idx, (ori, gen) in enumerate(zip(todo_originals, todo_generateds)):
             cache_key = (ori, gen)
             self.cache[cache_key] = todo_images[pair_idx]
-        
+
         images = [self.cache[(ori, gen)] for ori, gen in zip(originals, generateds)]
         return images
-
 
     def get_cache_file(self):
         return os.path.join(self.cache_folder, "cache_%s_%s.json" % (self.model_name, self.granularity))

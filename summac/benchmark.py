@@ -2,8 +2,9 @@ import json, os, pandas as pd, numpy as np, csv
 from datasets import load_dataset
 from collections import Counter
 import requests, zipfile, tarfile
-import .utils_scorer import choose_best_threshold
-import .utils_misc import download_file_from_google_drive
+from .utils_scorer import choose_best_threshold
+from .utils_misc import download_file_from_google_drive
+
 
 # SummaC Benchmark
 class SummaCBenchmark:

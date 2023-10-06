@@ -10,7 +10,7 @@ with open(str(REQUIREMENTS_PATH), "r", encoding="utf-8") as f:
 setup(
     name="summac",
     packages=find_packages(include=["summac"]),
-    version="0.0.1",
+    version="0.0.4",
     license="Apache",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
