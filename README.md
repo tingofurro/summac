@@ -15,6 +15,8 @@ We release: (1) the trained SummaC models, (2) the SummaC Benchmark and data loa
 pip install summac
 ```
 
+Requirement issues: in v0.0.4, we've reduced package dependencies to facilitate installation. We recommend you install `torch` first and verify it works before installing `summac`.
+
 The two trained models SummaC-ZS and SummaC-Conv are implemented in `model_summac` ([link](https://github.com/tingofurro/summac/blob/master/model_summac.py)). Once the package is installed, the models can be used like this:
 
 ### Example use
