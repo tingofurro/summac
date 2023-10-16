@@ -11,7 +11,7 @@ import numpy as np
 import os, json, argparse, time
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', default="tiiuae/falcon-40b-instruct", type=str, help='LLaMA model', 
+parser.add_argument('--model', default="facebook/opt-iml-1.3b", type=str, help='LLaMA model', 
                         choices=["decapoda-research/llama-7b-hf", 
                                  "tiiuae/falcon-7b-instruct", 
                                  "tiiuae/falcon-40b-instruct",
@@ -33,17 +33,17 @@ args = parser.parse_args()
 
 np.random.seed(args.seed)
 torch.random.manual_seed(args.seed)
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = "auto" if torch.cuda.is_available() else "cpu"
 
 
 def get_model_tokenzier(model_name):
     if args.prune_method == "fullmodel":
-        model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir="llm_weights", trust_remote_code=True, device_map="auto").to(device) # torch_dtype=torch.float16, low_cpu_mem_usage=True, 
+        model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir="llm_weights", trust_remote_code=True, device_map="auto") # torch_dtype=torch.float16, low_cpu_mem_usage=True, 
         tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False, trust_remote_code=True, cache_dir = "llm_weights")
     else:  
         short_name = str(args.model).split("/")[-1]
         model_name = f'pruned_model/{short_name}/{args.prune_method}'
-        model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, device_map="auto").to(device) # torch_dtype=torch.float16, low_cpu_mem_usage=True, 
+        model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, device_map="auto") # torch_dtype=torch.float16, low_cpu_mem_usage=True, 
         tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False, trust_remote_code=True)
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f' model {str(args.model)} size --->', trainable_params)
@@ -67,8 +67,8 @@ else: multipart_prompt = False
 ########### load metrics
 harim = load("NCSOFT/harim_plus")
 rouge = load("rouge")
-model_zs = SummaCZS(granularity="sentence", model_name="vitc", device="cuda") # If you have a GPU: switch to: device="cuda"-
-model_conv = SummaCConv(models=["vitc"], bins='percentile', granularity="sentence", nli_labels="e", device="cuda", start_file="default", agg="mean")
+model_zs = SummaCZS(granularity="sentence", model_name="vitc", device="auto") # If you have a GPU: switch to: device="cuda"-
+model_conv = SummaCConv(models=["vitc"], bins='percentile', granularity="sentence", nli_labels="e", device="audo", start_file="default", agg="mean")
 
 
 ########### load model
@@ -105,13 +105,13 @@ for i, d in enumerate(dataset):
         dataset[i]['prompt'] = generate_dict[d['id']]['prompt']
         dataset[i]['generated'] = generate_dict[d['id']]['generated']
         dataset[i]['rouge'] = generate_dict[d['id']]['rouge']
-        dataset[i]['bertscore'] = generate_dict[d['id']]['bertscore']
+        dataset[i]['harim'] = generate_dict[d['id']]['harim']
         dataset[i]['summac_conv'] = generate_dict[d['id']]['summac_conv']
         dataset[i]['summac_zs'] = generate_dict[d['id']]['summac_zs']
         
     else:
         try:
-            input_ids = tokenizer.encode(document, return_tensors="pt").to(device)
+            input_ids = tokenizer.encode(document, return_tensors="pt")
             output = model.generate(input_ids, num_return_sequences=1,
                                 max_new_tokens=int(len(input_ids[0])*0.25), # min_new_tokens=10, 
                                 )   # including one special token, origi len + 1
@@ -119,7 +119,7 @@ for i, d in enumerate(dataset):
         except:
             document = f"""{document}"""
             input_ids = tokenizer.encode(document, return_tensors="pt") #.to(device)
-            output = model.generate(input_ids.to(device), num_return_sequences=1,
+            output = model.generate(input_ids.to(model.device), num_return_sequences=1,
                                 max_new_tokens=int(len(input_ids[0])*0.2), # min_new_tokens=10, 
                                 )   # including one special token, origi len + 1
             output_text = tokenizer.decode(output[0][int(input_ids.shape[1]):], skip_special_tokens=True)
@@ -128,7 +128,7 @@ for i, d in enumerate(dataset):
 
         output_text = tokenizer.decode(output[0][int(input_ids.shape[1]):], skip_special_tokens=True)
 
-        score_bertscore = bertscore.compute(predictions=[output_text], references=[d['document']], lang="en")
+        score_harim = harim.compute(predictions=[output_text], references=[d['document']], lang="en")
         score_rouge = rouge.compute(predictions=[output_text], references=[d['document']]) #, avg=True
         score_zs = model_zs.score([d['document']], [output_text])
         score_conv = model_conv.score([d['document']], [output_text])
@@ -136,11 +136,11 @@ for i, d in enumerate(dataset):
         dataset[i]['document'] = d['document']
         dataset[i]['generated'] = output_text
         dataset[i]['rouge'] = score_rouge
-        dataset[i]['bertscore'] = score_bertscore
+        dataset[i]['harim'] = score_harim
         dataset[i]['summac_conv'] = score_conv["scores"][0]
         dataset[i]['summac_zs'] = score_zs["scores"][0]
 
-        generate_dict[d['id']] = {"document": d['document'], "prompt": prompt, 'generated': output_text, 'rouge': score_rouge, 'bertscore': score_bertscore, 
+        generate_dict[d['id']] = {"document": d['document'], "prompt": prompt, 'generated': output_text, 'rouge': score_rouge, 'harim': score_harim, 
                                  'summac_conv': score_conv["scores"][0], 'summac_zs': score_zs["scores"][0]
                                  }
 
