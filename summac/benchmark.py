@@ -41,8 +41,11 @@ class SummaCBenchmark:
     def get_cnndm_document(self, aid):
         global CNNDM
         if self.cnndm is None:
-            if CNNDM is None:
-                CNNDM = load_dataset("cnn_dailymail", "3.0.0")
+            # by cass
+            # if CNNDM is None:
+            #     CNNDM = load_dataset("cnn_dailymail", "3.0.0")
+            try: CNNDM
+            except: CNNDM = load_dataset("cnn_dailymail", "3.0.0")
             self.cnndm = CNNDM
             self.cnndm_id2article = {}
             for cut in ["test", "validation"]:
