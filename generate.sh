@@ -15,7 +15,7 @@ module load CUDA/11.8.0
 source activate seq
 
 
-python generate_summary_fast.py --prune_method sparsegpt --data polytope \
-                                --model_name "facebook/opt-iml-1.3b"
+python generate_summary_fast.py --prune_method sparsegpt --data factcc \
+                                --model "tiiuae/falcon-7b-instruct"
 
 
