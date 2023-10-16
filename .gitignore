@@ -3,5 +3,6 @@ llm_weights/*
 pruned_model/*
 generated_output/*
 
-
+summac/__pycache__/*
 slurm-*
+
