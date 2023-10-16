@@ -11,7 +11,7 @@ import numpy as np
 import os, json, argparse, time
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', default="tiiuae/falcon-40b-instruct", type=str, help='LLaMA model', 
+parser.add_argument('--model', default="tiiuae/falcon-7b-instruct", type=str, help='LLaMA model', 
                         choices=["decapoda-research/llama-7b-hf", 
                                  "tiiuae/falcon-7b-instruct", 
                                  "tiiuae/falcon-40b-instruct",
@@ -19,7 +19,7 @@ parser.add_argument('--model', default="tiiuae/falcon-40b-instruct", type=str, h
                                  "facebook/opt-iml-1.3b",
                                  "facebook/opt-iml-30b"
                                  ])
-parser.add_argument('--data', default="polytope", type=str, help='select a summarization dataset', 
+parser.add_argument('--data', default="factcc", type=str, help='select a summarization dataset', 
                     choices=["cogensumm", "xsumfaith", "frank", 
                              "polytope", "factcc", "summeval",
                              ])

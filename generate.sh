@@ -14,8 +14,9 @@ module load Anaconda3/2022.10
 module load CUDA/11.8.0
 source activate seq
 
-
-python generate_summary_fast.py --prune_method sparsegpt --data factcc \
+for method in "wanda" "fullmodel" "sparsegpt"
+do
+python generate_summary_fast.py --prune_method $method --data factcc \
                                 --model "tiiuae/falcon-7b-instruct"
 
-
+done
