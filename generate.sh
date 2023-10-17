@@ -16,7 +16,11 @@ source activate seq
 
 for method in "wanda" "fullmodel" "sparsegpt"
 do
-python generate_summary_fast.py --prune_method $method --data factcc \
-                                --model "tiiuae/falcon-7b-instruct"
+for prompt_id in 1 2 3 4 5
+do
+python generate_summary_fast.py --prune_method $method --data polytope \
+                                --model "facebook/opt-iml-1.3b" \
+                                --prompt_id $prompt_id
 
+done
 done

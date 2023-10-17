@@ -65,8 +65,9 @@ else: multipart_prompt = False
 
 
 ########### load metrics
-harim = load("NCSOFT/harim_plus")
+harim = load("NCSOFT/harim_plus")  #  using model : facebook/bart-large-cnn
 rouge = load("rouge")
+bertscore = load("bertscore")
 model_zs = SummaCZS(granularity="sentence", model_name="vitc", device="cuda") # If you have a GPU: switch to: device="cuda"-
 model_conv = SummaCConv(models=["vitc"], bins='percentile', granularity="sentence", nli_labels="e", device="cuda", start_file="default", agg="mean")
 
@@ -106,21 +107,24 @@ for i, d in enumerate(dataset):
         dataset[i]['generated'] = generate_dict[d['id']]['generated']
         dataset[i]['rouge'] = generate_dict[d['id']]['rouge']
         dataset[i]['bertscore'] = generate_dict[d['id']]['bertscore']
+        dataset[i]['harim'] = generate_dict[d['id']]['harim']
         dataset[i]['summac_conv'] = generate_dict[d['id']]['summac_conv']
         dataset[i]['summac_zs'] = generate_dict[d['id']]['summac_zs']
         
     else:
+        original_len = len(tokenizer.encode(document, return_tensors="pt")[0])
+        generate_max_new_tokens = int(original_len*0.25)
         try:
             input_ids = tokenizer.encode(document, return_tensors="pt").to(device)
             output = model.generate(input_ids, num_return_sequences=1,
-                                max_new_tokens=int(len(input_ids[0])*0.25), # min_new_tokens=10, 
+                                max_new_tokens=generate_max_new_tokens, 
                                 )   # including one special token, origi len + 1
 
         except:
             document = f"""{document}"""
-            input_ids = tokenizer.encode(document, return_tensors="pt") #.to(device)
+            input_ids = tokenizer.encode(document, return_tensors="pt") 
             output = model.generate(input_ids.to(device), num_return_sequences=1,
-                                max_new_tokens=int(len(input_ids[0])*0.2), # min_new_tokens=10, 
+                                max_new_tokens=generate_max_new_tokens, 
                                 )   # including one special token, origi len + 1
             output_text = tokenizer.decode(output[0][int(input_ids.shape[1]):], skip_special_tokens=True)
             print(f"==>> after processed output_text: {output_text}")
@@ -128,8 +132,9 @@ for i, d in enumerate(dataset):
 
         output_text = tokenizer.decode(output[0][int(input_ids.shape[1]):], skip_special_tokens=True)
 
-        score_bertscore = bertscore.compute(predictions=[output_text], references=[d['document']], lang="en")
+        score_harim = harim.compute(predictions=[output_text], references=[d['document']])
         score_rouge = rouge.compute(predictions=[output_text], references=[d['document']]) #, avg=True
+        score_bertscore = bertscore.compute(predictions=[output_text], references=[d['document']], lang="en")
         score_zs = model_zs.score([d['document']], [output_text])
         score_conv = model_conv.score([d['document']], [output_text])
 
@@ -137,10 +142,11 @@ for i, d in enumerate(dataset):
         dataset[i]['generated'] = output_text
         dataset[i]['rouge'] = score_rouge
         dataset[i]['bertscore'] = score_bertscore
+        dataset[i]['harim'] = score_harim
         dataset[i]['summac_conv'] = score_conv["scores"][0]
         dataset[i]['summac_zs'] = score_zs["scores"][0]
 
-        generate_dict[d['id']] = {"document": d['document'], "prompt": prompt, 'generated': output_text, 'rouge': score_rouge, 'bertscore': score_bertscore, 
+        generate_dict[d['id']] = {"document": d['document'], "prompt": prompt, 'generated': output_text, 'rouge': score_rouge, 'bertscore': score_bertscore, 'harim': score_harim, 
                                  'summac_conv': score_conv["scores"][0], 'summac_zs': score_zs["scores"][0]
                                  }
 
