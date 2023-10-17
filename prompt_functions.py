@@ -1,10 +1,4 @@
 from dataclasses import dataclass
-
-@dataclass
-class Document:
-
-    document: str
-
 # these are very similar to the ones you have hence why they work
 # this is nothing more than a formated string (f'string)
 # change the f'string as you please
