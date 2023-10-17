@@ -6,3 +6,4 @@ generated_output/*
 summac/__pycache__/*
 slurm-*
 
+.env*
