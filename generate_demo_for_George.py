@@ -30,7 +30,7 @@ parser.add_argument('--data', default="factcc", type=str, help='select a summari
 parser.add_argument('--seed', type=int, default=412, help='Seed for sampling the calibration data.')
 parser.add_argument('--prune_method', default="fullmodel", type=str, help='if using pruned model and which to use', 
                     choices=["fullmodel", "wanda", "sparsegpt"])
-parser.add_argument('--prompt_id', default=None, type=str, help='pick a prompt template from prompt list')
+parser.add_argument('--prompt_id', default=4, type=str, help='pick a prompt template from prompt list')
 args = parser.parse_args()
 
 
@@ -42,43 +42,38 @@ torch.random.manual_seed(args.seed)
 
 def get_model_tokenzier(model_name):
     if args.prune_method == "fullmodel":
-        model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir="llm_weights", trust_remote_code=True, device_map="auto") # torch_dtype=torch.float16, low_cpu_mem_usage=True, 
+        model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir="llm_weights", trust_remote_code=True, device_map="auto",
+                                                     torch_dtype=torch.float16, low_cpu_mem_usage=True, 
+                                                     ) 
         tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False, trust_remote_code=True, cache_dir = "llm_weights")
     else:  
         short_name = str(args.model).split("/")[-1]
         model_name = f'pruned_model/{short_name}/{args.prune_method}'
-        model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, device_map="auto") # torch_dtype=torch.float16, low_cpu_mem_usage=True, 
+        model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, device_map="auto",
+                                                     torch_dtype=torch.float16, low_cpu_mem_usage=True,
+                                                     ) 
         tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False, trust_remote_code=True)
-    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f' model {str(args.model)} size --->', trainable_params)
     return model, tokenizer
 
 
 
 ########### load prompt
 
-if args.prompt_id is not None:
-    with open('./generated_output/prompt_list.json', 'r') as file:
-        prompt_list = json.load(file)
-    prompt = prompt_list[f"prompt_{args.prompt_id}"]["prompt"]
 
-    if isinstance(prompt, list): multipart_prompt = True
-    else: multipart_prompt = False
-
+if "opt" in args.model:
+    from prompt_functions import opt_prompt_template as generate_prompt
+    example = generate_prompt(' [[[ This is a demo document to show prompt template. ]]]]')
+    print(' ')
+    
+elif "falcon" in args.model or "llama" in args.model:
+    from prompt_functions import llama_falon_prompt_template as generate_prompt
+    example = generate_prompt(' [[[ This is a demo document to show prompt template. ]]]]')
+    print(' ')
+    
 else:
-    if "opt" in args.model:
-        from prompt_functions import opt_prompt_template as generate_prompt
-        example = generate_prompt(' [[[ This is a demo document to show prompt template. ]]]]')
-    elif "falcon" in args.model or "llama" in args.model:
-        from prompt_functions import llama_falon_prompt_template as generate_prompt
-        example = generate_prompt(' [[[ This is a demo document to show prompt template. ]]]]')
-        
-    else:
-        print("==>> No prompt template for this model")
-      
-    print(f"==>> prompt example: {example}")
+    print("==>> No prompt template for this model")      
 
-
+print(f"==>> example: \n {example}")
 ########### load metrics
 harim = load("NCSOFT/harim_plus")  #  using model : facebook/bart-large-cnn
 rouge = load("rouge")
@@ -102,13 +97,8 @@ dataset = benchmark_val.get_dataset(args.data)
 
 
 
-for i, d in enumerate(dataset):
-    if args.prompt_id is not None: ## using template
-        if multipart_prompt: document = str(prompt[0]) + d['document'] + str(prompt[1])
-        elif prompt_list[f"prompt_{str(args.prompt_id)}"]["document_before_prompt"]: document = d['document'] + prompt
-        else: document = prompt + d['document']
-    else:  # using prompt generate
-        document = generate_prompt(d['document'])
+for i, d in enumerate(dataset[:5]):
+    document = generate_prompt(d['document'])
 
     if args.data == "summeval": d['id'] = d['cnndm_id']
     if args.data == "polytope": d['id'] = d['ID']

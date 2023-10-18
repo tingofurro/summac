@@ -16,10 +16,11 @@ source activate seq
 
 for method in "wanda" "fullmodel" "sparsegpt"
 do
-for model in "decapoda-research/llama-7b-hf" "decapoda-research/llama-13b-hf" "decapoda-research/llama-30b-hf", 
+for prompt_id in 1 2 3 4 5
 do
 python generate_summary_fast.py --prune_method $method --data polytope \
-                                --model $model 
+                                --model "decapoda-research/llama-30b-hf" \
+                                --prompt_id None 
 
 done
 done
