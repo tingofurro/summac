@@ -1,0 +1,7 @@
+### Instruction:
+Your task is to summarize concisely and truthfully. Summarize the input below
+
+### Input:
+<document_to_summarize>
+
+### Response:

@@ -16,6 +16,21 @@ def opt_prompt_template(document: str) -> str:
         document = document
     )
 
+
+def general_prompt(document: str) -> str:
+    
+    return """ ### Instruction:
+    Your task is to summarize concisely and truthfully. Summarize the input below \n
+
+    ### Input:
+    {document} \n
+
+    ### Response: \n
+    """.format(
+        document = document
+    )
+
+
 # llama and falcon were instructioned tuned on other
 # sets of data. So just pass the opt prompt_template here
 def instruction_prompt_template(messages):

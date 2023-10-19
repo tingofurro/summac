@@ -12,16 +12,16 @@ import os, json, argparse, time
 from prompt_functions import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', default="decapoda-research/llama-7b-hf", type=str, help='LLaMA model', 
-                        choices=["decapoda-research/llama-7b-hf", 
-                                 "decapoda-research/llama-13b-hf", 
-                                 "decapoda-research/llama-30b-hf", 
-
+parser.add_argument('--model', default="NousResearch/Nous-Hermes-llama-2-7b", type=str, help='LLaMA model', 
+                        choices=[
                                  "tiiuae/falcon-7b-instruct", 
                                  "tiiuae/falcon-40b-instruct",
 
                                  "facebook/opt-iml-1.3b",
-                                 "facebook/opt-iml-30b"
+                                 "facebook/opt-iml-30b",
+
+                                 "NousResearch/Nous-Hermes-llama-2-7b",
+                                 "NousResearch/Nous-Hermes-Llama2-13b"
                                  ])
 parser.add_argument('--data', default="factcc", type=str, help='select a summarization dataset', 
                     choices=["cogensumm", "xsumfaith", "frank", 
@@ -39,6 +39,10 @@ np.random.seed(args.seed)
 torch.random.manual_seed(args.seed)
 #device = "cuda" if torch.cuda.is_available() else "cpu"
 
+short_model_name = str(args.model).split("/")[-1]
+save_path = os.path.join("generated_output", short_model_name, args.prune_method, args.data)
+print(f"==>> save_path: {save_path}")
+os.makedirs(save_path, exist_ok=True)
 
 def get_model_tokenzier(model_name):
     if args.prune_method == "fullmodel":
@@ -68,11 +72,10 @@ if args.prompt_id is not None:
 else:
     if "opt" in args.model:
         from prompt_functions import opt_prompt_template as generate_prompt
-        example = generate_prompt(' [[[ This is a demo document to show prompt template. ]]]]')
-    elif "falcon" in args.model or "llama" in args.model:
-        from prompt_functions import llama_falon_prompt_template as generate_prompt
-        example = generate_prompt(' [[[ This is a demo document to show prompt template. ]]]]')
-        
+        example = generate_prompt(' [[[ This is a demo document to show prompt template. ]]]')
+    elif "falcon" in args.model or "llama" in str(args.model).lower():
+        from prompt_functions import general_prompt as generate_prompt
+        example = generate_prompt(' [[[ This is a demo document to show prompt template. ]]]')
     else:
         print("==>> No prompt template for this model")
       
@@ -131,15 +134,15 @@ for i, d in enumerate(dataset):
         generate_max_new_tokens = int(original_len*0.25)
         try:
             input_ids = tokenizer.encode(document, return_tensors="pt")
-            output = model.generate(input_ids, num_return_sequences=1,
+            output = model.generate(input_ids.to(model.device), num_return_sequences=1,
                                     max_new_tokens=generate_max_new_tokens, 
-                                    device = "auto",
+                                    #device = "auto",
                                     )   # including one special token, origi len + 1
 
         except:
             document = f"""{document}"""
             input_ids = tokenizer.encode(document, return_tensors="pt") 
-            output = model.generate(input_ids, num_return_sequences=1,
+            output = model.generate(input_ids.to(model.device), num_return_sequences=1,
                                 max_new_tokens=generate_max_new_tokens, 
                                 #device = "auto",
                                 )   # including one special token, origi len + 1
@@ -169,10 +172,8 @@ for i, d in enumerate(dataset):
 
 
 
-short_model_name = str(args.model).split("/")[-1]
-save_path = os.path.join("generated_output", short_model_name, args.prune_method, args.data)
-print(f"==>> save_path: {save_path}")
-os.makedirs(save_path, exist_ok=True)
+
+
 
 json_object = json.dumps(dataset, indent=4)
 with open(save_path + f"/detailed_result_prompt{str(args.prompt_id)}.json", "w") as outfile:
@@ -182,5 +183,5 @@ json_object = json.dumps(generate_dict, indent=4)
 with open(save_path + f"/norepeated_result_prompt{str(args.prompt_id)}.json", "w") as outfile:
     outfile.write(json_object)
 
-
+print(f"==>> done saving: {save_path}")
 
