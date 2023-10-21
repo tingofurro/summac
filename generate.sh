@@ -5,20 +5,20 @@
 #SBATCH --qos=gpu
 #SBATCH --gres=gpu:1
 #SBATCH --mem=80G
-#SBATCH --time=1-00:00:00
+#SBATCH --time=4-00:00:00
 
 
-#SBATCH --job-name=wad_13b
+#SBATCH --job-name=spar_lama7b
 
 module load Anaconda3/2022.10
 module load CUDA/11.8.0
 source activate seq
 
 
-for data in "polytope" "factcc" "summeval"
+for data in "summeval" "polytope" "factcc" 
 do
 python generate_summary_fast.py --prune_method "sparsegpt" --data $data \
-                                --model "NousResearch/Nous-Hermes-Llama2-13b"
+                                --model "NousResearch/Nous-Hermes-llama-2-7b"
 done
 # for method in "wanda" "fullmodel" "sparsegpt"
 # do

@@ -3,11 +3,9 @@ import pandas as pd
 import json, argparse
 from summac.model_summac import SummaCZS, SummaCConv
 
-
-
 def return_list_mean_std(score_list):
     #return "{:.3f} (".format(np.mean(score_list)), "{:.3f})".format(np.std(score_list))
-    return "{:.3f} ({:.3f})".format(np.mean(score_list), np.std(score_list))
+    return "{:.3f}({:.3f})".format(np.mean(score_list), np.std(score_list))
 
 
 parser = argparse.ArgumentParser()
@@ -89,15 +87,4 @@ df.replace(to_replace=["fullmodel", "sparsegpt", "wanda", "NousResearch/Nous-Her
 
 
 df.to_csv(f'generated_output/mean_std_result.csv', index=False)
-
-
-df = pd.read_csv(f'generated_output/mean_std_result.csv')
-
-for metrics in ['RougeL',       'BERTScore',          'HaRiM',      'SUMMAC_conv',      'SUMMAC_zs']:
-    RougeL = df[['Data', 'Model', 'Prune', metrics]]
-    RougeL_new = RougeL[RougeL['Data'] == 'polytope'][['Model','Prune',metrics]].rename(columns={metrics: "Polytope"})
-    RougeL_new['FactCC'] = RougeL[RougeL['Data'] == 'factcc'][metrics].values
-    RougeL_new['SummEval'] = RougeL[RougeL['Data'] == 'summeval'][metrics].values
-
-    RougeL_new.to_csv(f'generated_output/{metrics}_result.csv', index=False)
-
+print(df)
