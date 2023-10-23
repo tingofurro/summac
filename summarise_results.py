@@ -53,7 +53,7 @@ rouge_list_final, bert_list_final, harim_list_final, summac_conv_list_final, sum
 data_loop_list = ["polytope", "factcc", "summeval"]
 method_loop_list = ['fullmodel', 'wanda', 'sparsegpt']
 model_loop_list = [
-                # "NousResearch/Nous-Hermes-llama-2-7b", 
+                "NousResearch/Nous-Hermes-llama-2-7b", 
                 "NousResearch/Nous-Hermes-Llama2-13b", 
                 "tiiuae/falcon-7b-instruct",
                 ]
