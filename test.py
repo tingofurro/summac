@@ -1,6 +1,29 @@
 import json
 import os
 
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+
+model = AutoModelForCausalLM.from_pretrained("facebook/opt-iml-1.3b", cache_dir="llm_weights", trust_remote_code=True, device_map="auto") # torch_dtype=torch.float16, low_cpu_mem_usage=True, 
+print("".center(50, "-"))
+print("".center(50, "-"))
+print(model.base_model.decoder.layers)
+
+
+
+model = AutoModelForCausalLM.from_pretrained("tiiuae/falcon-7b-instruct", cache_dir="llm_weights", trust_remote_code=True, device_map="auto") # torch_dtype=torch.float16, low_cpu_mem_usage=True, 
+print(len(model.transformer.h))
+print("222".center(50, "-"))
+try: print(model.model.layers)
+except: print(' pass 2222')
+
+model = AutoModelForCausalLM.from_pretrained("NousResearch/Nous-Hermes-llama-2-7b", cache_dir="llm_weights", trust_remote_code=True, device_map="auto") # torch_dtype=torch.float16, low_cpu_mem_usage=True, 
+try: print(len(model.model.layers))
+except: pass
+print(" llama model layer list".center(50, "-"))
+
+quit()
+
 save_path = os.path.join("generated_output", "Nous-Hermes-llama-2-7b", "wanda", "xsumfaith")
 
 

@@ -23,14 +23,14 @@ parser.add_argument('--model', default="NousResearch/Nous-Hermes-llama-2-7b", ty
                                  "NousResearch/Nous-Hermes-llama-2-7b",
                                  "NousResearch/Nous-Hermes-Llama2-13b"
                                  ])
-parser.add_argument('--data', default="factcc", type=str, help='select a summarization dataset', 
-                    choices=["cogensumm", "xsumfaith", "frank", 
-                             "polytope", "factcc", "summeval",
+parser.add_argument('--data', default="xsumfaith", type=str, help='select a summarization dataset', 
+                    choices=["cogensumm", "frank", 
+                             "polytope", "factcc", "summeval", "xsumfaith",
                              ])
 parser.add_argument('--seed', type=int, default=412, help='Seed for sampling the calibration data.')
-parser.add_argument('--prune_method', default="wanda", type=str, help='if using pruned model and which to use', 
-                    choices=["fullmodel", "wanda", "sparsegpt"])
-parser.add_argument('--prompt_id', default=None, type=str, help='pick a prompt template from prompt list')
+parser.add_argument('--prune_method', default="fullmodel", type=str, help='if using pruned model and which to use', 
+                    choices=["fullmodel", "wanda", "sparsegpt", "magnitude"])
+parser.add_argument('--prompt_id', default=None, type=str, help='pick a prompt template from prompt list, A or B or None')
 args = parser.parse_args()
 
 
@@ -90,13 +90,15 @@ dataset = benchmark_val.get_dataset(args.data)
 
 for i, d in enumerate(dataset):
     # prepare full input based on prompt template
-    document = generate_prompt(d['document'])
+    document = generate_prompt(args.prompt_id, d['document'])
+   
 
     if args.data == "summeval": d['id'] = d['cnndm_id']
     if args.data == "polytope": d['id'] = d['ID']
     if args.data == "xsumfaith": d['id'] = d['bbcid']
     
     if i == 0: 
+        print(f"==>> document: {document}")
         ######### this part is only for quick testing and saving
         try: 
             with open(save_path + f"/norepeated_result_promptNone.json", "r+") as json_file:
@@ -110,6 +112,7 @@ for i, d in enumerate(dataset):
 
 
     if d['id'] in generate_dict.keys() and generate_dict[d['id']] is not None: 
+        dataset[i]['input'] = document
         dataset[i]['prompt'] = generate_dict[d['id']]['prompt']
         dataset[i]['generated'] = generate_dict[d['id']]['generated']
         dataset[i]['rouge'] = generate_dict[d['id']]['rouge']
@@ -131,13 +134,13 @@ for i, d in enumerate(dataset):
         output_text = tokenizer.decode(output[0][int(input_ids.shape[1]):], skip_special_tokens=True)
         
 
-        score_harim = harim.compute(predictions=[output_text], references=[d['document']])
-        score_rouge = rouge.compute(predictions=[output_text], references=[d['document']]) #, avg=True
-        score_bertscore = bertscore.compute(predictions=[output_text], references=[d['document']], lang="en")
-        score_zs = model_zs.score([d['document']], [output_text])
-        score_conv = model_conv.score([d['document']], [output_text])
+        score_harim = harim.compute(predictions=[output_text], references=[document])
+        score_rouge = rouge.compute(predictions=[output_text], references=[document]) #, avg=True
+        score_bertscore = bertscore.compute(predictions=[output_text], references=[document], lang="en")
+        score_zs = model_zs.score([document], [output_text])
+        score_conv = model_conv.score([document], [output_text])
 
-        dataset[i]['document'] = d['document']
+        dataset[i]['input'] = document
         dataset[i]['generated'] = output_text
         dataset[i]['rouge'] = score_rouge
         dataset[i]['bertscore'] = score_bertscore
@@ -145,7 +148,7 @@ for i, d in enumerate(dataset):
         dataset[i]['summac_conv'] = score_conv["scores"][0]
         dataset[i]['summac_zs'] = score_zs["scores"][0]
 
-        generate_dict[d['id']] = {"document": d['document'], "prompt": args.prompt_id, 'generated': output_text, 'rouge': score_rouge, 'bertscore': score_bertscore, 'harim': score_harim, 
+        generate_dict[d['id']] = {"input": document, "document": d['document'], "prompt": args.prompt_id, 'generated': output_text, 'rouge': score_rouge, 'bertscore': score_bertscore, 'harim': score_harim, 
                                  'summac_conv': score_conv["scores"][0], 'summac_zs': score_zs["scores"][0]
                                  }
 

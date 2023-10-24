@@ -17,19 +17,43 @@ def opt_prompt_template(document: str) -> str:
     )
 
 
-def general_prompt(document: str) -> str:
+def general_prompt(promt_id: str, document: str) -> str:
     
-    return """ ### Instruction:
-    Your task is to summarize concisely and truthfully. Summarize the input below \n
+    if promt_id == None or promt_id == "C":
+        return """ ### Instruction:
+        Your task is to summarize concisely and truthfully. Summarize the input below \n
 
-    ### Input:
-    {document} \n
+        ### Input:
+        {document} \n
 
-    ### Response: \n
-    """.format(
-        document = document
-    )
+        ### Response: \n
+        """.format(
+            document = document
+        )
+    
+    if promt_id == "A":
+        return """ ### Instruction:
+        Summarize the article below in three sentences. \n
 
+        ### Input:
+        {document} \n
+
+        ### Response: \n
+        """.format(
+            document = document
+        )
+
+    if promt_id == "B":
+        return """ ### Instruction:
+        Please write a short summary for the text below. \n
+
+        ### Input:
+        {document} \n
+
+        ### Response: \n
+        """.format(
+            document = document
+        )
 
 # llama and falcon were instructioned tuned on other
 # sets of data. So just pass the opt prompt_template here

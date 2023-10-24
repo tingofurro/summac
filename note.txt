@@ -5,3 +5,78 @@ Your task is to summarize concisely and truthfully. Summarize the input below
 <document_to_summarize>
 
 ### Response:
+
+
+
+"NousResearch/Nous-Hermes-llama-2-7b"
+model.model.layers
+
+len(model.model.layers) = 32
+
+ModuleList(
+  (0-31): 32 x LlamaDecoderLayer(
+    (self_attn): LlamaAttention(
+      (q_proj): Linear(in_features=4096, out_features=4096, bias=False)
+      (k_proj): Linear(in_features=4096, out_features=4096, bias=False)
+      (v_proj): Linear(in_features=4096, out_features=4096, bias=False)
+      (o_proj): Linear(in_features=4096, out_features=4096, bias=False)
+      (rotary_emb): LlamaRotaryEmbedding()
+    )
+    (mlp): LlamaMLP(
+      (gate_proj): Linear(in_features=4096, out_features=11008, bias=False)
+      (down_proj): Linear(in_features=11008, out_features=4096, bias=False)
+      (up_proj): Linear(in_features=4096, out_features=11008, bias=False)
+      (act_fn): SiLUActivation()
+    )
+    (input_layernorm): LlamaRMSNorm()
+    (post_attention_layernorm): LlamaRMSNorm()
+  )
+)
+
+
+
+
+"facebook/opt-iml-1.3b"
+model.base_model.decoder.layers
+
+ModuleList(
+  (0-23): 24 x OPTDecoderLayer(
+    (self_attn): OPTAttention(
+      (k_proj): Linear(in_features=2048, out_features=2048, bias=True)
+      (v_proj): Linear(in_features=2048, out_features=2048, bias=True)
+      (q_proj): Linear(in_features=2048, out_features=2048, bias=True)
+      (out_proj): Linear(in_features=2048, out_features=2048, bias=True)
+    )
+    (activation_fn): ReLU()
+    (self_attn_layer_norm): LayerNorm((2048,), eps=1e-05, elementwise_affine=True)
+    (fc1): Linear(in_features=2048, out_features=8192, bias=True)
+    (fc2): Linear(in_features=8192, out_features=2048, bias=True)
+    (final_layer_norm): LayerNorm((2048,), eps=1e-05, elementwise_affine=True)
+  )
+)
+
+
+
+
+
+
+"tiiuae/falcon-7b-instruct"
+model.transformer.h
+
+
+ModuleList(
+  (0-31): 32 x FalconDecoderLayer(
+    (self_attention): FalconAttention(
+      (maybe_rotary): FalconRotaryEmbedding()
+      (query_key_value): FalconLinear(in_features=4544, out_features=4672, bias=False)
+      (dense): FalconLinear(in_features=4544, out_features=4544, bias=False)
+      (attention_dropout): Dropout(p=0.0, inplace=False)
+    )
+    (mlp): FalconMLP(
+      (dense_h_to_4h): FalconLinear(in_features=4544, out_features=18176, bias=False)
+      (act): GELU(approximate='none')
+      (dense_4h_to_h): FalconLinear(in_features=18176, out_features=4544, bias=False)
+    )
+    (input_layernorm): LayerNorm((4544,), eps=1e-05, elementwise_affine=True)
+  )
+)
