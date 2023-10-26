@@ -1,4 +1,4 @@
-data/*
+data/*/*
 llm_weights/*
 pruned_model/*
 generated_output/*

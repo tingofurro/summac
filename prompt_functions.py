@@ -1,37 +1,35 @@
-def general_prompt(promt_id: str, document: str) -> str:
+def falcon_prompt(promt_id: str, document: str) -> str: # for falcon
 
     if promt_id == None or promt_id == "A":
-        return """ ### Instruction:
-        Your task is to summarize concisely and truthfully. Summarize the input below:
+        return """Your task is to summarize concisely and truthfully. Summarize the input below:
 
-        ### Input:
+        Input:
         {document}
 
-        ### Response:
+        Single paragraph summary:
         """.format(
             document = document
         )
 
     if promt_id == "B":
-        return """ ### Instruction:
-        Summarize the article below in a few sentences:
+        return """Summarize the article below in a single paragraph:
 
-        ### Input:
+        Input:
         {document}
 
-        ### Response:
+        Summary:
         """.format(
             document = document
         )
+    
 
     if promt_id == "C":
-        return """ ### Instruction:
-        Please write a short summary for the text below:
+        return """Please write a short summary for the text below:
 
-        ### Input:
+        Input:
         {document}
 
-        ### Response:
+        Summary:
         """.format(
             document = document
         )

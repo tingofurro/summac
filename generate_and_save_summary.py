@@ -12,16 +12,21 @@ import os, json, argparse, time
 from prompt_functions import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', default="NousResearch/Nous-Hermes-llama-2-7b", type=str, help='LLaMA model', 
+parser.add_argument('--model', default="tiiuae/falcon-7b-instruct", type=str, help='LLaMA model', 
                         choices=[
+                            #   "decapoda-research/llama-7b-hf", 
+
                                  "tiiuae/falcon-7b-instruct", 
                                  "tiiuae/falcon-40b-instruct",
 
-                                 "facebook/opt-iml-1.3b",
-                                 "facebook/opt-iml-30b",
+                                 "meta-llama/Llama-2-7b-chat-hf",
+                                 "meta-llama/Llama-2-13b-chat-hf",
 
-                                 "NousResearch/Nous-Hermes-llama-2-7b",
-                                 "NousResearch/Nous-Hermes-Llama2-13b"
+                                #  "facebook/opt-iml-1.3b",
+                                #  "facebook/opt-iml-30b",
+
+                                #  "NousResearch/Nous-Hermes-llama-2-7b",
+                                #  "NousResearch/Nous-Hermes-Llama2-13b"
                                  ])
 parser.add_argument('--data', default="xsumfaith", type=str, help='select a summarization dataset', 
                     choices=["cogensumm", "frank", 
@@ -32,6 +37,7 @@ parser.add_argument('--prune_method', default="fullmodel", type=str, help='if us
                     choices=["fullmodel", "wanda", "sparsegpt", "magnitude"])
 parser.add_argument('--prompt_id', default=None, type=str, help='pick a prompt template from prompt list, A or B or None')
 args = parser.parse_args()
+
 
 
 np.random.seed(args.seed)
@@ -78,9 +84,10 @@ model, tokenizer = get_model_tokenzier(args.model)
 
 
 ########### load dataset
-benchmark_val = SummaCBenchmark(benchmark_folder="data/", cut="val") 
-dataset = benchmark_val.get_dataset(args.data) 
-
+# benchmark_val = SummaCBenchmark(benchmark_folder="data/", cut="val") 
+# dataset = benchmark_val.get_dataset(args.data) 
+f = open(f"data/{args.data}.json")
+dataset = json.load(f)
 # summeval  dict_keys(['document', 'claim', 'label', 'model_name', 'cnndm_id', 'cut', 'annotations', 'dataset', 'origin', 'error_type'])
 # factcc    dict_keys(['claim', 'label', 'filepath', 'id', 'document', 'annotations', 'dataset', 'origin'])
 # polytope  dict_keys(['ID', 'document', 'claim', 'errors', 'cut', 'overall_label', 'omission_label', 'addition_label', 'duplication_label', 'inaccuracy_label', 'label', 'dataset', 'annotations', 'origin'])
@@ -91,7 +98,6 @@ dataset = benchmark_val.get_dataset(args.data)
 for i, d in enumerate(dataset):
     # prepare full input based on prompt template
     document = generate_prompt(args.prompt_id, d['document'])
-   
 
     if args.data == "summeval": d['id'] = d['cnndm_id']
     if args.data == "polytope": d['id'] = d['ID']

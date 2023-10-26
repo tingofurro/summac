@@ -12,11 +12,10 @@ import os, json, argparse, time
 from prompt_functions import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data', default="xsumfaith", type=str, help='select a summarization dataset', 
-                    choices=["cogensumm", "frank", 
+parser.add_argument('--data', default="summeval", type=str, help='select a summarization dataset', 
+                    choices=[ #"cogensumm", "frank", 
                              "polytope", "factcc", "summeval", "xsumfaith",
                              ])
-parser.add_argument('--prompt_id', default=None, type=str, help='pick a prompt template from prompt list, A or B or None')
 args = parser.parse_args()
 
 
@@ -35,27 +34,34 @@ k = 0
 
 for i, d in enumerate(dataset):
 
-    if args.data == "summeval": d['id'] = d['cnndm_id']
-    if args.data == "polytope": d['id'] = d['ID']
-    if args.data == "xsumfaith": d['id'] = d['bbcid']
-    
-    
+    if args.data == "summeval": temp_id = d['cnndm_id']
+    if args.data == "polytope": temp_id = d['ID']
+    if args.data == "xsumfaith": temp_id = d['bbcid']
+    if args.data == "factcc": temp_id = d['id']
     
     if i == 0: 
-        print(f"==>> document: {d.keys} \n {d}")
-        ######### this part is only for quick testing and saving
-        generate_dict = {str(d['id']):None}
+        generate_dict = {f'{args.data}_{k}':d}
+        temp_id_list = [temp_id]
+        k += 1
 
+        print(generate_dict)
+        print(generate_dict.keys())
 
-    if d['id'] in generate_dict.keys() and generate_dict[d['id']] is not None: 
+    if temp_id in temp_id_list: 
         pass
     else: # not exist in generate_dict
-        generate_dict[d['id']] = d
+        # d['new_id'] = f"{args.data}_k"
+        generate_dict[f'{args.data}_{k}'] = d
+        temp_id_list.append(temp_id)
+        k += 1
+        
+
+json_data = json.dumps(generate_dict, indent=4)
+
+with open(f"data/{args.data}.json", "w") as json_file:
+    json_file.write(json_data)
 
 
-json_object = json.dumps(dataset, indent=4)
-with open(f"data/{args.data}_data.json", "w") as outfile:
-    outfile.write(json_object)
 
 
-
+print(f" saving at data/{args.data}.json")
