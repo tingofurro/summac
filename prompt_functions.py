@@ -1,57 +1,44 @@
-from dataclasses import dataclass
-# these are very similar to the ones you have hence why they work
-# this is nothing more than a formated string (f'string)
-# change the f'string as you please
-def opt_prompt_template(document: str) -> str:
-
-    return """ We have the following document which we must summarise.
-    {document}
-    The summary that covers these points is:""".format(
-        document = document
-    )
-
-
 def general_prompt(promt_id: str, document: str) -> str:
-    
-    if promt_id == None or promt_id == "C":
+
+    if promt_id == None or promt_id == "A":
         return """ ### Instruction:
-        Your task is to summarize concisely and truthfully. Summarize the input below \n
+        Your task is to summarize concisely and truthfully. Summarize the input below:
 
         ### Input:
-        {document} \n
+        {document}
 
-        ### Response: \n
-        """.format(
-            document = document
-        )
-    
-    if promt_id == "A":
-        return """ ### Instruction:
-        Summarize the article below in three sentences. \n
-
-        ### Input:
-        {document} \n
-
-        ### Response: \n
+        ### Response:
         """.format(
             document = document
         )
 
     if promt_id == "B":
         return """ ### Instruction:
-        Please write a short summary for the text below. \n
+        Summarize the article below in a few sentences:
 
         ### Input:
-        {document} \n
+        {document}
 
-        ### Response: \n
+        ### Response:
+        """.format(
+            document = document
+        )
+
+    if promt_id == "C":
+        return """ ### Instruction:
+        Please write a short summary for the text below:
+
+        ### Input:
+        {document}
+
+        ### Response:
         """.format(
             document = document
         )
 
 # llama and falcon were instructioned tuned on other
 # sets of data. So just pass the opt prompt_template here
-def instruction_prompt_template(messages):
+def convert_to_llama_chat_template(messages):
     startPrompt = "<s>[INST] "
     endPrompt = " [/INST]"
     conversation = []
@@ -67,14 +54,35 @@ def instruction_prompt_template(messages):
 
     return startPrompt + "".join(conversation) + endPrompt
 
-# these now constructs the llama / dolly / falcon prompt
+# these now constructs the llama
 # feel free to change the "content" message. I would keep this as is
-# and just modify the `opt_prompt_template`.
-def llama_falon_prompt_template(document: str) -> str:
+def llama_prompt(prompt_id: str, document: str) -> str:
 
-    prompt: str = opt_prompt_template(document)
+    if prompt_id == "A":
+        prompt = """Your task is to summarize concisely and truthfully. Summarize the input below:
+        {document}
 
-    return instruction_prompt_template(
+        The summary is:""".format(
+            document = document
+        )
+
+    elif prompt_id == "B":
+        prompt = """Summarize the article below in a few sentences:
+        {document}
+
+        The summary is:""".format(
+            document = document
+        )
+
+    else:
+        prompt = """Please write a short summary for the text below:
+        {document}
+
+        The summary is:""".format(
+            document = document
+        )
+
+    return convert_to_llama_chat_template(
         messages=[
             {
                 "role": "system",
