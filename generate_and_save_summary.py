@@ -32,7 +32,7 @@ parser.add_argument('--data', default="xsumfaith", type=str, help='select a summ
                     choices=[ #"cogensumm", "frank", 
                              "polytope", "factcc", "summeval", "xsumfaith",
                              ])
-parser.add_argument('--seed', type=int, default=412, help='Seed for sampling the calibration data.')
+parser.add_argument('--seed', type=int, default=0, help='Seed for sampling the calibration data.')
 parser.add_argument('--prune_method', default="fullmodel", type=str, help='if using pruned model and which to use', 
                     choices=["fullmodel", "wanda", "sparsegpt", "magnitude"])
 parser.add_argument('--prompt_id', default="A", type=str, 
