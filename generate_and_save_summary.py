@@ -52,16 +52,22 @@ os.makedirs(save_path, exist_ok=True)
 
 
 
-def get_model_tokenzier(model_name):
-    if args.prune_method == "fullmodel":
-        model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir="llm_weights", trust_remote_code=True, device_map="auto") # torch_dtype=torch.float16, low_cpu_mem_usage=True, 
-        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False, trust_remote_code=True, cache_dir = "llm_weights")
-    else:  
-        short_name = str(args.model).split("/")[-1]
-        model_name = f'pruned_model/{short_name}/{args.prune_method}'
-        model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, device_map="auto") # torch_dtype=torch.float16, low_cpu_mem_usage=True, 
-        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False, trust_remote_code=True)
-    #trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+def get_model_tokenzier(model_name, cache_dir = "llm_weights"):
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        cache_dir=cache_dir,
+        trust_remote_code=True,
+        torch_dtype="auto" if torch.cuda.is_available() else None,
+        device_map="auto"
+    )
+
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_name, 
+        use_fast=False,
+        trust_remote_code=True,
+        cache_dir=cache_dir
+    )
+
     return model, tokenizer
 
 
@@ -83,7 +89,13 @@ model_conv = SummaCConv(models=["vitc"], bins='percentile', granularity="sentenc
 
 
 ########### load model
-model, tokenizer = get_model_tokenzier(args.model)
+model_path = args.model
+if args.prune_method != "fullmodel":
+    short_name = str(args.model).split("/")[-1]
+    model_path = f'pruned_model/{short_name}/{args.prune_method}'
+
+model, tokenizer = get_model_tokenzier(model_path)
+model.eval()
 
 
 ########### load dataset
