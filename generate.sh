@@ -3,26 +3,26 @@
 #SBATCH --nodes=1
 #SBATCH --partition=gpu
 #SBATCH --qos=gpu
-#SBATCH --gres=gpu:1
-#SBATCH --mem=82G
+#SBATCH --gres=gpu:2
+#SBATCH --mem=182G
 #SBATCH --time=4-00:00:00
 
 
-#SBATCH --job-name=xsum-fal-magnitude
+#SBATCH --job-name=xsum_A
 
 module load Anaconda3/2022.10
 module load CUDA/11.8.0
 source activate seq
 
 
-for prune_method in "sparsegpt" "wanda" "fullmodel" "magnitude"
-do
+# for prune_method in "sparsegpt" "wanda" "fullmodel" "magnitude"
+# do
 for prompt_id in "A" "B" "C"
 do
-python generate_and_save_summary.py --prune_method $prune_method --data "polytope" \
-                                     --model "NousResearch/Nous-Hermes-llama-2-7b" --prompt_id $prompt_id
+python generate_and_save_summary.py --prune_method "fullmodel" --data "summeval" --prompt_id $prompt_id \
+                                     --model "tiiuae/falcon-7b-instruct" 
 done
-done
+# done
 
 
 
