@@ -116,6 +116,7 @@ for i, key in enumerate(key_list):
         try: 
             with open(save_path + f"/prompt_{args.prompt_id}_raw_result.json", "r+") as json_file:
                 generate_dict = json.load(json_file)
+                print(' \n \n \n')
                 print("".center(50, "-"))
                 print(' countinue from last time')
         except: generate_dict = dataset.copy()
@@ -160,6 +161,7 @@ for i, key in enumerate(key_list):
             outfile.write(json_object)
             outfile.close()
         ######### this part is only for quick testing and saving
+        torch.cuda.empty_cache()
 
 
 json_object = json.dumps(generate_dict, indent=4)

@@ -11,7 +11,7 @@ def return_list_mean_std(score_list):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', default="NousResearch/Nous-Hermes-Llama2-13b", type=str, help='LLaMA model', 
+parser.add_argument('--model', default="tiiuae/falcon-7b-instruct", type=str, help='LLaMA model', 
                         choices=[
                                  "tiiuae/falcon-7b-instruct", 
 
@@ -19,12 +19,14 @@ parser.add_argument('--model', default="NousResearch/Nous-Hermes-Llama2-13b", ty
                                  "NousResearch/Nous-Hermes-Llama2-13b"
                                  ])
 parser.add_argument('--data', default="factcc", type=str, help='select a summarization dataset', 
-                    choices=["cogensumm", "xsumfaith", "frank", 
-                             "polytope", "factcc", "summeval",
+                    choices=["cogensumm", "frank", 
+                             "polytope", "factcc", "summeval", "xsumfaith",
                              ])
 parser.add_argument('--prune_method', default="fullmodel", type=str, help='if using pruned model and which to use', 
                     choices=["fullmodel", "wanda", "sparsegpt"])
-parser.add_argument('--prompt_id', default=1, type=int, help='pick a prompt template from prompt list')
+parser.add_argument('--prompt_id', default="A", type=str, 
+                    choices=["A", "B", "C"],
+                    help='pick a prompt template from prompt list, A or B or None')
 args = parser.parse_args()
 
 
@@ -32,29 +34,33 @@ args = parser.parse_args()
 
 
 def print_one_prune(data, model_name, prune_method):
-    with open(f"generated_output/{model_name}/{prune_method}/{data}/norepeated_result_promptNone.json") as json_file:
+    with open(f"generated_output/{model_name}/{prune_method}/{data}/prompt_{args.prompt_id}_raw_result.json") as json_file:
         data = json.load(json_file)
 
     rouge_list, bert_list, harim_list, summac_conv_list, summac_zs_list = [], [], [], [], []
     for k in data.keys():
-        #print(data[k].keys())
-        if data[k] is not None:
+        print(data[k].keys())    
+        try:
             rouge_list.append(data[k]['rouge']['rougeL'])
             bert_list.append(data[k]['bertscore']['f1'][0])
             harim_list.append(data[k]['harim'][0])
             summac_conv_list.append(data[k]['summac_conv'])
             summac_zs_list.append(data[k]['summac_zs'])
+        except:
+            print('-------------------')
+            print(data, "\n", model_name, "\n", prune_method, "\n") # str(args.prompt_id), "\n", 
+            quit()
 
     return rouge_list, bert_list, harim_list, summac_conv_list, summac_zs_list
    
 rouge_list_final, bert_list_final, harim_list_final, summac_conv_list_final, summac_zs_list_final = [], [], [], [], []
 
 
-data_loop_list = ["polytope", "factcc", "summeval"]
+data_loop_list = ["polytope", "factcc", "summeval", "xsumfaith"]
 method_loop_list = ['fullmodel', 'wanda', 'sparsegpt']
 model_loop_list = [
-                "NousResearch/Nous-Hermes-llama-2-7b", 
-                "NousResearch/Nous-Hermes-Llama2-13b", 
+                # "NousResearch/Nous-Hermes-llama-2-7b", 
+                # "NousResearch/Nous-Hermes-Llama2-13b", 
                 "tiiuae/falcon-7b-instruct",
                 ]
 
@@ -91,7 +97,7 @@ df.replace(to_replace=["fullmodel", "sparsegpt", "wanda", "NousResearch/Nous-Her
 df.to_csv(f'generated_output/mean_std_result.csv', index=False)
 
 
-df = pd.read_csv(f'generated_output/mean_std_result.csv')
+df = pd.read_csv(f'generated_output/mean_std_result_{len(model_loop_list)}model.csv')
 
 for metrics in ['RougeL',       'BERTScore',          'HaRiM',      'SUMMAC_conv',      'SUMMAC_zs']:
     RougeL = df[['Data', 'Model', 'Prune', metrics]]
