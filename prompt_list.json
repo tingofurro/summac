@@ -1,0 +1,27 @@
+{
+    "prompt_1": {
+        "prompt": " Please summarize the text above. ",
+        "document_before_prompt": true,
+        "reference": "self define"
+    },
+    "prompt_2": {
+        "prompt": " Please write a short summary of the text above. ",
+        "document_before_prompt": true,
+        "reference": "self define"
+    },
+    "prompt_3": {
+        "prompt": " Please write a summary of the text above. ",
+        "document_before_prompt": true,
+        "reference": "self define"
+    },
+    "prompt_4": {
+        "prompt": ["Article: ", " Summarize the article in three sentences. Summary:"],
+        "document_before_prompt": false,
+        "reference": "https://arxiv.org/pdf/2301.13848.pdf"
+    },
+    "prompt_5": {
+        "prompt": "System: You are an abstractive summarize that follows the output pattern. User: Please write a summary for the document. Document: ",
+        "document_before_prompt": false,
+        "reference": "https://arxiv.org/pdf/2304.04193.pdf"
+    }
+}
