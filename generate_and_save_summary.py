@@ -80,19 +80,17 @@ else: print(' no prompt generator found')
 
 
 
-########### load metrics
+# ########### load metrics
 harim = load("NCSOFT/harim_plus")  #  using model : facebook/bart-large-cnn
 rouge = load("rouge")
 bertscore = load("bertscore")
 model_zs = SummaCZS(granularity="sentence", model_name="vitc", device="cuda") # If you have a GPU: switch to: device="cuda"-
 model_conv = SummaCConv(models=["vitc"], bins='percentile', granularity="sentence", nli_labels="e", device="cuda", start_file="default", agg="mean")
-
-
 ########### load model
 model_path = args.model
 if args.prune_method != "fullmodel":
     short_name = str(args.model).split("/")[-1]
-    model_path = f'pruned_model/{short_name}/{args.prune_method}'
+    model_path = f"pruned_model/{short_name}/{args.prune_method}"
 
 model, tokenizer = get_model_tokenzier(model_path)
 model.eval()
@@ -121,12 +119,10 @@ for i, key in enumerate(key_list):
                 print(' countinue from last time')
         except: generate_dict = dataset.copy()
 
-        print("\n \n", generate_prompt(args.prompt_id, dataset[key]['document']))
-
-
-    if 'generated' in [generate_dict[key].keys()]:
-        pass
-    else: # not exist in generate_dict
+    if 'generated' in list(generate_dict[key].keys()):
+        print(key)
+    else: 
+        print(f"generating for {key} ...")
         document = generate_prompt(args.prompt_id, dataset[key]['document'])
         #character_len = len(dataset[key]['document'])
 
@@ -160,8 +156,9 @@ for i, key in enumerate(key_list):
         with open(save_path + f"/prompt_{args.prompt_id}_raw_result.json", "w") as outfile:
             outfile.write(json_object)
             outfile.close()
+            print(key)
         ######### this part is only for quick testing and saving
-        torch.cuda.empty_cache()
+        #torch.cuda.empty_cache()
 
 
 json_object = json.dumps(generate_dict, indent=4)

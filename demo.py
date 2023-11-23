@@ -1,7 +1,27 @@
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from prompt_functions import general_prompt as generate_prompt
+from summac.model_summac import SummaCZS, SummaCConv
 
+model_zs = SummaCZS(granularity="sentence", model_name="vitc", device="cpu") # If you have a GPU: switch to: device="cuda"
+model_conv = SummaCConv(models=["vitc"], bins='percentile', granularity="sentence", nli_labels="e", device="cpu", start_file="default", agg="mean")
+
+document = """horrific cctv footage has emerged of a husband smashing his dancer wife 's head into concrete paving 11 times then shooting her in the face five times .\nhe later confessed that he 'd carried out the brutal act ` because he was jealous of men looking at her ' .\nsickening video captured on security cameras shows crazed milton vieira severiano , 32 , dragging the limp body of dancer cicera alves de sena , 29 , into the garden of their apartment in the city of rio de janeiro in eastern brazil .\nhorrific cctv footage has emerged of a husband smashing his dancer wife 's head into concrete paving 11 times then shooting her in the face five times\nmilton vieira severiano confessed that he battered and shot his wife because he was jealous of men looking at her\ndancer cicera alves de sena ( pictured ) was killed by her husband after he 'd yelled at her that she was ` a slut '\ncicera alves de sena belonged to a dance troop called jaula das gostozuedas\nhe then dumps her on the ground before grabbing her by the hair and savagely slamming the back of her head into the concrete 11 times before viciously punching her in the face another 10 times .\nleaving the battered and unconscious dancer on the ground he goes into the house and returns with a handgun , shooting her in the face five times at pointblank range .\nhorrified neighbour lelio maya puga , 33 , said : ` they had only been married four days when i heard a terrible argument coming from their apartment .\n` she belonged to a dance group called jaula das gostozuedas which i have been to see and am a big fan of .\n` he was yelling and accusing her of being a slut and a whore and screaming that she would be better off dead .\n` i knew something terrible was happening and then things went silent until i heard the gunshots . '\nafter shooting his wife , who went by the stage name of amanda bueno , severiano stole a neighbour 's car but was picked up by police after crashing it during his getaway .\na police spokesman said : ` in his car we found four handguns , a shotgun and a bullet proof vest .\n` he confessed to murdering his wife and said he had been jealous of men looking at her . '\nhe now faces life in jail .\ncrime scene : people gather outside the couple 's house after the shocking incident took place\npolice found four handguns , a shotgun and a bullet proof vest in severiano 's getaway car",
+        "claim": "sickening video captured on security cameras shows crazed milton vieira severiano dragging the limp body of dancer cicera alves de sena into the garden of their apartment in the city of rio de janeiro in eastern brazil . \nhe then grabs her by the hair and savagely slams the back of her head into the concrete 11 times before viciously punching her in the face another 10 times . \nleaving the battered and unconscious dancer on the ground he goes into the house and returns with a handgun , shooting her five times at pointblank range . \nseveriano later confessed that he 'd carried out the brutal act ` because he was jealous of men looking at"""
+
+summary1 = "- Milt Vieira Severiano, a Brazilian dancer, was killed by her husband after he yelled at her that she was a slut.\n        - He confessed to murdering her and said he was jealous of men looking at her.\n        - He now faces life in jail.\n        - Police found four handguns, a shotgun, and a bullet proof vest in his car."
+score_zs1 = model_zs.score([document], [summary1])
+score_conv1 = model_conv.score([document], [summary1])
+print("[Summary 1] SummaCZS Score: %.3f; SummacConv score: %.3f" % (score_zs1["scores"][0], score_conv1["scores"][0])) # [Summary 1] SummaCZS Score: 0.582; SummacConv score: 0.536
+
+
+
+summary2 = "There are strange shape patterns on Arcadia Planitia. The shapes could indicate the area might be made of glaciers."
+score_zs2 = model_zs.score([document], [summary2])
+score_conv2 = model_conv.score([document], [summary2])
+print("[Summary 2] SummaCZS Score: %.3f; SummacConv score: %.3f" % (score_zs2["scores"][0], score_conv2["scores"][0])) # [Summary 2] SummaCZS Score: 0.877; SummacConv score: 0.709
+
+
+
+quit()
 model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-13b-chat-hf", cache_dir="llm_weights")
 
 
