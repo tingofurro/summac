@@ -12,22 +12,7 @@ import os, json, argparse, time
 from prompt_functions import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', default="tiiuae/falcon-7b-instruct", type=str, help='LLaMA model', 
-                        choices=[
-                            #   "decapoda-research/llama-7b-hf", 
-
-                                 "tiiuae/falcon-7b-instruct", 
-                                 "tiiuae/falcon-40b-instruct",
-
-                                 "meta-llama/Llama-2-7b-chat-hf",
-                                 "meta-llama/Llama-2-13b-chat-hf",
-
-                                #  "facebook/opt-iml-1.3b",
-                                #  "facebook/opt-iml-30b",
-
-                                #  "NousResearch/Nous-Hermes-llama-2-7b",
-                                #  "NousResearch/Nous-Hermes-Llama2-13b"
-                                 ])
+parser.add_argument('--model', type=str, help='Model name or path.')
 parser.add_argument('--data', default="xsumfaith", type=str, help='select a summarization dataset', 
                     choices=[ #"cogensumm", "frank", 
                              "polytope", "factcc", "summeval", "xsumfaith",
@@ -56,7 +41,6 @@ def get_model_tokenzier(model_name, cache_dir = "llm_weights"):
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         cache_dir=cache_dir,
-        trust_remote_code=True,
         torch_dtype="auto" if torch.cuda.is_available() else None,
         device_map="auto"
     )
@@ -64,7 +48,6 @@ def get_model_tokenzier(model_name, cache_dir = "llm_weights"):
     tokenizer = AutoTokenizer.from_pretrained(
         model_name, 
         use_fast=False,
-        trust_remote_code=True,
         cache_dir=cache_dir
     )
 
@@ -84,7 +67,7 @@ else: print(' no prompt generator found')
 harim = load("NCSOFT/harim_plus")  #  using model : facebook/bart-large-cnn
 rouge = load("rouge")
 bertscore = load("bertscore")
-model_zs = SummaCZS(granularity="sentence", model_name="vitc", device="cuda") # If you have a GPU: switch to: device="cuda"-
+model_zs = SummaCZS(granularity="sentence", model_name="vitc", device="cuda", use_con=False) # If you have a GPU: switch to: device="cuda"-
 model_conv = SummaCConv(models=["vitc"], bins='percentile', granularity="sentence", nli_labels="e", device="cuda", start_file="default", agg="mean")
 ########### load model
 model_path = args.model
