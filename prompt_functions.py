@@ -1,93 +1,56 @@
-def falcon_prompt(promt_id: str, document: str) -> str: # for falcon
+from typing import Optional
+from prompts.formatters import TEMPLATE_FORMATTER
+from prompts.instructions import TASK_INSTRUCTION
+from prompts.roles import TASK_ROLE
+import warnings
 
-    if promt_id == None or promt_id == "A":
-        return """Your task is to summarize concisely and truthfully. Summarize the input below:
 
-        Input:
-        {document}
+def generate_prompt(
+    task: str, model: str, prompt_id: str, document: str, question: Optional[str] = None, warningon: bool = False
+) -> str:
 
-        Single paragraph summary:
-        """.format(
+    assert task in ['question_answering', 'summarization']
+    assert model in ['llama', 'mistral', 'falcon']
+    assert prompt_id in ['A', 'B', 'C']
+
+    if task == 'summarization':
+        if (question is not None)and(warningon):
+            warnings.warn("`question` field is not empty. Did you want to use the `question answering` task?")
+        instruction = TASK_INSTRUCTION[task](
+            prompt_id=prompt_id,
             document = document
         )
-
-    if promt_id == "B":
-        return """Summarize the article below in a single paragraph:
-
-        Input:
-        {document}
-
-        Summary:
-        """.format(
-            document = document
-        )
-    
-
-    if promt_id == "C":
-        return """Please write a short summary for the text below:
-
-        Input:
-        {document}
-
-        Summary:
-        """.format(
-            document = document
-        )
-
-# llama and falcon were instructioned tuned on other
-# sets of data. So just pass the opt prompt_template here
-def convert_to_llama_chat_template(messages):
-    startPrompt = "<s>[INST] "
-    endPrompt = " [/INST]"
-    conversation = []
-    for index, message in enumerate(messages):
-        if message["role"] == "system" and index == 0:
-            conversation.append(f"<<SYS>>\n{message['content']}\n<</SYS>>\n\n")
-        elif message["role"] == "user":
-            conversation.append(message["content"].strip())
-        else:
-            conversation.append(
-                f" [/INST] {message['content'].strip()}</s><s>[INST] "
-            )
-
-    return startPrompt + "".join(conversation) + endPrompt
-
-# these now constructs the llama
-# feel free to change the "content" message. I would keep this as is
-def llama_prompt(prompt_id: str, document: str) -> str:
-
-    if prompt_id == "A":
-        prompt = """Your task is to summarize concisely and truthfully. Summarize the input below:
-        {document}
-
-        The summary is:""".format(
-            document = document
-        )
-
-    elif prompt_id == "B":
-        prompt = """Summarize the article below in a few sentences:
-        {document}
-
-        The summary is:""".format(
-            document = document
-        )
-
     else:
-        prompt = """Please write a short summary for the text below:
-        {document}
-
-        The summary is:""".format(
-            document = document
+        assert question is not None
+        instruction = TASK_INSTRUCTION[task](
+            prompt_id=prompt_id,
+            document = document,
+            question = question
         )
 
-    return convert_to_llama_chat_template(
+    return TEMPLATE_FORMATTER[model](
         messages=[
             {
                 "role": "system",
-                "content": """
-                You are a helpful assistant that summarizes truthfully any document given.
-                """,
+                "content": TASK_ROLE[task],
             },
-            {"role": "user", "content": prompt},
+            {"role": "user", "content": instruction},
         ],
     )
+
+## Example 1
+print(generate_prompt(
+    task="summarization",
+    model="mistral",
+    prompt_id="B",
+    document="I am hungry its almost lunch",
+))
+
+## Example 2
+print(generate_prompt(
+    task="question_answering",
+    model="falcon",
+    prompt_id="B",
+    document="I am hungry its almost lunch",
+    question="what time is it?"
+))
