@@ -110,12 +110,12 @@ for i, key in enumerate(key_list):
         #character_len = len(dataset[key]['document'])
 
         original_len = len(tokenizer.encode(document, return_tensors="pt")[0])
-        generate_max_new_tokens = int(original_len*0.25)
+        max_new_tokens = int(original_len * 0.5)
         input_ids = tokenizer.encode(document, return_tensors="pt") 
-        output = model.generate(input_ids.to(model.device), num_return_sequences=1,
-                                max_new_tokens=generate_max_new_tokens, 
-                                #device = "auto",
-                                )   # including one special token, origi len + 1
+        output = model.generate(
+            inputs=input_ids.to(model.device),
+            max_new_tokens=max_new_tokens
+        )
         output_text = tokenizer.decode(output[0][int(input_ids.shape[1]):], skip_special_tokens=True)
         
 
