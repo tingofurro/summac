@@ -31,6 +31,7 @@ np.random.seed(args.seed)
 torch.random.manual_seed(args.seed)
 
 short_model_name = str(args.model).split("/")[-1]
+short_model_type = short_model_name.split("-")[0].lower()
 save_path = os.path.join("generated_output", short_model_name, args.prune_method, args.data)
 os.makedirs(save_path, exist_ok=True)
 
@@ -52,15 +53,6 @@ def get_model_tokenzier(model_name, cache_dir = "llm_weights"):
     )
 
     return model, tokenizer
-
-
-
-########### load prompt
-if 'falcon' in str(args.model).lower(): from prompt_functions import falcon_prompt as generate_prompt
-elif 'llama' in str(args.model).lower(): from prompt_functions import llama_prompt as generate_prompt
-else: print(' no prompt generator found')
-
-
 
 
 # ########### load metrics
@@ -106,7 +98,12 @@ for i, key in enumerate(key_list):
         print(key)
     else: 
         print(f"generating for {key} ...")
-        document = generate_prompt(args.prompt_id, dataset[key]['document'])
+        document = generate_prompt(
+            task="summarization",
+            model=short_model_type,
+            prompt_id=args.prompt_id,
+            document=dataset[key]["document"],
+        )
         #character_len = len(dataset[key]['document'])
 
         original_len = len(tokenizer.encode(document, return_tensors="pt")[0])
