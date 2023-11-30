@@ -10,7 +10,7 @@ def generate_prompt(
 ) -> str:
 
     assert task in ['question_answering', 'summarization']
-    assert model in ['llama', 'mistral', 'falcon']
+    assert model in ['llama', 'mistral', 'falcon', 'opt']
     assert prompt_id in ['A', 'B', 'C']
 
     if task == 'summarization':
@@ -38,18 +38,25 @@ def generate_prompt(
         ],
     )
 
+
+print()
+print("---- Summarization -----")
+
 ## Example 1
 print(generate_prompt(
     task="summarization",
-    model="mistral",
+    model="opt",
     prompt_id="B",
     document="I am hungry its almost lunch",
 ))
 
+print()
+print("---- QA -----")
+
 ## Example 2
 print(generate_prompt(
     task="question_answering",
-    model="falcon",
+    model="llama",
     prompt_id="B",
     document="I am hungry its almost lunch",
     question="what time is it?"
