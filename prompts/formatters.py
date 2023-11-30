@@ -40,9 +40,20 @@ def convert_to_falcon_chat_template(messages):
 
     return  "".join(conversation)
 
+def convert_to_opt_chat_template(messages):
+    conversation = []
+    for index, message in enumerate(messages):
+        if message["role"] == "system" and index == 0:
+            continue
+        else:
+            conversation.append(f"{message['content']}\n")
+
+    return  "".join(conversation)
+
 
 TEMPLATE_FORMATTER = {
     'falcon': convert_to_falcon_chat_template,
+    'opt': convert_to_opt_chat_template,
     'llama': convert_to_llama_chat_template,
     'mistral': convert_to_mistral_chat_template
 }
