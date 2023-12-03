@@ -1,6 +1,6 @@
 import transformers
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, PretrainedConfig
 from datasets import load_dataset,load_from_disk, list_metrics # metrics_list = list_metrics()
 from evaluate import load
 from summac.model_summac import SummaCZS, SummaCConv
@@ -36,6 +36,13 @@ save_path = os.path.join("generated_output", short_model_name, args.prune_method
 os.makedirs(save_path, exist_ok=True)
 
 
+def get_sequence_length(config: PretrainedConfig, default: int = 2048) -> int:
+    if hasattr(config, "sliding_window"):
+        return config.sliding_window
+    elif hasattr(config, "max_position_embeddings"):
+        return config.max_position_embeddings
+    else:
+        return default
 
 
 def get_model_tokenzier(model_name, cache_dir = "llm_weights"):
@@ -70,6 +77,7 @@ if args.prune_method != "fullmodel":
 model, tokenizer = get_model_tokenzier(model_path)
 model.eval()
 
+sequence_length = get_sequence_length(model.config)
 
 ########### load dataset
 # benchmark_val = SummaCBenchmark(benchmark_folder="data/", cut="val") 
@@ -106,12 +114,14 @@ for i, key in enumerate(key_list):
         )
         #character_len = len(dataset[key]['document'])
 
-        original_len = len(tokenizer.encode(document, return_tensors="pt")[0])
-        max_new_tokens = int(original_len * 0.5)
         input_ids = tokenizer.encode(document, return_tensors="pt") 
+        if input_ids.shape[1] > sequence_length:
+            print(f"Skipping {key} ({input_ids.shape[1]} > {sequence_length}).")
+            continue
+
         output = model.generate(
             inputs=input_ids.to(model.device),
-            max_new_tokens=max_new_tokens
+            max_length=sequence_length
         )
         output_text = tokenizer.decode(output[0][int(input_ids.shape[1]):], skip_special_tokens=True)
         
