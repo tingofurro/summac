@@ -9,7 +9,11 @@ from .utils_misc import download_file_from_google_drive
 # SummaC Benchmark
 class SummaCBenchmark:
 
-    def __init__(self, benchmark_folder="/home/phillab/data/summac_benchmark/", dataset_names=["cogensum", "xsumfaith", "polytope", "factcc", "summeval", "frank"], cut="val"):
+    def __init__(self, 
+    benchmark_folder="/home/phillab/data/summac_benchmark/", 
+    dataset_names=["cogensum", "xsumfaith", "polytope", "factcc", "summeval", "frank"], 
+    cut="val", 
+    hf_datasets_cache_dir = os.environ.get("HF_DATASETS_CACHE", None)):
         assert cut in ["val", "test"], "Unrecognized cut for the Fact Checking Benchmark"
         if not os.path.exists(benchmark_folder):
             os.makedirs(benchmark_folder)
@@ -18,7 +22,8 @@ class SummaCBenchmark:
         self.benchmark_folder = benchmark_folder
         self.cnndm_id2reference = None
         self.cnndm = None
-        self.xsum = None
+        self.xsum = None 
+        self.hf_datasets_cache_dir = hf_datasets_cache_dir
 
         self.datasets = []
         for dataset_name in dataset_names:
@@ -39,21 +44,16 @@ class SummaCBenchmark:
 
     # Underlying dataset loader: CNN/DM and XSum
     def get_cnndm_document(self, aid):
-        global CNNDM
         if self.cnndm is None:
-            if CNNDM is None:
-                CNNDM = load_dataset("cnn_dailymail", "3.0.0")
-            self.cnndm = CNNDM
-            self.cnndm_id2article = {}
-            for cut in ["test", "validation"]:
-                self.cnndm_id2article.update({d["id"]: d["article"] for d in self.cnndm[cut]})
+            self.cnndm= load_dataset("cnn_dailymail", "3.0.0", cache_dir=self.hf_datasets_cache_dir)
+        self.cnndm_id2article = {}
+        for cut in ["test", "validation"]:
+            self.cnndm_id2article.update({d["id"]: d["article"] for d in self.cnndm[cut]})
         return self.cnndm_id2article[aid]
 
     def get_cnndm_reference(self, aid):
-        global CNNDM
-        if CNNDM is None:
-            CNNDM = load_dataset("cnn_dailymail", "3.0.0")
-            self.cnndm = CNNDM
+        if self.cnndm is None:
+            self.cnndm= load_dataset("cnn_dailymail", "3.0.0", cache_dir=self.hf_datasets_cache_dir)
         if self.cnndm_id2reference is None:
             self.cnndm_id2reference = {}
             for cut in ["test", "validation"]:
@@ -63,7 +63,7 @@ class SummaCBenchmark:
 
     def get_xsum_document(self, aid):
         if self.xsum is None:
-            self.xsum = load_dataset("xsum")["test"]
+            self.xsum = load_dataset("xsum", cache_dir=self.hf_datasets_cache_dir)["test"]
             self.xsumid2article = {d["id"]: d["document"] for d in self.xsum}
 
         return self.xsumid2article[aid]
