@@ -7,6 +7,8 @@ from .utils_misc import download_file_from_google_drive
 from  tqdm import tqdm
 from itertools import islice
 
+
+
 # SummaC Benchmark
 class SummaCBenchmark:
 
@@ -352,7 +354,7 @@ class SummaCBenchmark:
 
             summ_labels = []
             annotator_labels = {}
-            for annot in tqdm(d["summary_sentences_annotations"]):
+            for annot in d["summary_sentences_annotations"]:
                 annot_vals = [an for ans in annot.values() for an in ans]
                 noerror_count = len([an for an in annot_vals if an=="NoE"])
                 label = 1 if noerror_count >= 2 else 0
@@ -398,22 +400,6 @@ class SummaCBenchmark:
             benchmark.append({"name": dataset["name"], "score": dataset_f1, "threshold": dataset_thresh})
         return {"overall_score": np.mean([t["score"] for t in benchmark]), "benchmark": benchmark}
 
-    def  dump_datasets(self):
-        for dataset_name in dataset_names:
-            if dataset_name == "cogensum":
-                self.load_cogensumm()
-            elif dataset_name == "xsumfaith":
-                self.load_xsumfaith()
-            elif dataset_name == "polytope":
-                self.load_polytope()
-            elif dataset_name == "factcc":
-                self.load_factcc()
-            elif dataset_name == "summeval":
-                self.load_summeval()
-            elif dataset_name == "frank":
-                self.load_frank()
-            else:
-                raise ValueError("Unrecognized dataset name: %s" % (dataset_name))
 
 if __name__ == "__main__":
     import random
