@@ -160,7 +160,8 @@ class SummaCBenchmark:
 
         clean_dataset = []
         
-        groups = dict(islice(groups.items(), 4))
+        if self.debug: 
+            groups = dict(islice(groups.items(), 4))
         for k, vs in tqdm(groups.items()):
             A = vs[0]
             document = self.get_xsum_document(A["bbcid"])
@@ -344,7 +345,7 @@ class SummaCBenchmark:
         dataset = []
 
         if self.debug:
-            raw_dataset = raw_dataset[:4]
+            raw_dataset = raw_dataset[:100]
         for d in tqdm(raw_dataset):
             article = d["article"]
             origin = "cnndm" if len(d["hash"]) >= 40 else "xsum"
