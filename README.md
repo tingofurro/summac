@@ -57,7 +57,7 @@ The SummaC Benchmark consists of 6 summary consistency datasets that have been s
 The data-loaders for the benchmark are included in `benchmark.py` ([link](https://github.com/tingofurro/summac/blob/master/summac/benchmark.py)). Each dataset in the benchmark downloads automatically on first run. To load the benchmark:
 ```py
 from summac.benchmark import SummaCBenchmark
-benchmark_val = SummaCBenchmark(benchmark_folder="/path/to/summac_benchmark/", cut="val")
+benchmark_val = SummaCBenchmark(benchmark_folder="/path/to/summac_benchmark/", cut="val", hf_datasets_cache_dir = "/path/to/huggingface_datasets_cache_dir/")
 frank_dataset = benchmark_val.get_dataset("frank")
 print(frank_dataset[300]) # {"document: "A Darwin woman has become a TV [...]", "claim": "natalia moon , 23 , has become a tv sensation [...]", "label": 0, "cut": "val", "model_name": "s2s", "error_type": "LinkE"}
 ```
