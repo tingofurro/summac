@@ -247,7 +247,9 @@ class SummaCConv(torch.nn.Module):
                 os.system("wget https://github.com/tingofurro/summac/raw/master/summac_conv_vitc_sent_perc_e.bin")
                 assert bins == "percentile", "bins mode should be set to percentile if using the default 1-d convolution weights."
         if start_file is not None:
-            print(self.load_state_dict(torch.load(start_file)))
+            res = self.load_state_dict(torch.load(start_file))
+            if res != '<All keys matched successfully>':
+                print(res)
 
     def build_image(self, original, generated):
         images = [imager.build_image(original, generated) for imager in self.imagers]
