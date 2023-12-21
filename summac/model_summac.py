@@ -295,7 +295,7 @@ class SummaCConv(torch.nn.Module):
                 histograms.append(histogram)
 
         N = len(histograms)
-        histograms = torch.FloatTensor(histograms).to(self.device)
+        histograms = torch.FloatTensor(np.array(histograms)).to(self.device)
 
         non_zeros = (torch.sum(histograms, dim=-1) != 0.0).long()
         seq_lengths = non_zeros.sum(dim=-1).tolist()
