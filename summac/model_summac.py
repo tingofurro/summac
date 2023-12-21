@@ -248,7 +248,7 @@ class SummaCConv(torch.nn.Module):
                 assert bins == "percentile", "bins mode should be set to percentile if using the default 1-d convolution weights."
         if start_file is not None:
             res = self.load_state_dict(torch.load(start_file))
-            if res != '<All keys matched successfully>':
+            if res.missing_keys or res.unexpected_keys:
                 print(res)
 
     def build_image(self, original, generated):
