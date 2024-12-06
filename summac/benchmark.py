@@ -3,7 +3,7 @@ from datasets import load_dataset
 from collections import Counter
 import requests, zipfile, tarfile
 from .utils_scorer import choose_best_threshold
-from .utils_misc import download_file_from_google_drive
+
 
 # SummaC Benchmark
 class SummaCBenchmark:
@@ -275,7 +275,9 @@ class SummaCBenchmark:
             os.makedirs(dataset_folder)
 
             # From the 4/19/2020 update on the README: https://github.com/Yale-LILY/SummEval
-            download_file_from_google_drive("1d2Iaz3jNraURP1i7CfTqPIj8REZMJ3tS", fn)
+            r = requests.get("https://storage.googleapis.com/sfr-summarization-repo-research/model_annotations.aligned.jsonl")
+            with open(os.path.join(dataset_folder, "model_annotations.aligned.scored.jsonl"), "wb") as f:
+                f.write(r.content)
 
         with open(fn, "r") as f:
             for line in f:
