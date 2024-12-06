@@ -5,9 +5,15 @@ import requests, zipfile, tarfile
 from .utils_scorer import choose_best_threshold
 from .utils_misc import download_file_from_google_drive
 
-
 # SummaC Benchmark
 class SummaCBenchmark:
+    # Set class variables to None, will be loaded when the first instance of the class is initiated.
+    cnndm = None
+    cnndm_id2article = None
+    cnndm_id2reference = None
+
+    xsum = None
+    xsumid2article = None
 
     def __init__(self, benchmark_folder="/home/phillab/data/summac_benchmark/", dataset_names=["cogensum", "xsumfaith", "polytope", "factcc", "summeval", "frank"], cut="val"):
         assert cut in ["val", "test"], "Unrecognized cut for the Fact Checking Benchmark"
@@ -16,9 +22,26 @@ class SummaCBenchmark:
 
         self.cut = cut
         self.benchmark_folder = benchmark_folder
-        self.cnndm_id2reference = None
-        self.cnndm = None
-        self.xsum = None
+        
+        # Loading CNN/DM, XSum
+        if SummaCBenchmark.cnndm is None:
+            SummaCBenchmark.cnndm = load_dataset("cnn_dailymail", "3.0.0")
+
+        if SummaCBenchmark.cnndm_id2article is None:
+            SummaCBenchmark.cnndm_id2article = {}
+            for cut in ["test", "validation"]:
+                SummaCBenchmark.cnndm_id2article.update({d["id"]: d["article"] for d in SummaCBenchmark.cnndm[cut]})
+
+        if SummaCBenchmark.cnndm_id2reference is None:
+            SummaCBenchmark.cnndm_id2reference = {}
+            for cut in ["test", "validation"]:
+                SummaCBenchmark.cnndm_id2reference.update({d["id"]: d["highlights"] for d in SummaCBenchmark.cnndm[cut]})
+
+        if SummaCBenchmark.xsum is None:
+            SummaCBenchmark.xsum = load_dataset("xsum")["test"]
+
+        if SummaCBenchmark.xsumid2article is None:
+            SummaCBenchmark.xsumid2article = {d["id"]: d["document"] for d in SummaCBenchmark.xsum}
 
         self.datasets = []
         for dataset_name in dataset_names:
@@ -39,34 +62,13 @@ class SummaCBenchmark:
 
     # Underlying dataset loader: CNN/DM and XSum
     def get_cnndm_document(self, aid):
-        global CNNDM
-        if self.cnndm is None:
-            if CNNDM is None:
-                CNNDM = load_dataset("cnn_dailymail", "3.0.0")
-            self.cnndm = CNNDM
-            self.cnndm_id2article = {}
-            for cut in ["test", "validation"]:
-                self.cnndm_id2article.update({d["id"]: d["article"] for d in self.cnndm[cut]})
-        return self.cnndm_id2article[aid]
+        return SummaCBenchmark.cnndm_id2article[aid]
 
     def get_cnndm_reference(self, aid):
-        global CNNDM
-        if CNNDM is None:
-            CNNDM = load_dataset("cnn_dailymail", "3.0.0")
-            self.cnndm = CNNDM
-        if self.cnndm_id2reference is None:
-            self.cnndm_id2reference = {}
-            for cut in ["test", "validation"]:
-                self.cnndm_id2reference.update({d["id"]: d["highlights"] for d in self.cnndm[cut]})
-        return self.cnndm_id2reference[aid]
-
+        return SummaCBenchmark.cnndm_id2reference[aid]
 
     def get_xsum_document(self, aid):
-        if self.xsum is None:
-            self.xsum = load_dataset("xsum")["test"]
-            self.xsumid2article = {d["id"]: d["document"] for d in self.xsum}
-
-        return self.xsumid2article[aid]
+        return SummaCBenchmark.xsumid2article[aid]
 
     # Individual dataset loaders
     def load_cogensumm(self):
