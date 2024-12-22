@@ -69,7 +69,7 @@ class SummaCBenchmark:
 
     def get_xsum_document(self, aid):
         if self.xsum is None:
-            self.xsum = load_dataset("xsum", cache_dir=self.hf_datasets_cache_dir)["test"]
+            self.xsum = load_dataset("xsum", cache_dir=self.hf_datasets_cache_dir, trust_remote_code=True)["test"]
             self.xsumid2article = {d["id"]: d["document"] for d in self.xsum}
 
         return self.xsumid2article[aid]
