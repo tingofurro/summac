@@ -4,12 +4,20 @@ from collections import Counter
 import requests, zipfile, tarfile
 from .utils_scorer import choose_best_threshold
 from .utils_misc import download_file_from_google_drive
+from  tqdm import tqdm
+from itertools import islice
+
 
 
 # SummaC Benchmark
 class SummaCBenchmark:
 
-    def __init__(self, benchmark_folder="/home/phillab/data/summac_benchmark/", dataset_names=["cogensum", "xsumfaith", "polytope", "factcc", "summeval", "frank"], cut="val"):
+    def __init__(self, 
+    benchmark_folder="/home/phillab/data/summac_benchmark/", 
+    dataset_names=["cogensumm", "xsumfaith", "polytope", "factcc", "summeval", "frank"], 
+    cut="val", 
+    hf_datasets_cache_dir = os.environ.get("HF_DATASETS_CACHE", None), 
+    debug=False):
         assert cut in ["val", "test"], "Unrecognized cut for the Fact Checking Benchmark"
         if not os.path.exists(benchmark_folder):
             os.makedirs(benchmark_folder)
@@ -18,11 +26,14 @@ class SummaCBenchmark:
         self.benchmark_folder = benchmark_folder
         self.cnndm_id2reference = None
         self.cnndm = None
-        self.xsum = None
+        self.xsum = None 
+        self.hf_datasets_cache_dir = hf_datasets_cache_dir
+        self.debug = debug
 
         self.datasets = []
         for dataset_name in dataset_names:
-            if dataset_name == "cogensum":
+            print ("Loading dataset %s" % (dataset_name))
+            if dataset_name == "cogensumm":
                 self.load_cogensumm()
             elif dataset_name == "xsumfaith":
                 self.load_xsumfaith()
@@ -39,21 +50,16 @@ class SummaCBenchmark:
 
     # Underlying dataset loader: CNN/DM and XSum
     def get_cnndm_document(self, aid):
-        global CNNDM
         if self.cnndm is None:
-            if CNNDM is None:
-                CNNDM = load_dataset("cnn_dailymail", "3.0.0")
-            self.cnndm = CNNDM
-            self.cnndm_id2article = {}
-            for cut in ["test", "validation"]:
-                self.cnndm_id2article.update({d["id"]: d["article"] for d in self.cnndm[cut]})
+            self.cnndm= load_dataset("cnn_dailymail", "3.0.0", cache_dir=self.hf_datasets_cache_dir)
+        self.cnndm_id2article = {}
+        for cut in ["test", "validation"]:
+            self.cnndm_id2article.update({d["id"]: d["article"] for d in self.cnndm[cut]})
         return self.cnndm_id2article[aid]
 
     def get_cnndm_reference(self, aid):
-        global CNNDM
-        if CNNDM is None:
-            CNNDM = load_dataset("cnn_dailymail", "3.0.0")
-            self.cnndm = CNNDM
+        if self.cnndm is None:
+            self.cnndm= load_dataset("cnn_dailymail", "3.0.0", cache_dir=self.hf_datasets_cache_dir)
         if self.cnndm_id2reference is None:
             self.cnndm_id2reference = {}
             for cut in ["test", "validation"]:
@@ -63,7 +69,7 @@ class SummaCBenchmark:
 
     def get_xsum_document(self, aid):
         if self.xsum is None:
-            self.xsum = load_dataset("xsum")["test"]
+            self.xsum = load_dataset("xsum", cache_dir=self.hf_datasets_cache_dir, trust_remote_code=True)["test"]
             self.xsumid2article = {d["id"]: d["document"] for d in self.xsum}
 
         return self.xsumid2article[aid]
@@ -94,22 +100,28 @@ class SummaCBenchmark:
             with open(os.path.join(dataset_folder, fn), "r") as f:
                 dataset = json.load(f)
 
+            if self.debug:
+                if type(dataset) == dict:
+                    dataset = dict(islice(dataset.items(), 4))
+                elif type(dataset) == list:
+                        dataset = dataset[:4]
+
             if "_org" in fn or fn == "test_chen18_reranked.json":
-                for aid in dataset:
+                for aid in tqdm(dataset):
                     document = self.get_cnndm_document(aid)
                     label = 0 if dataset[aid]["label"] == "Incorrect" else 1
                     sents = dataset[aid]["sents"]
                     summary = " ".join([sents[str(i)]["text"] for i in range(len(sents))])
                     clean_dataset.append({"filename": fn, "label": label, "document": document, "claim": summary, "cnndm_id": aid, "annotations": [label], "dataset": "cogensumm", "origin": "cnndm"})
             elif fn == "val_reranking.json":
-                for aid in dataset:
+                for aid in tqdm(dataset):
                     document = self.get_cnndm_document(aid)
                     for idx, data in dataset[aid].items():
                         label = 0 if data["label"] == "Incorrect" else 1
                         summary = " ".join([data["sents"][str(i)]["text"] for i in range(len(data["sents"]))])
                         clean_dataset.append({"filename": fn, "label": label, "document": document, "claim": summary, "cnndm_id": aid, "annotations": [label], "dataset": "cogensumm", "origin": "cnndm"})
             elif fn == "val_sentence_pairs.json":
-                for d in dataset:
+                for d in tqdm(dataset):
                     aid = d["article_id"]
                     document = self.get_cnndm_document(aid)
                     clean_dataset.append({"filename": fn, "label": 1, "document": document, "claim": d["correct_sent"], "cnndm_id": aid, "annotations": [1], "dataset": "cogensumm", "origin": "cnndm"})
@@ -147,7 +159,10 @@ class SummaCBenchmark:
             groups[k].append(d)
 
         clean_dataset = []
-        for k, vs in groups.items():
+        
+        if self.debug: 
+            groups = dict(islice(groups.items(), 4))
+        for k, vs in tqdm(groups.items()):
             A = vs[0]
             document = self.get_xsum_document(A["bbcid"])
             labels = [v["hallucination_type"] for v in vs]
@@ -192,7 +207,9 @@ class SummaCBenchmark:
                 if str(row["Subtypes"]) != "nan":
                     ID2row[row["ID"]]["errors"].append(row["Subtypes"])
 
-            for ID in ID2row:
+            if self.debug: 
+                ID2row = dict(islice(ID2row.items(), 4))
+            for ID in tqdm(ID2row):
                 d = ID2row[ID]
                 d["overall_label"] = 1 if len(d["errors"]) == 0 else 0
                 d["omission_label"] = 0 if "Omission" in d["errors"] else 1
@@ -250,7 +267,9 @@ class SummaCBenchmark:
                 for line in f:
                     dataset.append(json.loads(line))
 
-            for d in dataset:
+            if self.debug:
+                dataset = dataset[:4]
+            for d in tqdm(dataset):
                 aid = d["filepath"].split("/")[-1].replace(".story", "")
                 d["document"] = self.get_cnndm_document(aid)
                 d["label"] = 1 if d["label"] == "CORRECT" else 0
@@ -281,7 +300,9 @@ class SummaCBenchmark:
 
         clean_dataset = []
 
-        for i, d in enumerate(raw_dataset):
+        if self.debug:   
+            raw_dataset = raw_dataset[:4]
+        for i, d in enumerate(tqdm(raw_dataset)):
             c = "val" if i % 2 == 0 else "test"
             _, _, article_id = d["id"].split("-")
             document = self.get_cnndm_document(article_id)
@@ -322,7 +343,10 @@ class SummaCBenchmark:
         with open(raw_file, "r") as f:
             raw_dataset = json.load(f)
         dataset = []
-        for d in raw_dataset:
+
+        if self.debug:
+            raw_dataset = raw_dataset[:100]
+        for d in tqdm(raw_dataset):
             article = d["article"]
             origin = "cnndm" if len(d["hash"]) >= 40 else "xsum"
 
