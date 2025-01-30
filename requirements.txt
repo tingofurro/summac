@@ -1,6 +1,6 @@
 torch
 transformers>=4.8.1
 nltk>=3.6.6
-huggingface-hub<=0.17.0 # To avoid issues with 0.18.x
+huggingface-hub<=0.28.0 # Updated
 sentencepiece
 protobuf
